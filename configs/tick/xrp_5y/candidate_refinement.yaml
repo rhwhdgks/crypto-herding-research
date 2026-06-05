@@ -1,0 +1,23 @@
+input:
+  base_dir: outputs/tick/xrp_5y/candidate_paper_sim
+
+analysis:
+  prev_candidate: prev_neg
+  ratio_candidate: ratio_1_40_16_18
+  round_trip_cost_bps: 4
+  recent_days_list:
+    - 30
+    - 60
+    - 90
+  cost_bps_grid:
+    - 2
+    - 4
+    - 6
+    - 8
+    - 10
+
+output:
+  base_dir: outputs/tick/xrp_5y/candidate_refinement
+
+logging:
+  level: INFO

@@ -1,0 +1,23 @@
+# Core scientific stack
+numpy>=1.26.0
+pandas>=2.2.0
+scipy>=1.11.0
+statsmodels>=0.14.1
+
+# Plotting
+matplotlib>=3.8.0
+
+# Data IO
+pyarrow>=17.0.0
+PyYAML>=6.0.1
+
+# Crypto market data
+ccxt>=4.4.0
+requests>=2.32.0
+
+# Database (optional — only if database.enabled = true)
+SQLAlchemy>=2.0.32
+PyMySQL>=1.1.1
+
+# Excel I/O (Sprint1 cointegration helpers)
+openpyxl>=3.1.0

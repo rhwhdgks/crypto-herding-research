@@ -1,0 +1,19 @@
+input:
+  base_dir: outputs/tick/xrp_5y/overlap_core/variants
+
+analysis:
+  selected_variants:
+    - time_17_18
+    - time_17_18_prior_drop_q4
+  recent_days_list:
+    - 7
+    - 30
+    - 60
+  recent_signal_count: 8
+  as_of_mode: now_utc
+
+output:
+  base_dir: outputs/tick/xrp_5y/trackers/dual_tracker
+
+logging:
+  level: INFO

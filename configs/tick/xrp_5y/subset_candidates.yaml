@@ -1,0 +1,15 @@
+input:
+  base_dir: outputs/tick/xrp_5y/cost_sanity
+
+analysis:
+  holdout_days_list:
+    - 30
+    - 60
+  round_trip_cost_bps: 4
+  block_days: 30
+
+output:
+  base_dir: outputs/tick/xrp_5y/subset_candidates
+
+logging:
+  level: INFO

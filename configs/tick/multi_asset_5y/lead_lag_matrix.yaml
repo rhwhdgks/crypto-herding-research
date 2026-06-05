@@ -1,0 +1,55 @@
+data:
+  source: binance_public_data
+  trade_kind: aggTrades
+  local_data_dir: data/tick_archive
+  overwrite_existing: false
+  prefer_monthly_archives: true
+  monthly_chunk_rows: 1000000
+  symbols:
+    - BTCUSDT
+    - ETHUSDT
+    - XRPUSDT
+    - SOLUSDT
+    - DOGEUSDT
+    - ADAUSDT
+    - AVAXUSDT
+  lookback_days: 1825
+  end: latest
+
+backfill:
+  max_workers: 4
+
+analysis:
+  interval_minutes:
+    - 15
+  forward_horizons_minutes:
+    - 30
+  session_hours_utc:
+    - 16
+    - 17
+    - 18
+    - 19
+    - 20
+    - 21
+    - 22
+    - 23
+  lookback_days_for_threshold: 5
+  herding_score_percentile: 0.15
+  min_trades_per_bucket: 200
+  symbols:
+    - BTCUSDT
+    - ETHUSDT
+    - XRPUSDT
+    - SOLUSDT
+    - DOGEUSDT
+    - ADAUSDT
+    - AVAXUSDT
+  directions:
+    - up
+    - down
+
+output:
+  base_dir: outputs/tick/multi_asset_5y/lead_lag_matrix
+
+logging:
+  level: INFO

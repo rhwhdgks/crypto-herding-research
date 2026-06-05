@@ -1,0 +1,42 @@
+input:
+  micro_frame_paths:
+    XRPUSDT: outputs/tick/multi_asset_365d/generalization/intermediate/tick_micro_frame_15m.csv
+    DOGEUSDT: outputs/tick/multi_asset_365d/singles/doge/intermediate/tick_micro_frame_15m.csv
+    AVAXUSDT: outputs/tick/multi_asset_365d/singles/avax/intermediate/tick_micro_frame_15m.csv
+
+analysis:
+  focus_horizon_minutes: 30
+  round_trip_cost_bps: 4
+  recent_days_list:
+    - 30
+    - 60
+    - 90
+  recent_signal_count: 8
+  as_of_mode: now_utc
+  candidates:
+    - variant_name: xrp_up_21_22
+      variant_label: XRP up 21-22
+      symbol: XRPUSDT
+      event_side: up
+      hours_utc:
+        - 21
+        - 22
+    - variant_name: doge_down_21_22
+      variant_label: DOGE down 21-22
+      symbol: DOGEUSDT
+      event_side: down
+      hours_utc:
+        - 21
+        - 22
+    - variant_name: avax_down_21
+      variant_label: AVAX down 21
+      symbol: AVAXUSDT
+      event_side: down
+      hours_utc:
+        - 21
+
+output:
+  base_dir: outputs/tick/multi_asset_365d/trackers/candidate_basket
+
+logging:
+  level: INFO

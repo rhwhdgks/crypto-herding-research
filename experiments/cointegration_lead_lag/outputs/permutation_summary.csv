@@ -1,0 +1,12 @@
+,0
+real_cum_pnl,0.0027550954095923626
+real_sharpe,0.7818975296240581
+real_n_entries,2.0
+n_permutations,1000.0
+null_pnl_mean,-0.003830636998827006
+null_pnl_std,0.010732020098224252
+null_pnl_p5,-0.024257720106306415
+null_pnl_p95,0.008109100580128939
+p_value_pnl_one_sided_above,0.208
+p_value_pnl_two_sided,0.416
+p_value_sharpe_one_sided_above,0.31546134663341646

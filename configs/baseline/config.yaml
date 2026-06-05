@@ -1,0 +1,382 @@
+data:
+  source: binance
+  prefer_local_files: true
+  local_data_dir: data
+  cache_downloads: true
+  cache_format: parquet
+  use_bulk_downloads: true
+  fallback_to_mock: false
+  symbols:
+    - BTCUSDT
+    - ETHUSDT
+    - BNBUSDT
+    - XRPUSDT
+    - ADAUSDT
+    - SOLUSDT
+    - DOGEUSDT
+    - LINKUSDT
+    - AVAXUSDT
+    - DOTUSDT
+    - LTCUSDT
+    - TRXUSDT
+    - ATOMUSDT
+    - NEARUSDT
+  timeframe: 1m
+  lookback_years: 2
+  end: latest
+  exchange_limit: 1000
+  missing_timestamp_policy: forward_fill_prices
+  max_forward_fill_steps: 3
+
+panel:
+  mode: intersection
+  min_active_assets: 14
+
+regression:
+  rolling:
+    enabled: false
+    window: 720
+    min_periods: 720
+
+event_detection:
+  lookback_window: 1440
+  min_history: 1440
+  volatility_window: 60
+  cooldown_periods: 30
+  herding:
+    csad_method: percentile
+    csad_low_percentile: 0.20
+    market_abs_method: percentile
+    market_abs_upper_percentile: 0.60
+  shock:
+    abs_return_method: percentile
+    abs_return_percentile: 0.90
+    volatility_method: percentile
+    volatility_percentile: 0.90
+
+event_study:
+  holding_periods:
+    - 5
+    - 15
+    - 30
+    - 60
+    - 120
+    - 360
+    - 1440
+  max_path_horizon: 360
+
+database:
+  enabled: false  # DB export 사용 시 true로 변경
+  driver: mysql+pymysql
+  host: ${HERDING_DB_HOST:-127.0.0.1}
+  port: 3306
+  user: ${HERDING_DB_USER:-trader}
+  password: ${HERDING_DB_PASSWORD}  # 환경변수에서 주입
+  database: ${HERDING_DB_NAME:-trading}
+  charset: utf8mb4
+  table_prefix: crypto_herding
+  export_raw_ohlcv: true
+  raw_insert_mode: replace
+  raw_overlap_periods: 5
+  if_exists: replace
+  chunk_size: 5000
+  insert_method: default
+  export_empty_tables: false
+
+output:
+  base_dir: outputs/baseline
+
+sentiment_extension:
+  news:
+    input_path: data/news/news_headlines.csv
+    timestamp_column: timestamp
+    source_column: source
+    asset_column: asset
+    headline_column: headline
+    scoring:
+      headline_positive_threshold: 0.0
+      headline_negative_threshold: 0.0
+  lookback_minutes:
+    - 5
+    - 15
+    - 30
+  label_window_minutes: 15
+  event_positive_threshold: 0.05
+  event_negative_threshold: -0.05
+  feature_layer:
+    focus_window_minutes: 15
+    dense_news_quantile: 0.75
+    strong_sentiment_quantile: 0.75
+  baseline_input:
+    event_path: outputs/baseline/events.csv
+  output:
+    base_dir: outputs/baseline/sentiment_extension
+  news_collection:
+    output_path: data/news/news_headlines.csv
+    output:
+      base_dir: outputs/baseline/news_collection
+    google_news:
+      enabled: true
+      language: en-US
+      region: US
+      edition: US:en
+    gdelt:
+      enabled: true
+      request_strategy: timespan
+      lookback_days: 90
+      window_days: 7
+      max_records_per_window: 50
+      sort: datedesc
+      timeout_seconds: 60
+      retries: 2
+      retry_backoff_seconds: 3.0
+      sleep_seconds: 2.0
+    gdelt_slow:
+      enabled: true
+      output_path: data/news/news_headlines.csv
+      state_path: data/news/gdelt_slow_state.json
+      output:
+        base_dir: outputs/baseline/news_collection_gdelt_slow
+      query_names:
+        - btc
+        - eth
+        - xrp
+        - ada
+        - sol
+        - doge
+        - link
+        - avax
+      queries_per_run: 1
+      request_strategy: timespan
+      lookback_days: 90
+      max_records_per_query: 25
+      sort: datedesc
+      timeout_seconds: 60
+      retries: 1
+      retry_backoff_seconds: 10.0
+      inter_query_sleep_seconds: 20.0
+      stop_on_rate_limit: true
+      advance_on_non_rate_limit_error: true
+    queries:
+      - name: market_crypto
+        asset: ""
+        rss_source: google_news
+        gdelt_source: gdelt
+        query: "cryptocurrency OR bitcoin OR ethereum OR altcoin"
+      - name: btc
+        asset: BTCUSDT
+        rss_source: google_news
+        gdelt_source: gdelt
+        query: "bitcoin OR BTC crypto"
+      - name: eth
+        asset: ETHUSDT
+        rss_source: google_news
+        gdelt_source: gdelt
+        query: "ethereum OR ETH crypto"
+      - name: xrp
+        asset: XRPUSDT
+        rss_source: google_news
+        gdelt_source: gdelt
+        query: "XRP OR Ripple crypto"
+      - name: ada
+        asset: ADAUSDT
+        rss_source: google_news
+        gdelt_source: gdelt
+        query: "Cardano OR ADA crypto"
+      - name: sol
+        asset: SOLUSDT
+        rss_source: google_news
+        gdelt_source: gdelt
+        query: "Solana OR SOL crypto"
+      - name: doge
+        asset: DOGEUSDT
+        rss_source: google_news
+        gdelt_source: gdelt
+        query: "Dogecoin OR DOGE crypto"
+      - name: link
+        asset: LINKUSDT
+        rss_source: google_news
+        gdelt_source: gdelt
+        query: "Chainlink OR LINK crypto"
+      - name: avax
+        asset: AVAXUSDT
+        rss_source: google_news
+        gdelt_source: gdelt
+        query: "Avalanche OR AVAX crypto"
+
+reddit_collection:
+  output_path: data/reddit/reddit_posts.csv
+  output:
+    base_dir: outputs/baseline/reddit_collection
+  sort: new
+  time_filter: year
+  limit: 100
+  max_pages: 3
+  timeout_seconds: 60
+  sleep_seconds: 1.0
+  queries:
+    - name: market_cc
+      subreddit: CryptoCurrency
+      asset: ""
+      query: "bitcoin OR ethereum OR altcoin OR crypto"
+    - name: market_cm
+      subreddit: CryptoMarkets
+      asset: ""
+      query: "bitcoin OR ethereum OR altcoin OR crypto"
+    - name: btc_cc
+      subreddit: CryptoCurrency
+      asset: BTCUSDT
+      query: "bitcoin OR BTC"
+    - name: eth_cc
+      subreddit: CryptoCurrency
+      asset: ETHUSDT
+      query: "ethereum OR ETH"
+    - name: xrp_cc
+      subreddit: CryptoCurrency
+      asset: XRPUSDT
+      query: "xrp OR ripple"
+    - name: doge_cc
+      subreddit: CryptoCurrency
+      asset: DOGEUSDT
+      query: "doge OR dogecoin"
+    - name: sol_cc
+      subreddit: CryptoCurrency
+      asset: SOLUSDT
+      query: "sol OR solana"
+    - name: avax_cc
+      subreddit: CryptoCurrency
+      asset: AVAXUSDT
+      query: "avax OR avalanche"
+    - name: ada_cc
+      subreddit: CryptoCurrency
+      asset: ADAUSDT
+      query: "ada OR cardano"
+    - name: link_cc
+      subreddit: CryptoCurrency
+      asset: LINKUSDT
+      query: "link OR chainlink"
+
+reddit_sentiment_extension:
+  reddit:
+    input_path: data/reddit/reddit_posts.csv
+    timestamp_column: timestamp
+    source_column: source
+    asset_column: asset
+    headline_column: headline
+    scoring:
+      headline_positive_threshold: 0.0
+      headline_negative_threshold: 0.0
+      # 뉴스 기본 어휘에 Reddit 슬랭을 더해 neutral 쏠림(초기 87.72%)을 낮추려는 1차 튜닝.
+      # news_sentiment.py의 DEFAULT 사전은 건드리지 않고, 이 섹션에서만 전체 리스트를 재정의한다.
+      positive_terms:
+        - bullish
+        - breakout
+        - beats
+        - beat
+        - surge
+        - surges
+        - soar
+        - soars
+        - jump
+        - jumps
+        - rally
+        - rallies
+        - gain
+        - gains
+        - strong
+        - strength
+        - upgrade
+        - upgrades
+        - buy
+        - buying
+        - adoption
+        - partnership
+        - approval
+        - approved
+        - record
+        - high
+        - positive
+        - optimism
+        - optimistic
+        - moon
+        - mooning
+        - moonshot
+        - pump
+        - pumping
+        - hodl
+        - hodling
+        - ath
+        - wagmi
+        - lfg
+        - bullrun
+        - accumulate
+        - accumulating
+        - green
+        - alpha
+      negative_terms:
+        - bearish
+        - selloff
+        - sell-off
+        - drop
+        - drops
+        - fall
+        - falls
+        - plunge
+        - plunges
+        - crash
+        - crashes
+        - weak
+        - weakness
+        - downgrade
+        - downgrades
+        - lawsuit
+        - hack
+        - hacked
+        - ban
+        - bans
+        - risk
+        - risks
+        - negative
+        - panic
+        - fear
+        - fraud
+        - liquidation
+        - investigation
+        - dump
+        - dumping
+        - dumped
+        - rekt
+        - rug
+        - rugged
+        - rugpull
+        - rug-pull
+        - ngmi
+        - bagholder
+        - bagholders
+        - red
+        - bloodbath
+        - capitulation
+        - tank
+        - tanking
+        - tanked
+        - scam
+        - cope
+        - bleeding
+  lookback_minutes:
+    - 5
+    - 15
+    - 30
+  label_window_minutes: 15
+  event_positive_threshold: 0.05
+  event_negative_threshold: -0.05
+  feature_layer:
+    focus_window_minutes: 15
+    dense_news_quantile: 0.50
+    strong_sentiment_quantile: 0.50
+  baseline_input:
+    event_path: outputs/baseline/events.csv
+  output:
+    base_dir: outputs/baseline/reddit_sentiment_extension
+
+logging:
+  level: INFO

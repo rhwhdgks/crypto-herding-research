@@ -1,0 +1,16 @@
+input:
+  overlap_base_dir: outputs/tick/xrp_5y/overlap_core
+  trade_sample_base_dir: outputs/tick/xrp_5y/cost_sanity
+
+analysis:
+  strength_bucket_count: 4
+  prior_drop_bucket_count: 4
+  rolling_window_days:
+    - 90
+    - 180
+
+output:
+  base_dir: outputs/tick/xrp_5y/overlap_core/regime
+
+logging:
+  level: INFO

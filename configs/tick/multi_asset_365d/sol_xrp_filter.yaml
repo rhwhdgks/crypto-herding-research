@@ -1,0 +1,21 @@
+input:
+  trade_log_path: outputs/tick/xrp_5y/overlap_core/variants/variant_trade_log.csv
+  micro_frame_path: outputs/tick/multi_asset_365d/generalization/intermediate/tick_micro_frame_15m.csv
+
+analysis:
+  holdout_days:
+    - 30
+    - 60
+  cost_bps_grid:
+    - 2
+    - 4
+    - 6
+    - 8
+    - 10
+    - 12
+
+output:
+  base_dir: outputs/tick/multi_asset_365d/sol_xrp_filter
+
+logging:
+  level: INFO

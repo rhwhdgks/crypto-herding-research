@@ -1,0 +1,20 @@
+input:
+  base_dir: outputs/tick/xrp_5y/overlap_core/regime
+
+analysis:
+  holdout_days_list:
+    - 30
+    - 60
+  block_days: 30
+  cost_bps_grid:
+    - 2
+    - 4
+    - 6
+    - 8
+    - 10
+
+output:
+  base_dir: outputs/tick/xrp_5y/overlap_core/variants
+
+logging:
+  level: INFO

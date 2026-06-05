@@ -1,0 +1,18 @@
+data:
+  source: binance_public_data
+  trade_kind: aggTrades
+  local_data_dir: data/tick_archive
+  overwrite_existing: false
+  symbols:
+    - BTCUSDT
+    - ETHUSDT
+    - SOLUSDT
+    - XRPUSDT
+  lookback_days: 365
+  end: latest
+
+output:
+  base_dir: outputs/tick/multi_asset_365d/backfill
+
+logging:
+  level: INFO

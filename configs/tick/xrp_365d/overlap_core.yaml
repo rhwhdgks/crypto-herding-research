@@ -1,0 +1,22 @@
+input:
+  base_dir: outputs/tick/xrp_365d/candidate_refinement
+
+analysis:
+  round_trip_cost_bps: 4
+  holdout_days_list:
+    - 30
+    - 60
+  cost_bps_grid:
+    - 2
+    - 4
+    - 6
+    - 8
+    - 10
+  block_days: 30
+  block_step_days: 10
+
+output:
+  base_dir: outputs/tick/xrp_365d/overlap_core
+
+logging:
+  level: INFO
