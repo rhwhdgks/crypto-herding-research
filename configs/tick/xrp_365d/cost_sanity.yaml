@@ -1,0 +1,28 @@
+input:
+  base_dir: outputs/tick/xrp_365d/short_horizon
+
+rule:
+  interval_minutes: 15
+  event_label: up
+  horizon_minutes: 30
+  symbols:
+    - XRPUSDT
+
+analysis:
+  holdout_days_list:
+    - 30
+    - 60
+  cost_bps_grid:
+    - 2
+    - 4
+    - 6
+    - 8
+    - 10
+    - 12
+  enforce_non_overlap: true
+
+output:
+  base_dir: outputs/tick/xrp_365d/cost_sanity
+
+logging:
+  level: INFO

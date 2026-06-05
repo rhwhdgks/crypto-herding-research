@@ -1,0 +1,16 @@
+input:
+  base_dir: outputs/tick/xrp_5y/overlap_core
+
+analysis:
+  recent_days_list:
+    - 7
+    - 30
+    - 60
+  recent_signal_count: 12
+  as_of_mode: now_utc
+
+output:
+  base_dir: outputs/tick/xrp_5y/overlap_core/tracker
+
+logging:
+  level: INFO

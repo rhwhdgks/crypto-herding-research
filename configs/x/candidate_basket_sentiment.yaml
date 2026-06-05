@@ -1,0 +1,86 @@
+collection:
+  bearer_token_env: X_BEARER_TOKEN
+  cache_path: data/x_archive/recent_candidate_basket/posts.parquet
+  state_path: data/x_archive/recent_candidate_basket/state.json
+  initial_lookback_days: 7
+  max_results_per_request: 100
+  max_pages_per_query: 5
+  request_pause_seconds: 0.6
+  end: latest
+  queries:
+    - name: xrp
+      symbol: XRPUSDT
+      query: "($XRP OR XRP OR ripple) lang:en -is:retweet -is:reply"
+    - name: doge
+      symbol: DOGEUSDT
+      query: "($DOGE OR DOGE OR dogecoin) lang:en -is:retweet -is:reply"
+    - name: avax
+      symbol: AVAXUSDT
+      query: "($AVAX OR AVAX OR avalanche) lang:en -is:retweet -is:reply"
+
+scoring:
+  neutral_band: 0.0
+  engagement_weights:
+    like: 1.0
+    reply: 1.0
+    repost: 2.0
+    quote: 2.0
+    bookmark: 1.0
+  positive_terms:
+    - bullish
+    - breakout
+    - pump
+    - moon
+    - mooning
+    - rip
+    - ripping
+    - squeeze
+    - strong
+    - strength
+    - bounce
+    - rebound
+    - support
+    - buy
+    - long
+    - accumulate
+    - send
+    - green
+    - uptrend
+  negative_terms:
+    - bearish
+    - dump
+    - crash
+    - rug
+    - rugged
+    - weak
+    - weakness
+    - rejection
+    - sell
+    - short
+    - breakdown
+    - downtrend
+    - liquidation
+    - red
+    - fade
+    - panic
+    - capitulation
+
+bridge:
+  lookback_minutes:
+    - 15
+    - 60
+    - 240
+  focus_lookback_minutes: 60
+  sentiment_abs_threshold: 0.5
+  trade_log:
+    path: outputs/tick/multi_asset_365d/trackers/candidate_basket/variant_trade_log.csv
+    timestamp_column: entry_timestamp
+    symbol_column: symbol
+    variant_column: variant_name
+    return_column: net_return
+
+output:
+  base_dir: outputs/x/candidate_basket_sentiment
+
+logging:
+  level: INFO

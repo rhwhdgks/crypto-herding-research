@@ -1,0 +1,59 @@
+data:
+  source: binance
+  prefer_local_files: true
+  local_data_dir: data
+  cache_downloads: true
+  cache_format: parquet
+  use_bulk_downloads: false
+  fallback_to_mock: false
+  symbols:
+    - BTCUSDT
+    - ETHUSDT
+    - BNBUSDT
+    - XRPUSDT
+    - ADAUSDT
+    - SOLUSDT
+    - DOGEUSDT
+    - LINKUSDT
+    - AVAXUSDT
+    - DOTUSDT
+    - LTCUSDT
+    - TRXUSDT
+    - ATOMUSDT
+    - NEARUSDT
+  timeframe: 1w
+  start: "2018-01-01 00:00:00"
+  # 2024-04-08 라벨의 마지막 주간 바를 포함하려면 내부 요청 종료 시각은 다음 주 경계여야 합니다.
+  end: "2024-04-15 00:00:00"
+  exchange_limit: 1000
+  missing_timestamp_policy: none
+  allow_partial_history: true
+
+panel:
+  mode: expanding_universe
+  min_active_assets: 4
+
+paper_like:
+  regression:
+    cov_type: HAC
+    hac_maxlags: auto
+  subperiods:
+    - name: pre_covid
+      start: "2018-01-01 00:00:00"
+      end: "2020-03-10 23:59:00"
+    - name: covid
+      start: "2020-03-11 00:00:00"
+      end: "2022-02-23 23:59:00"
+    - name: post_covid
+      start: "2022-02-24 00:00:00"
+      # 주간 자료에서는 2024-04-08 라벨 바를 포함하기 위해 마지막 주 경계 직전까지 둡니다.
+      end: "2024-04-14 23:59:00"
+
+database:
+  enabled: false
+
+output:
+  base_dir: outputs/paper_like/weekly
+
+logging:
+  level: INFO

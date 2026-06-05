@@ -1,0 +1,65 @@
+data:
+  source: binance
+  prefer_local_files: true
+  local_data_dir: data
+  cache_downloads: true
+  cache_format: parquet
+  use_bulk_downloads: false
+  fallback_to_mock: false
+  symbols:
+    - BTCUSDT
+    - ETHUSDT
+    - BNBUSDT
+    - XRPUSDT
+    - ADAUSDT
+    - SOLUSDT
+    - DOGEUSDT
+    - LINKUSDT
+    - AVAXUSDT
+    - DOTUSDT
+    - LTCUSDT
+    - TRXUSDT
+    - ATOMUSDT
+    - NEARUSDT
+  timeframe: 1d
+  start: "2021-04-09 00:00:00"
+  end: latest
+  exchange_limit: 1000
+  missing_timestamp_policy: forward_fill_prices
+  max_forward_fill_steps: 3
+
+panel:
+  mode: intersection
+  min_active_assets: 14
+
+regression:
+  cov_type: HAC
+  hac_maxlags: auto
+
+event_detection:
+  lookback_window: 90
+  min_history: 90
+  volatility_window: 20
+  cooldown_periods: 1
+  herding:
+    csad_method: percentile
+    csad_low_percentile: 0.20
+    market_abs_method: percentile
+    market_abs_upper_percentile: 0.60
+  shock:
+    abs_return_method: percentile
+    abs_return_percentile: 0.85
+    volatility_method: percentile
+    volatility_percentile: 0.85
+
+tick:
+  trade_log_path: outputs/tick/xrp_5y/overlap_core/variants/variant_trade_log.csv
+  candidate_names:
+    - time_17_18
+    - time_17_18_prior_drop_q4
+
+output:
+  base_dir: outputs/tick/multi_asset_365d/paper_bridge
+
+logging:
+  level: INFO

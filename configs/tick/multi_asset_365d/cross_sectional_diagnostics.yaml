@@ -1,0 +1,36 @@
+input:
+  symbol_focus_path: outputs/tick/multi_asset_365d/generalization_extended/generalization_symbol_focus_combined.csv
+  micro_frame_paths:
+    BTCUSDT: outputs/tick/multi_asset_365d/singles/btc/intermediate/tick_micro_frame_15m.csv
+    ETHUSDT: outputs/tick/multi_asset_365d/generalization/intermediate/tick_micro_frame_15m.csv
+    XRPUSDT: outputs/tick/multi_asset_365d/generalization/intermediate/tick_micro_frame_15m.csv
+    SOLUSDT: outputs/tick/multi_asset_365d/generalization/intermediate/tick_micro_frame_15m.csv
+    DOGEUSDT: outputs/tick/multi_asset_365d/singles/doge/intermediate/tick_micro_frame_15m.csv
+    ADAUSDT: outputs/tick/multi_asset_365d/singles/ada/intermediate/tick_micro_frame_15m.csv
+    AVAXUSDT: outputs/tick/multi_asset_365d/singles/avax/intermediate/tick_micro_frame_15m.csv
+
+analysis:
+  symbols:
+    - BTCUSDT
+    - ETHUSDT
+    - XRPUSDT
+    - SOLUSDT
+    - DOGEUSDT
+    - ADAUSDT
+    - AVAXUSDT
+  focus_horizon_minutes: 30
+  min_hour_event_count: 20
+  min_prior_event_count: 30
+  symbol_groups:
+    majors:
+      - BTCUSDT
+      - ETHUSDT
+    alts:
+      - XRPUSDT
+      - SOLUSDT
+      - DOGEUSDT
+      - ADAUSDT
+      - AVAXUSDT
+
+output:
+  base_dir: outputs/tick/multi_asset_365d/cross_sectional_diagnostics

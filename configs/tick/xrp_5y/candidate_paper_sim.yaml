@@ -1,0 +1,18 @@
+input:
+  base_dir: outputs/tick/xrp_5y/cost_sanity
+
+analysis:
+  candidates:
+    - prev_neg
+    - ratio_1_40_16_18
+  round_trip_cost_bps: 4
+  recent_days_list:
+    - 30
+    - 60
+    - 90
+
+output:
+  base_dir: outputs/tick/xrp_5y/candidate_paper_sim
+
+logging:
+  level: INFO

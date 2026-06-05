@@ -1,0 +1,89 @@
+# =========================================
+# Python
+# =========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# =========================================
+# Virtual environments
+# =========================================
+.venv/
+venv/
+env/
+ENV/
+
+# =========================================
+# IDE / OS
+# =========================================
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# =========================================
+# AI assistants / development notes (internal)
+# =========================================
+.claude/
+agents.md
+claude.md
+CLAUDE.md
+
+# =========================================
+# Logs
+# =========================================
+logs/
+*.log
+*.out
+
+# =========================================
+# Secrets / credentials
+# =========================================
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+credentials.json
+
+# =========================================
+# Raw market data (regenerate via scripts)
+# =========================================
+data/*.parquet
+data/*.csv
+data/tick_archive/
+data/tick_pilot/
+data/news/
+data/reddit/
+data/x_archive/
+data/coinmarketcap/
+
+# =========================================
+# Reference papers (copyright)
+# =========================================
+references/
+
+# =========================================
+# Database dumps
+# =========================================
+*.sql.gz
+*.db
+*.sqlite
+*.sqlite3
+
+# =========================================
+# Heavy research outputs / experiments
+# =========================================
+# Default: only explicitly added files under outputs/ and experiments/ are tracked.
+# See PUBLISH.md for the curated `git add` list.

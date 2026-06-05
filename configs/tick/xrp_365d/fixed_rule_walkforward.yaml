@@ -1,0 +1,19 @@
+input:
+  base_dir: outputs/tick/xrp_365d/short_horizon
+
+rule:
+  interval_minutes: 15
+  event_label: up
+  horizon_minutes: 30
+  symbols:
+    - XRPUSDT
+
+analysis:
+  block_days: 30
+  step_days: 30
+
+output:
+  base_dir: outputs/tick/xrp_365d/fixed_rule/walkforward
+
+logging:
+  level: INFO

@@ -1,0 +1,21 @@
+input:
+  base_dir: outputs/tick/xrp_365d/short_horizon
+
+rule:
+  interval_minutes: 15
+  event_label: up
+  horizon_minutes: 30
+  symbols:
+    - XRPUSDT
+
+analysis:
+  window_days_list:
+    - 10
+    - 20
+    - 30
+
+output:
+  base_dir: outputs/tick/xrp_365d/fixed_rule/regime
+
+logging:
+  level: INFO
