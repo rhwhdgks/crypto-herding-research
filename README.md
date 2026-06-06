@@ -1,7 +1,7 @@
-# Crypto Herding Research Pipeline
+# Crypto Market Herding Research
 
-> 암호화폐 시장의 **군집행동(herding)** 을 다층적으로 분석한 재현 가능한 연구 파이프라인.
-> 1분봉 CSAD 회귀, tick microstructure event study, 7-자산 lead-lag matrix, cointegration 페어 통합 검증까지 통합한 quant research repo.
+> 암호화폐 시장의 **군집행동(herding)** 을 CSAD, tick microstructure, lead-lag matrix, 뉴스/Reddit sentiment feature로 검증하는 재현 가능한 quant research repo.
+> 목표는 자동매매 시스템이 아니라, herding-like event가 존재하는지와 그 뒤의 단기 가격 반응이 통계적으로 유지되는지를 검증하는 것이다.
 
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
@@ -14,7 +14,7 @@
 1. **광범위 herding 가설은 기각**: 2년 1분봉 Binance 14-자산 universe (105만 obs) CSAD 회귀에서 `β₂ = +4.53` — 시장 전체 herding은 통계적으로 약함.
 2. **알트 한정 미시구조 패턴은 통계적으로 살아있음**: 5년 tick aggTrades 데이터로 빌드한 7×6×2 = 84-cell **lead-lag matrix**에서 `DOGE down event → AVAX/ADA +30min` 패턴이 **BH-FDR q=0.05 보정** 통과.
 3. **다만 시간적 lead-lag이 아닌 동시 반응 (CCF lag=0 peak)** → alpha 트레이딩 신호로 변환 불가, **알트 간 공통 beta 구조**의 정량적 증거.
-4. **연구의 진짜 가치**: alpha 발굴이 아니라 **죽은 가설의 명확한 정리 + 4단 robustness 검증 (다중비교 보정 / stability split / permutation test / tick-level CCF) 자동화 파이프라인**.
+4. **연구의 핵심 가치**: alpha를 성급히 주장하지 않고, **죽은 가설의 정리 + robustness 검증 (다중비교 보정 / stability split / permutation test / tick-level CCF) 자동화 파이프라인**을 남김.
 
 선행연구 ("Herding, information cascades, and cryptocurrencies", 2024)는 CSAD/SCSAD + VPIN + SUR 모형으로 informed trading 측면을 다뤘고, 본 연구는 자산 간 **directional lead-lag matrix** 측면을 추가해 보완적 관점을 제공.
 
@@ -153,6 +153,18 @@ cd cryptomarket_herding
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+```
+
+Repository rename candidate:
+
+```text
+crypto-herding-research
+```
+
+Recommended GitHub About:
+
+```text
+Reproducible crypto herding research: CSAD/SCSAD, Binance tick microstructure event studies, lead-lag robustness, and news/Reddit sentiment features.
 ```
 
 ### Configure secrets (optional — only if using DB export)
