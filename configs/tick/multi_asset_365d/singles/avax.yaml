@@ -7,8 +7,8 @@ data:
   monthly_chunk_rows: 1000000
   symbols:
     - AVAXUSDT
-  start: "2025-04-09"
-  end: "2026-04-09"
+  lookback_days: 365
+  end: latest
 
 backfill:
   max_workers: 2
