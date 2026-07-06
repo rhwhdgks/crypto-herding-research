@@ -31,6 +31,7 @@
 | Stability split (전반 vs 후반 2.5년) | OOS 검증 | 같은 부호 유지, 후반에 강도 ↑ |
 | Permutation test (1000 shuffles) | random null 분포 | 시간적 lead-lag 가설 p=0.208 (reject) |
 | Tick-level CCF | 1분 단위 cross-correlation | **lag=0 peak → 동시 반응** |
+| **VPIN-proxy conditional split** | DOGE 581M aggTrades, toxicity 3분위 | 공동반응이 **low-toxicity(noise)에 집중** → informed cascade ❌ |
 
 ---
 
@@ -70,10 +71,14 @@ herding/
 │   │   ├── step6_vol_regime.py               # Low vs high vol split
 │   │   └── step7_period_split.py             # Bull / winter / recovery
 │   │
-│   └── cointegration_lead_lag/       # Cross-validation with pair trading
-│       ├── step1_15m_screening.py            # Engle-Granger 3-day rolling
-│       ├── step2_15m_backtest.py             # Z-score backtest + LAG sweep
-│       └── step3_permutation_test.py         # 1000-shuffle null distribution
+│   ├── cointegration_lead_lag/       # Cross-validation with pair trading
+│   │   ├── step1_15m_screening.py            # Engle-Granger 3-day rolling
+│   │   ├── step2_15m_backtest.py             # Z-score backtest + LAG sweep
+│   │   └── step3_permutation_test.py         # 1000-shuffle null distribution
+│   │
+│   └── informed_trading/             # VPIN-proxy × lead-lag integration
+│       ├── step1_doge_vpin.py                # aggTrades → 15m order-flow toxicity
+│       └── step2_conditional_leadlag.py      # toxicity-tercile conditional split
 │
 ├── configs/                          # YAML configuration files
 │   ├── baseline/config.yaml          # 2-year 1m baseline
@@ -148,17 +153,11 @@ Welch t-stat 적용, 84개 hypothesis에 대해 BH-FDR 보정.
 ### Install
 
 ```bash
-git clone https://github.com/rhwhdgks/cryptomarket_herding.git
-cd cryptomarket_herding
+git clone https://github.com/rhwhdgks/crypto-herding-research.git
+cd crypto-herding-research
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-```
-
-Repository rename candidate:
-
-```text
-crypto-herding-research
 ```
 
 Recommended GitHub About:
@@ -216,7 +215,7 @@ ls outputs/tick/multi_asset_5y/lead_lag_matrix/
 ## Limitations & Honest Disclosure
 
 - **No live alpha**: BH-FDR 보정 통과한 cell도 effect size가 taker fee (왕복 ~0.15%)에 비해 작음 (5y mean +0.058% / 30min).
-- **No VPIN / SUR model yet**: 선행연구의 informed-trading axis는 본 연구와 직교 — 명시적 다음 단계.
+- **VPIN-proxy only, no SUR model yet**: informed-trading axis는 15분 시간버킷 order-flow toxicity(정확한 aggressor side 기반)로 1차 검증 — canonical equal-volume VPIN과 SUR 모형은 다음 단계.
 - **CCF lag=0**: 통계적으로 유의한 lead-lag 쌍도 동시 반응이고 시간차 leading이 아님. 이를 숨기지 않고 명시.
 - **Single exchange (Binance USDT)**: Cross-exchange spillover 미검증.
 - 모든 결과는 **research hypothesis**, production strategy 아님.
@@ -225,7 +224,8 @@ ls outputs/tick/multi_asset_5y/lead_lag_matrix/
 
 ## Roadmap
 
-- [ ] VPIN computation from aggTrades + SUR(herding × VPIN) model
+- [x] VPIN-proxy (order-flow toxicity) × lead-lag conditional split — **공동반응은 low-toxicity(noise)에 집중, informed cascade 기각** ([`experiments/informed_trading/`](experiments/informed_trading/informed_trading_report.md))
+- [ ] Canonical VPIN (equal-volume bucket) + SUR(herding × VPIN × vol) model
 - [ ] Idiosyncratic vol grouping per Patterson-Sharma decomposition
 - [ ] Funding-rate / perp-spot basis layer
 - [ ] Cross-exchange (Coinbase / OKX / Bybit) spillover

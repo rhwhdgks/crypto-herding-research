@@ -87,3 +87,5 @@ references/
 # =========================================
 # Default: only explicitly added files under outputs/ and experiments/ are tracked.
 # See PUBLISH.md for the curated `git add` list.
+# Regenerable heavy intermediates (rebuild via the step scripts):
+experiments/informed_trading/outputs/doge_vpin_15m.csv
