@@ -45,7 +45,7 @@ git commit -m "Initial release: crypto herding research pipeline + lead-lag matr
 
 ```bash
 # GitHub에서 빈 repo 생성 후 (Add README, gitignore, license 모두 체크해제)
-git remote add origin git@github.com:rhwhdgks/cryptomarket_herding.git
+git remote add origin git@github.com:rhwhdgks/crypto-herding-research.git
 git push -u origin main
 ```
 
