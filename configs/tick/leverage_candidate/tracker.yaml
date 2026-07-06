@@ -1,0 +1,85 @@
+# Leverage-state 후보 forward tracker
+#
+# 후보: DOGE down micro-herding event + crowded funding + OI no-flush
+#       → 알트 4종(+DOGE) 동일가중 long basket, 30분 보유
+# 근거: experiments/informed_trading/ step5~9 (2026-07-06)
+#       permutation p=0.041 / maker net +0.131%/trade / 단 2024-12 이후 레짐 휴면
+# 지위: 추적 후보 — 다음 crowded funding 레짐에서의 생존 여부가 최종 판정
+
+data:
+  source: binance_public_data
+  trade_kind: aggTrades
+  local_data_dir: data/tick_archive
+  overwrite_existing: false
+  prefer_monthly_archives: true
+  monthly_chunk_rows: 1000000
+  symbols:
+    - DOGEUSDT
+    - AVAXUSDT
+    - ADAUSDT
+    - XRPUSDT
+    - SOLUSDT
+  # in-sample micro frame 종료(2026-05-07) 이후가 OOS.
+  # rolling threshold 워밍업(5일)을 위해 5월 초부터 로드하고,
+  # oos_start 이전 이벤트는 기록하지 않는다.
+  start: "2026-05-01"
+  end: safe_latest
+
+backfill:
+  max_workers: 4
+
+analysis:
+  # lead_lag_matrix.yaml 과 동일 (이벤트 정의 일치가 생명)
+  interval_minutes:
+    - 15
+  forward_horizons_minutes:
+    - 30
+  session_hours_utc:
+    - 16
+    - 17
+    - 18
+    - 19
+    - 20
+    - 21
+    - 22
+    - 23
+  lookback_days_for_threshold: 5
+  herding_score_percentile: 0.15
+  min_trades_per_bucket: 200
+  symbols:
+    - DOGEUSDT
+    - AVAXUSDT
+    - ADAUSDT
+    - XRPUSDT
+    - SOLUSDT
+  directions:
+    - down
+
+candidate:
+  leader: DOGEUSDT
+  direction: down
+  basket_targets:
+    - AVAXUSDT
+    - ADAUSDT
+    - XRPUSDT
+    - SOLUSDT
+  include_leader_in_basket: true
+  # 진입 조건 (모두 이벤트 버킷 종료 시점 관측 가능)
+  funding_threshold: 0.0001          # crowded = 기본요율 초과
+  # in-sample(2021-12~2026-04, 3899 DOGE down events) d_oi_event 하위 tercile 컷.
+  # no-flush 조건: d_oi_event > flush_cut. 고정값 사용 (OOS 순수성).
+  flush_cut: -0.001146
+  oos_start: "2026-05-08"
+  fee_scenarios:
+    maker_rt: 0.0004
+    taker_rt: 0.0010
+
+futures_state:
+  base_url: https://data.binance.vision/data/futures/um
+  local_data_dir: data/futures_archive
+
+output:
+  base_dir: outputs/tick/leverage_candidate/tracker
+
+logging:
+  level: INFO

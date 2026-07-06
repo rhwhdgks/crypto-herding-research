@@ -229,7 +229,7 @@ ls outputs/tick/multi_asset_5y/lead_lag_matrix/
 - [x] VPIN-proxy (order-flow toxicity) × lead-lag conditional split — **공동반응은 low-toxicity(noise)에 집중, informed cascade 기각** ([`experiments/informed_trading/`](experiments/informed_trading/informed_trading_report.md))
 - [x] Funding-rate / OI (레버리지 상태) conditional layer — **crowded funding × no OI-flush 셀이 첫 ex-ante 수수료권 후보 (추적 지위, 승격 아님)**
 - [x] crowded × no_flush 후보: basket pooled + permutation (p=0.041) + 비용 시뮬 (maker net +0.13%/trade)
-- [ ] crowded × no_flush 후보: forward tracker 등록 — 다음 crowded funding 레짐에서 생존 판정 (rolling flush 컷 포함)
+- [x] crowded × no_flush 후보: forward tracker 등록 (`scripts/run_leverage_candidate_tracker.py`) — 첫 실행 2026-07-06: OOS 2개월 DORMANT (crowded 버킷 0%), 신호 0건. 다음 crowded 레짐에서 생존 판정
 - [ ] Canonical VPIN (equal-volume bucket) + SUR(herding × VPIN × vol) model
 - [ ] Idiosyncratic vol grouping per Patterson-Sharma decomposition
 - [ ] Perp-spot basis layer (funding-rate layer는 완료, basis는 미착수)
