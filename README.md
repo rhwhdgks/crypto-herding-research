@@ -32,7 +32,8 @@
 | Permutation test (1000 shuffles) | random null 분포 | 시간적 lead-lag 가설 p=0.208 (reject) |
 | Tick-level CCF | 1분 단위 cross-correlation | **lag=0 peak → 동시 반응** |
 | **VPIN-proxy conditional split** | DOGE 581M aggTrades, toxicity 3분위 | 공동반응이 **low-toxicity(noise)에 집중** → informed cascade ❌ |
-| **Funding/OI conditional split** | Binance futures funding + 5-min OI | `crowded funding × no OI-flush` 셀만 **+0.13~0.17%/30min (t=1.9~2.8, 알트 4종)** — 첫 ex-ante 수수료권 후보, 추적 지위 |
+| **Funding/OI conditional split** | Binance futures funding + 5-min OI | `crowded funding × no OI-flush` 셀만 **+0.13~0.17%/30min (t=1.9~2.8, 알트 4종)** — 첫 ex-ante 수수료권 후보 |
+| Permutation + 실행 시뮬 | circular-shift null 1000회 / fee 시나리오 | **p=0.041**, maker net +0.13%/trade — 단 **2024-12 이후 레짐 휴면** (crowded funding 미발생), 추적 지위 |
 
 ---
 
@@ -227,7 +228,8 @@ ls outputs/tick/multi_asset_5y/lead_lag_matrix/
 
 - [x] VPIN-proxy (order-flow toxicity) × lead-lag conditional split — **공동반응은 low-toxicity(noise)에 집중, informed cascade 기각** ([`experiments/informed_trading/`](experiments/informed_trading/informed_trading_report.md))
 - [x] Funding-rate / OI (레버리지 상태) conditional layer — **crowded funding × no OI-flush 셀이 첫 ex-ante 수수료권 후보 (추적 지위, 승격 아님)**
-- [ ] crowded × no_flush 후보: basket pooled 검정 + permutation + forward tracker 등록
+- [x] crowded × no_flush 후보: basket pooled + permutation (p=0.041) + 비용 시뮬 (maker net +0.13%/trade)
+- [ ] crowded × no_flush 후보: forward tracker 등록 — 다음 crowded funding 레짐에서 생존 판정 (rolling flush 컷 포함)
 - [ ] Canonical VPIN (equal-volume bucket) + SUR(herding × VPIN × vol) model
 - [ ] Idiosyncratic vol grouping per Patterson-Sharma decomposition
 - [ ] Perp-spot basis layer (funding-rate layer는 완료, basis는 미착수)
