@@ -151,14 +151,45 @@ crowded × no_flush 셀, 타깃 6종 확장 + 시간 반분할:
 - 알트 4종 모두 taker 왕복비(~0.15%) 근방~초과, 반분할 부호 유지
 - BTC/ETH는 효과 절반 이하 — 기존 "메이저 비일반화" 패턴과 정합
 
+### 검증 1 — Permutation test (step8)
+
+circular shift null (state 시계열을 15분 그리드에서 통째로 회전, 자기상관 보존, 1000회).
+통계량은 다중비교를 제거한 **알트 4종 동일가중 basket delta**.
+
+- 관측: +0.157% (n=241) vs null 평균 +0.040% / sd 0.066% / p95 +0.151%
+- **p = 0.041 (one-sided), 0.043 (two-sided)** — 통과하나 아슬아슬 (z≈1.8)
+- null 평균이 0이 아닌 이유: DOGE down 이벤트는 아무 부분집합이나 기본 반등(t=3.4)을
+  가지므로, 이 검정은 **conditioning의 증분 정보**를 잰다. 증분은 실재하나 강하지 않음.
+
+### 검증 2 — 실행 시뮬 (step9, 30min hold, 이벤트당)
+
+| basket | gross | maker (0.04% RT) | taker (0.10% RT) |
+|---|---|---|---|
+| 알트 4종 | +0.156% (win 56%) | **+0.116%** | +0.056% |
+| +DOGE 5종 | +0.171% (win 58%) | **+0.131%** | +0.071% |
+
+- 총 241 이벤트 누적 (5종, maker): **+31.5%**, maxDD 7.9%
+- 연도별 일관: 2023 +0.168% / 2024 +0.151%
+
+### 결정적 함정 — 레짐 휴면 (step9)
+
+**cell 이벤트가 전부 2023-01-15 ~ 2024-12-07 구간에만 존재.**
+2024-12 이후 17개월간 DOGE funding이 기본요율을 초과한 적이 없어 이벤트 0건.
+step7의 "반분할 안정"도 실질적으로는 2023 vs 2024 비교였던 셈.
+
+→ 이 후보는 상시 전략이 아니라 **crowded-long 레짐에서만 발화하는 조건부 후보**다.
+살아있는지 여부는 다음 crowded funding 레짐이 와야 확인 가능 — forward tracker 의
+역할이며, 그 전까지는 어떤 성과 주장도 하지 않는다.
+
 ### 지위: 추적 후보 (승격 아님)
 
-- **처음으로 ex-ante 구현 가능하면서 수수료 장벽에 닿는 조건부 셀** (maker 왕복 ~0.04% 기준은 명확히 초과)
-- 단 n≈242 (주 1회 빈도), **다중비교 스캔 끝에 발견된 셀**이므로 tracker 원칙 적용:
-  추적하되 과대평가하지 말 것. crowded funding 시기가 후반(2024~)에 몰려 있어
-  regime 의존성 검증도 필요.
-- 다음 검증: (1) 알트 basket pooled 검정, (2) DOGE 자체 반등 포함 실행 시뮬,
-  (3) forward tracker 등록, (4) permutation test
+- **처음으로 ex-ante 구현 가능하면서 수수료 장벽을 넘는 조건부 셀** (maker 기준 명확,
+  taker 기준 얇게 통과). permutation p=0.041로 증분 정보도 실재.
+- 단: (1) 다중비교 스캔 출신 + permutation 아슬아슬, (2) **2024-12 이후 레짐 휴면**
+  (활동 기간 2023-01~2024-12 뿐), (3) 활동기에도 연 ~120건 수준.
+- 완료된 검증: basket pooled (step8에 포함), permutation (step8), 비용 시뮬 (step9)
+- 남은 것: **forward tracker 등록** — 다음 crowded funding 레짐에서의 생존 여부가
+  이 후보의 최종 판정. rolling flush 컷 구현도 tracker 단계에서 필요.
 
 ## 산출물
 
@@ -171,10 +202,15 @@ crowded × no_flush 셀, 타깃 6종 확장 + 시간 반분할:
 | `step5_leverage_conditional.py` | 레버리지 조건부 분해 | ✓ |
 | `step6_combined_filter.py` | funding regime × OI flush 교차 | ✓ |
 | `step7_crowded_noflush_robustness.py` | 최강 셀 타깃 확장 + 반분할 | ✓ |
+| `step8_permutation_test.py` | circular-shift permutation (basket) | ✓ |
+| `step9_execution_sim.py` | 비용 시나리오 실행 시뮬 | ✓ |
 | `outputs/conditional_leadlag_summary.csv` | toxicity 분위별 delta/t | ✓ |
 | `outputs/joint_vol_toxicity_summary.csv` | vol × tox 셀별 결과 | ✓ |
 | `outputs/leverage_conditional_summary.csv` | 레버리지 조건별 결과 | ✓ |
 | `outputs/combined_filter_summary.csv` | funding × flush 셀별 결과 | ✓ |
 | `outputs/crowded_noflush_robustness.csv` | 최강 셀 robustness | ✓ |
+| `outputs/permutation_crowded_noflush.csv` | permutation null 분포 (1001 draws) | ✓ |
+| `outputs/execution_sim_summary.csv` | basket × fee 시나리오 성과 | ✓ |
+| `outputs/execution_sim_events.csv` | cell 이벤트별 상세 (241건) | ✓ |
 | `outputs/doge_vpin_15m.csv` | 175,260 buckets VPIN-proxy (23MB) | ✗ (step1로 재생성) |
 | `outputs/doge_futures_state_15m.csv` | 154,753 buckets funding/OI 상태 (~15MB) | ✗ (step4로 재생성) |
