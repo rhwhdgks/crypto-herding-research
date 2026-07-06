@@ -174,8 +174,9 @@ circular shift null (state 시계열을 15분 그리드에서 통째로 회전, 
 ### 결정적 함정 — 레짐 휴면 (step9)
 
 **cell 이벤트가 전부 2023-01-15 ~ 2024-12-07 구간에만 존재.**
-2024-12 이후 17개월간 DOGE funding이 기본요율을 초과한 적이 없어 이벤트 0건.
-step7의 "반분할 안정"도 실질적으로는 2023 vs 2024 비교였던 셈.
+(정정 2026-07-06, step10: DOGE crowded funding 버킷 자체는 2025-10-11까지 드물게
+존재했으나 — 이후 완전 소멸, 최근 90일 0.0% — 세션·이벤트 조건과 겹친 적이 없어
+cell 이벤트는 2024-12-07이 마지막.) step7의 "반분할 안정"도 실질 2023 vs 2024 비교였던 셈.
 
 → 이 후보는 상시 전략이 아니라 **crowded-long 레짐에서만 발화하는 조건부 후보**다.
 살아있는지 여부는 다음 crowded funding 레짐이 와야 확인 가능 — forward tracker 의
@@ -190,6 +191,31 @@ step7의 "반분할 안정"도 실질적으로는 2023 vs 2024 비교였던 셈.
 - 완료된 검증: basket pooled (step8에 포함), permutation (step8), 비용 시뮬 (step9)
 - 남은 것: **forward tracker 등록** — 다음 crowded funding 레짐에서의 생존 여부가
   이 후보의 최종 판정. rolling flush 컷 구현도 tracker 단계에서 필요.
+
+## Step 10 — Leader 확장 (2026-07-06): 일반화 실패, DOGE 고유 구조로 확정
+
+같은 crowded × no_flush 규칙을 다른 leader의 funding/OI로 적용 (basket5 통계량 통일):
+
+| leader | ALL down events | crowded × no_flush cell | 최근 90일 레짐 |
+|---|---|---|---|
+| **DOGE** (기준 재현) | +0.037%, t=2.83 | **+0.170%, t=3.04, n=242** | dormant (0%) |
+| SOL | +0.023%, t=1.99 | −0.003%, t=−0.04 | dormant (0%) |
+| ADA | +0.017%, t=1.36 | +0.032%, t=0.35 | dormant (0%) |
+| XRP | +0.003%, t=0.19 | −0.026%, t=−0.32 | dormant (0%) |
+| AVAX | +0.019%, t=1.40 | −0.045%, t=−0.53 | dormant (0%) |
+
+**판정:**
+
+1. **Leader 일반화 실패** — crowded × no_flush 구조는 DOGE에서만 성립.
+   다른 4개 leader는 셀이 0 근방 또는 음수. "레버리지 과열 × noise dip" 일반 법칙이
+   아니라 **DOGE 고유 구조**다. 해석: DOGE는 리테일 레버리지 정서의 대표 자산이고,
+   그 조건부 dip만 알트 바스켓 반등을 동반한다 (unconditional에서도 DOGE가 최강
+   leader인 5y matrix 결과와 정합).
+2. **정직한 코스트**: 일반화됐다면 요행 가능성이 크게 줄었을 텐데 실패했으므로,
+   단일 자산 조건부 신호로서 **overfit 잔존 위험이 상향**됐다. permutation p=0.041과
+   BTC/ETH falsification은 여전히 유효하나, tracker 생존의 중요성이 더 커졌다.
+3. **"지금 발화 가능한" 변형 없음** — 5개 leader 전부 최근 90일 crowded 0.0%.
+   시장 전체가 저 funding 레짐. 후보는 전면 휴면이 맞다.
 
 ## 산출물
 
