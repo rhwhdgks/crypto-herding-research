@@ -1,120 +1,147 @@
 # Crypto Herding Research
 
-암호화폐 시장의 CSAD 집단추종 신호를 재현하고, 그 음의 계수가 행동적 herding인지 모형 구조가 만든 결과인지 반증 중심으로 검증한 재현 가능한 연구 저장소입니다.
+## 암호화폐가 함께 움직이면 정말 서로를 따라간 것일까?
 
-> **핵심 결론:** 선행논문의 no-intercept·SCSAD 계수는 정밀하게 재현됐지만, 두 모형은 herding이 없는 합성자료에서도 거의 항상 음의 유의한 계수를 만듭니다. 현재 표본에서 거래 가능한 단기 alpha는 확인되지 않았습니다.
+여러 코인이 동시에 오르거나 내릴 때 흔히 “투자자들이 떼를 지어 움직였다”고 말합니다. 이 프로젝트는 그 설명이 데이터로도 성립하는지 검증한 연구입니다.
 
-상세한 연구 과정과 수치는 [외부용 통합 연구 보고서](docs/EXTERNAL_RESEARCH_REPORT_KO.md)에서 확인할 수 있습니다.
+논문 결과를 그대로 재현하는 데서 시작해, 다른 기간과 거래소에서도 같은 현상이 나타나는지 확인하고, 마지막에는 **집단추종이 전혀 없는 가상시장에서도 같은 신호가 생기는지** 실험했습니다.
 
-## 연구 질문과 결과
+## 30초 요약
 
-| 질문 | 결과 | 현재 해석 |
+- 선행논문과 거의 같은 음의 CSAD 계수를 재현했습니다.
+- 하지만 집단추종이 없는 가상시장에서도 그 계수가 97~100%의 빈도로 나타났습니다.
+- 따라서 “논문의 숫자는 재현되지만, 그 숫자만으로 투자자의 집단추종을 입증할 수는 없다”가 핵심 결론입니다.
+- 1분봉과 개별 체결자료에서도 단기 수익률을 안정적으로 예측하는 신호는 찾지 못했습니다.
+- 현재 이 프로젝트에는 자동매매에서 반복적인 초과수익을 기대할 수 있다고 확인된 예측 신호(`alpha`)가 없습니다.
+
+> 이 연구의 가장 중요한 성과는 수익 전략을 발견한 것이 아니라, 기존 지표가 잘못 해석될 수 있는 수학적 원인을 확인한 것입니다.
+
+더 자세한 설명은 [누구나 읽을 수 있는 한국어 통합 보고서](docs/EXTERNAL_RESEARCH_REPORT_KO.md)에 정리했습니다.
+
+## 무엇을 확인했나
+
+| 확인한 내용 | 결과 | 쉬운 해석 |
 |---|---|---|
-| Binance 14자산 2년 1분봉에서 classical CSAD herding이 나타나는가? | Standard CSAD의 `beta2 > 0` | 지지하지 않음 |
-| 선행논문의 CMC fixed-62 결과를 재현할 수 있는가? | Daily no-intercept `-1.837`, SCSAD `-2.902` | 수치 재현 성공 |
-| corrected 모형이 기간·거래소·point-in-time universe를 넘어 유지되는가? | CMC holdout 4/4, Binance 3/4, OKX 3/4·1/4, Binance PIT 2/4·0/4 | 보편적 강건성 없음 |
-| 음의 계수가 intentional herding을 식별하는가? | 비허딩 null에서 no-intercept 99~100%, SCSAD 97~100% false positive | 식별하지 못함 |
-| 기계적 음의 계수를 수학적으로 설명할 수 있는가? | Gaussian 식 3/3, 원 v1 수렴 5/6, 독립 v1.1 보충 12/12 | 수학식·유한표본 수렴 지지, 원 실패는 보존 |
-| Tick run-clustering이 단기 방향을 예측하는가? | 사전등록 OOS 0/9 | 방향성 alpha 없음 |
-| Zero-run이 시장상태와 미래 변동을 설명하는가? | 동시점 5/5, 미래 family 0/2 | 상태 기술 가능, 미래 예측력 없음 |
+| Binance 주요 코인 14개의 2년 1분봉 | 전통적 CSAD 집단추종 신호 없음 | 최근 Binance 표본에서는 뚜렷한 집단추종을 찾지 못함 |
+| 선행논문의 CoinMarketCap 62종목 분석 | 논문 계수를 매우 가깝게 재현 | 논문의 계산 결과 자체는 재현 가능 |
+| 논문 종료 이후 기간 | 같은 종류의 음의 계수가 다시 나타남 | 특정 과거기간에만 생긴 숫자는 아님 |
+| Binance·OKX·시점별 종목구성 검증 | 거래소와 구성법을 바꾸면 결과가 약해짐 | 어떤 코인을 어떻게 고르는지에 민감 |
+| 집단추종이 없는 가상시장 | 기존 보정모형이 거의 항상 음의 계수를 생성 | 음의 계수만으로 집단추종을 판정하면 위험 |
+| 개별 체결의 연속성 | 단기 가격 방향 예측 실패 | 매매 신호로 확인되지 않음 |
+| 동일 가격 체결의 반복(Zero-run) | 현재 거래상태는 설명하지만 미래 변동은 예측하지 못함 | 시장상태 설명 변수이지 미래 예측 변수는 아님 |
 
-논문 수치를 재현했다는 것과 투자자의 의도적 모방을 식별했다는 것은 서로 다른 주장입니다. 이 저장소는 두 주장을 분리합니다.
+## 왜 음의 계수가 문제가 됐나
 
-## CSAD
-
-횡단면 절대편차(CSAD)는 시점 `t`에서 각 자산 수익률이 시장수익률에서 얼마나 떨어져 있는지 측정합니다.
+CSAD는 같은 시점에 여러 코인의 수익률이 시장 평균에서 얼마나 떨어져 있는지 측정합니다.
 
 ```text
-CSAD_t = mean_i |R_i,t - R_m,t|
-
-CSAD_t = alpha + beta1 * |R_m,t| + beta2 * R_m,t^2 + error_t
+CSAD = 각 코인 수익률과 시장 평균 수익률의 거리 평균
 ```
 
-Standard 모형에서 `beta2 < 0`은 시장 움직임이 커질수록 횡단면 분산의 증가세가 둔화되는 현상을 뜻합니다. 그러나 이것만으로 투자자의 의도적 집단추종이나 미래수익률 alpha를 입증하지는 않습니다.
+일반적으로 시장이 크게 움직일 때 이 거리가 예상보다 덜 벌어지면 코인들이 서로 따라 움직였을 가능성을 생각할 수 있습니다.
 
-## 저장소 구조
+문제는 선행연구의 일부 회귀식이 **절편을 제거하거나 CSAD의 부호를 바꾸는 방식**을 사용했다는 점입니다. 실험 결과, 이 구조는 실제 집단추종이 없어도 회귀선이 음의 곡률을 만들도록 유도했습니다.
 
-```text
-.
-├── configs/               # baseline, replication, external-validation 설정
-├── data/                  # 로컬 원자료 안내; 실제 데이터는 Git 제외
-├── docs/                  # 외부 독자를 위한 통합 문서
-├── experiments/           # 과거 탐색 연구와 무효화 기록
-├── outputs/v2/            # 수정된 연구 결과; 공개 파일은 명시적 opt-in
-├── research_protocols/    # 결과 확인 전 고정한 연구 프로토콜
-├── scripts/               # 실행기, 보고서 생성기, 읽기 전용 verifier
-├── src/                   # 분석·simulation·reporting 모듈
-└── tests/                 # 단위·통합·재현성 테스트
-```
+쉽게 말하면 다음과 같습니다.
 
-## 설치
+1. 원래 데이터에는 0보다 큰 기본적인 분산 수준이 있습니다.
+2. 절편을 없애면 회귀선이 무조건 원점에서 출발해야 합니다.
+3. 회귀선은 기본 분산 수준을 따라가기 위해 처음에는 올라갔다가 다시 휘어집니다.
+4. 이때 음의 제곱항이 생기며, 이것이 집단추종 신호처럼 보일 수 있습니다.
+
+이 수학적 설명은 독립식 검증과 Monte Carlo simulation으로 확인했습니다. 최초 사전등록 실험은 엄격한 기준에서 6개 중 5개만 통과했고, 이 실패를 그대로 보존했습니다. 이후 독립 seed와 더 긴 표본으로 진행한 별도 보충실험은 12개 기준을 모두 통과했습니다.
+
+## 이 연구가 말하는 것과 말하지 않는 것
+
+### 말할 수 있는 것
+
+- 선행논문의 주요 수치는 재현할 수 있습니다.
+- 해당 결과는 거래소, 종목구성, 가중법에 민감합니다.
+- 일부 음의 CSAD 계수는 회귀식 구조만으로도 발생합니다.
+- Zero-run은 동시점의 거래활동과 주문흐름 상태를 설명할 수 있습니다.
+
+### 말할 수 없는 것
+
+- 투자자들이 서로를 보고 의도적으로 따라 했다는 주장
+- 음의 CSAD 계수가 곧 암호화폐 집단추종이라는 주장
+- 집단추종 이벤트 뒤에 수익을 낼 수 있다는 주장
+- 현재 결과만으로 자동매매를 시작할 수 있다는 주장
+
+## 연구 진행 순서
+
+1. **기초분석:** Binance 14종목의 2년 1분봉으로 시장수익률과 CSAD를 계산했습니다.
+2. **논문 재현:** CoinMarketCap 자료와 논문의 62종목 목록으로 주요 계수를 재현했습니다.
+3. **외부검증:** 새로운 기간, Binance, OKX, 시점별 Top-50 종목구성에서 반복했습니다.
+4. **모형 감사:** 집단추종이 없는 여러 가상시장을 만들어 거짓양성률을 측정했습니다.
+5. **수학적 검증:** 음의 계수가 생기는 원인을 폐형식과 simulation으로 확인했습니다.
+6. **미시구조 연구:** 1분봉보다 세밀한 개별 체결자료에서 단기 예측력을 검증했습니다.
+
+## 처음 읽는다면
+
+다음 순서로 보면 가장 빠릅니다.
+
+1. [외부용 한국어 통합 보고서](docs/EXTERNAL_RESEARCH_REPORT_KO.md): 연구 배경부터 결론까지 쉬운 설명
+2. [최종 논문형 원고](outputs/v2/final_research_completion_v1/final_research_manuscript.md): 전체 연구를 논문 형식으로 정리
+3. [기계적 음의 계수 보고서](outputs/v2/csad_mechanical_derivation_v1/csad_mechanical_derivation_report.md): 왜 음수가 생기는지 집중 설명
+4. [최종 재현 안내](outputs/v2/final_research_completion_v1/REPRODUCIBILITY.md): 코드와 결과 검증 방법
+
+## 직접 실행하기
 
 Python 3.11 이상을 권장합니다.
 
 ```bash
 git clone https://github.com/rhwhdgks/crypto-herding-research.git
 cd crypto-herding-research
+
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -e .
 ```
 
-## 최소 재현
-
-먼저 코드와 공개 결과의 무결성을 확인합니다.
+코드와 공개 결과가 정상인지 확인합니다.
 
 ```bash
 PYTHONPATH=src python -m pytest -q
 PYTHONPATH=src python scripts/verify_csad_mechanical_derivation_v1_1_amended.py
 ```
 
-`verify_final_research_completion.py`는 로컬의 전체 tick intermediate와 대형 입력까지 해시로 검사하는 strict verifier입니다. 공개 저장소에 제외된 대형 입력을 별도로 복원한 환경에서 실행하세요.
-
-원자료가 준비된 환경에서는 개별 연구를 다시 실행할 수 있습니다.
+Binance 2년 1분봉 baseline을 실행하려면 다음 명령을 사용합니다.
 
 ```bash
-# Binance 14자산, 정확한 2년 1분봉 baseline
 PYTHONPATH=src python scripts/run_pipeline.py \
   --config configs/baseline/config.yaml
-
-# CSAD specification audit
-PYTHONPATH=src python scripts/run_csad_specification_audit.py \
-  --config configs/research/csad_specification_audit_v1.yaml
-
-# 기계적 음의 계수 simulation
-PYTHONPATH=src python scripts/run_csad_mechanical_derivation.py \
-  --config configs/research/csad_mechanical_derivation_v1.yaml
 ```
 
-전체 simulation과 tick 연구는 시간이 오래 걸리고 로컬 raw archive를 요구합니다. 각 프로토콜과 config의 기간·seed·판정 기준을 변경하면 원 사전등록 결과의 재현으로 간주할 수 없습니다.
+전체 연구를 다시 실행하려면 Git에 포함되지 않은 원자료가 필요합니다. 데이터 출처와 생성 방법은 [data/README.md](data/README.md)를 참고하세요.
 
-## 핵심 문서
+## 폴더 안내
 
-- [외부용 통합 연구 보고서](docs/EXTERNAL_RESEARCH_REPORT_KO.md)
-- [최종 논문형 원고](outputs/v2/final_research_completion_v1/final_research_manuscript.md)
-- [최종 재현 안내](outputs/v2/final_research_completion_v1/REPRODUCIBILITY.md)
-- [CSAD specification audit](outputs/v2/csad_specification_audit_v1/csad_specification_audit_report_v1_1.md)
-- [기계적 음의 계수 보고서 v1](outputs/v2/csad_mechanical_derivation_v1/csad_mechanical_derivation_report.md)
-- [독립 수렴 보충 v1.1](outputs/v2/csad_mechanical_derivation_v1/supplement_v1_1/csad_mechanical_convergence_supplement_report.md)
-- [Zero-run 미시구조 보고서](outputs/v2/zero_run_microstructure_v1/zero_run_microstructure_report.md)
+| 폴더 | 내용 |
+|---|---|
+| `src/` | 데이터 처리, CSAD, simulation, tick 분석 코드 |
+| `scripts/` | 연구 실행기와 결과 verifier |
+| `configs/` | 기간, 종목, 통계기준을 고정한 설정 |
+| `research_protocols/` | 결과를 보기 전에 작성한 연구계획 |
+| `outputs/v2/` | 교정된 핵심 보고서와 판정 결과 |
+| `tests/` | 단위·통합·재현성 테스트 |
+| `docs/` | 외부 독자를 위한 설명 문서 |
 
-## 데이터와 결과물 정책
+## 데이터 정책
 
-Raw OHLCV, aggTrades, CoinMarketCap·OKX 응답, 뉴스·Reddit archive, DB dump는 크기·라이선스·보안 문제로 Git에 포함하지 않습니다. [data/README.md](data/README.md)에 출처와 생성 방법을 정리했습니다.
-
-`outputs/`도 기본적으로 Git에서 제외됩니다. 공개 저장소에는 결론을 확인하는 데 필요한 보고서, 판정표, manifest, 그림만 파일 단위로 검토해 포함합니다. 대형 parquet와 intermediate는 로컬에 보존하며, immutable 결과의 경로나 해시는 바꾸지 않습니다.
+대용량 OHLCV·개별 체결 원자료, 데이터베이스, API 자격증명은 GitHub에 올리지 않습니다. 공개 저장소에는 연구를 이해하고 핵심 결과를 검증하는 데 필요한 코드, 설정, 보고서, 판정표와 경량 simulation 결과만 포함합니다.
 
 ## 한계
 
-- CSAD는 수익률 동조를 측정할 뿐 투자자의 의도나 정보전파 경로를 직접 관찰하지 않습니다.
-- Fixed universe에는 survivorship·listing bias가, 시가총액 가중에는 동시성 문제가 남을 수 있습니다.
-- Standard CSAD도 공통요인, 시변변동성, fat tail 아래에서 null 크기 교정이 필요합니다.
-- Tick 결과는 aggTrades 기반이며 bid-ask spread, depth, 주문 취소를 직접 보지 못합니다.
-- News·Reddit sentiment는 검증된 point-in-time archive가 부족해 confirmatory 결론에 사용하지 않았습니다.
+- CSAD는 코인들이 비슷하게 움직였는지는 측정하지만 투자자의 의도를 직접 관찰하지 못합니다.
+- 고정 종목목록에는 상장폐지와 생존편향 문제가 남을 수 있습니다.
+- 개별 체결자료에는 호가, 주문장 깊이, 주문 취소 정보가 없습니다.
+- 뉴스와 Reddit 자료는 충분한 과거시점 archive가 없어 최종 결론에 사용하지 않았습니다.
 
-이 프로젝트는 자동매매 봇, 투자 권유, 수익 보장 프로젝트가 아닙니다. 사전 기준을 통과한 미래수익률 alpha가 없으므로 tracker와 paper-sim은 활성 연구 결론에서 제외합니다.
+## 주의
+
+이 저장소는 자동매매 봇이나 투자 권유 프로젝트가 아닙니다. 현재까지 사전 기준을 통과한 미래수익률 예측 신호가 없으며, 수익을 보장하지 않습니다.
 
 ## License
 
-코드와 저장소 문서는 [MIT License](LICENSE)로 배포됩니다. 외부 데이터와 참고 논문에는 각 제공자의 별도 이용조건이 적용됩니다.
+코드와 저장소 문서는 [MIT License](LICENSE)로 배포됩니다. 외부 데이터에는 각 제공자의 별도 이용조건이 적용됩니다.
