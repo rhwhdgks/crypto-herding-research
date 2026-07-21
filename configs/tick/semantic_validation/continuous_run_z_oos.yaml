@@ -1,0 +1,42 @@
+protocol:
+  path: research_protocols/tick_continuous_run_z_oos_v1.md
+
+data:
+  input_path: outputs/v2/tick/semantic_validation/raw_2y/intermediate/tick_micro_frame_15m.parquet
+  expected_start: "2024-04-08T00:00:00Z"
+  expected_end: "2026-04-07T23:45:00Z"
+  expected_rows: 490560
+  expected_interval_minutes: 15
+  minimum_aggressor_available_share: 1.0
+  symbols:
+    - BTCUSDT
+    - ETHUSDT
+    - XRPUSDT
+    - SOLUSDT
+    - DOGEUSDT
+    - ADAUSDT
+    - AVAXUSDT
+
+split:
+  development_start: "2024-04-08T00:00:00Z"
+  oos_start: "2025-04-08T00:00:00Z"
+  oos_end_exclusive: "2026-04-08T00:00:00Z"
+
+analysis:
+  horizon_minutes: 30
+  trailing_volatility_buckets: 96
+  minimum_transaction_count: 200
+  winsor_lower_quantile: 0.005
+  winsor_upper_quantile: 0.995
+  family_size: 3
+  fdr_alpha: 0.05
+  construct_minimum_effect: 0.02
+  economic_effect_threshold_bps: 5.0
+  minimum_complete_observations: 100000
+  minimum_utc_day_clusters: 300
+
+output:
+  base_dir: outputs/v2/tick/continuous_run_z_oos
+
+logging:
+  level: INFO

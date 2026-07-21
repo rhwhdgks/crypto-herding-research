@@ -1,0 +1,5 @@
+decision,passed,value,supporting_count,required_count_or_share,classification
+conditional_cutoff_calibration,True,0.025366890404454556,23.0,0.9,calibrated
+empirical_excess_clustering,True,0.8734690245753663,7.0,5.0,beyond_counts
+mechanism_beyond_conditional_null,False,0.0,0.0,3.0,not_distinct
+final_mechanical_null_audit,False,,,,clustering_beyond_counts_but_mechanism_not_distinct

@@ -1,0 +1,89 @@
+{
+  "files": [
+    {
+      "path": "data/BTCUSDT_1d.parquet",
+      "size": 84729,
+      "sha256": "ee67e71b5aecbd6b2f9ad4a39a0f0b40f6784836ec1fafb5ef50071d9a414349"
+    },
+    {
+      "path": "data/ETHUSDT_1d.parquet",
+      "size": 80703,
+      "sha256": "e5505ab7e10486465976829c0b13812fb3e93efaa35fea1294b1af58e0b72811"
+    },
+    {
+      "path": "data/BNBUSDT_1d.parquet",
+      "size": 71767,
+      "sha256": "675d4932ed60009e53420b040c31a72cd275d0aa09fbdd1a1d44518fb1f3c709"
+    },
+    {
+      "path": "data/XRPUSDT_1d.parquet",
+      "size": 83524,
+      "sha256": "553d072087712754bc813d21436e70d55cd0e31ae1d76101da4b21735685d323"
+    },
+    {
+      "path": "data/ADAUSDT_1d.parquet",
+      "size": 81368,
+      "sha256": "6b184984f02d483dbf28bd18c4961ff631b9fef826606b8053e88933420ff55e"
+    },
+    {
+      "path": "data/SOLUSDT_1d.parquet",
+      "size": 75783,
+      "sha256": "c62d88ae4d0036f26281aa9d9744db93252333b8559a5bdb8b8953cd056cc8bd"
+    },
+    {
+      "path": "data/DOGEUSDT_1d.parquet",
+      "size": 96269,
+      "sha256": "beb050fd6e7f70709831b9b15872bd2ac0827d474284a58e167cf7d9f3413664"
+    },
+    {
+      "path": "data/LINKUSDT_1d.parquet",
+      "size": 72987,
+      "sha256": "92d9c2107ed431fdba337a0869b34d59852db219e2408c1f835521d125999a21"
+    },
+    {
+      "path": "data/AVAXUSDT_1d.parquet",
+      "size": 71190,
+      "sha256": "346c5ba92e4a23bf53a269c1d2d491c850384c9dec0d7ad1327ac5eae643b884"
+    },
+    {
+      "path": "data/DOTUSDT_1d.parquet",
+      "size": 74757,
+      "sha256": "8b09f09b49c9306bf696de57899ee46ee3297bb9ad83548ba7509785575663d3"
+    },
+    {
+      "path": "data/LTCUSDT_1d.parquet",
+      "size": 72945,
+      "sha256": "970a9552cc3595ab8d016f916196a50b71f5a9a8e095dbda26092444191bb9ad"
+    },
+    {
+      "path": "data/TRXUSDT_1d.parquet",
+      "size": 94099,
+      "sha256": "611f30044d70d6aef3048968a43fb6ae0de986c291c55bbf64325c61db74dc6f"
+    },
+    {
+      "path": "data/ATOMUSDT_1d.parquet",
+      "size": 76433,
+      "sha256": "679b3c9cd19cd829270169c6f542697094f235549d313f5b525c8b17251766f7"
+    },
+    {
+      "path": "data/NEARUSDT_1d.parquet",
+      "size": 79565,
+      "sha256": "dd4459de293bff08a9bcdffbbee2147fce86ed3e47f562d2f87f7f0e4c4e1079"
+    },
+    {
+      "path": "research_protocols/binance_14_external_validation_v1.md",
+      "size": 4184,
+      "sha256": "a21e74e2d76222b66105a8782eee5969f5e8d8037cceea6e7764a6f0ce38b57c"
+    },
+    {
+      "path": "outputs/v2/cmc_fixed_62/replication_v1/regression_targets.csv",
+      "size": 12485,
+      "sha256": "db298544876b01500c52cd7c0b52aac3f2439d46809e87240e0111781aa86d09"
+    },
+    {
+      "path": "outputs/v2/cmc_fixed_62/temporal_validation_v1/regression_targets.csv",
+      "size": 9486,
+      "sha256": "896bb4765eb6f235fb6411c0d19ebf7b6a8a458b8cba0ca47f342e6a461f14c8"
+    }
+  ]
+}

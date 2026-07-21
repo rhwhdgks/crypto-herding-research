@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "research_axes": 11,
+  "hypotheses": 19,
+  "closed_with_current_data": 16,
+  "requires_new_external_data": 3,
+  "mechanical_null_classification": "clustering_beyond_counts_but_mechanism_not_distinct",
+  "behavioral_herding_identified": false,
+  "short_horizon_predictive_family_passed": false,
+  "directional_alpha_tested_in_final_stage": false,
+  "tracker_activation_allowed": false,
+  "verifier_mode": "read_only",
+  "artifact_files_hashed": 31
+}

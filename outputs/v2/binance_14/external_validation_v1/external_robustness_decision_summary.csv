@@ -1,0 +1,3 @@
+variant,required_cells,passing_cells,all_required_cells_pass
+equal_weight_primary,4,3,False
+lagged_turnover_sensitivity,4,3,False

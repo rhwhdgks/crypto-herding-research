@@ -1,0 +1,10 @@
+{
+  "rows": 9044,
+  "repetitions": 999,
+  "minimum_n": 200,
+  "maximum_n": 384856,
+  "minimum_k": 89,
+  "maximum_k": 102637,
+  "maximum_pmf_sum_error": 8.881784197001252e-16,
+  "minimum_variance": 2.724937689073232
+}

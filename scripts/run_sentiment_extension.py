@@ -2,15 +2,11 @@ from __future__ import annotations
 
 import argparse
 import logging
-import sys
 from pathlib import Path
 
 import pandas as pd
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SRC_DIR = PROJECT_ROOT / "src"
-if str(SRC_DIR) not in sys.path:
-    sys.path.insert(0, str(SRC_DIR))
 
 from event_sentiment import (
     attach_event_sentiment_features,
@@ -75,6 +71,8 @@ def main() -> None:
         timestamp_column="timestamp",
         positive_threshold=float(sentiment_cfg.get("event_positive_threshold", 0.05)),
         negative_threshold=float(sentiment_cfg.get("event_negative_threshold", -0.05)),
+        availability_timestamp_column=str(sentiment_cfg.get("availability_timestamp_column", "first_seen_at_utc")),
+        require_point_in_time=bool(sentiment_cfg.get("require_point_in_time", True)),
     )
     label_window = int(sentiment_cfg.get("label_window_minutes", 15))
     event_features = build_sentiment_event_groups(
@@ -91,19 +89,21 @@ def main() -> None:
     )
     save_dataframe(event_features, output_dirs["base"] / "event_sentiment_features.csv", index=False)
 
+    oos_start = pd.Timestamp(feature_cfg["oos_start"])
+    oos_features = event_features.loc[event_features["timestamp"] >= oos_start].copy()
     summary = summarize_sentiment_event_study(
-        events_with_groups=event_features,
+        events_with_groups=oos_features,
         holding_periods=[int(value) for value in config["event_study"]["holding_periods"]],
         group_column=f"event_sentiment_group_{label_window}m",
     )
     feature_group_column = f"news_feature_group_{int(feature_cfg.get('focus_window_minutes', label_window))}m"
     feature_summary = summarize_sentiment_event_study(
-        events_with_groups=event_features,
+        events_with_groups=oos_features,
         holding_periods=[int(value) for value in config["event_study"]["holding_periods"]],
         group_column=feature_group_column,
     )
     feature_overview = summarize_feature_layer(
-        events_with_groups=event_features,
+        events_with_groups=oos_features,
         focus_window_minutes=int(feature_cfg.get("focus_window_minutes", label_window)),
         feature_group_column=feature_group_column,
     )

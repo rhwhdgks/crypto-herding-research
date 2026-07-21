@@ -1,252 +1,120 @@
-# Crypto Market Herding Research
+# Crypto Herding Research
 
-> 암호화폐 시장의 **군집행동(herding)** 을 CSAD, tick microstructure, lead-lag matrix, 뉴스/Reddit sentiment feature로 검증하는 재현 가능한 quant research repo.
-> 목표는 자동매매 시스템이 아니라, herding-like event가 존재하는지와 그 뒤의 단기 가격 반응이 통계적으로 유지되는지를 검증하는 것이다.
+암호화폐 시장의 CSAD 집단추종 신호를 재현하고, 그 음의 계수가 행동적 herding인지 모형 구조가 만든 결과인지 반증 중심으로 검증한 재현 가능한 연구 저장소입니다.
 
-[![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Status: Research](https://img.shields.io/badge/status-research-orange.svg)]()
+> **핵심 결론:** 선행논문의 no-intercept·SCSAD 계수는 정밀하게 재현됐지만, 두 모형은 herding이 없는 합성자료에서도 거의 항상 음의 유의한 계수를 만듭니다. 현재 표본에서 거래 가능한 단기 alpha는 확인되지 않았습니다.
 
----
+상세한 연구 과정과 수치는 [외부용 통합 연구 보고서](docs/EXTERNAL_RESEARCH_REPORT_KO.md)에서 확인할 수 있습니다.
 
-## TL;DR
+## 연구 질문과 결과
 
-1. **광범위 herding 가설은 기각**: 2년 1분봉 Binance 14-자산 universe (105만 obs) CSAD 회귀에서 `β₂ = +4.53` — 시장 전체 herding은 통계적으로 약함.
-2. **알트 한정 미시구조 패턴은 통계적으로 살아있음**: 5년 tick aggTrades 데이터로 빌드한 7×6×2 = 84-cell **lead-lag matrix**에서 `DOGE down event → AVAX/ADA +30min` 패턴이 **BH-FDR q=0.05 보정** 통과.
-3. **다만 시간적 lead-lag이 아닌 동시 반응 (CCF lag=0 peak)** → alpha 트레이딩 신호로 변환 불가, **알트 간 공통 beta 구조**의 정량적 증거.
-4. **연구의 핵심 가치**: alpha를 성급히 주장하지 않고, **죽은 가설의 정리 + robustness 검증 (다중비교 보정 / stability split / permutation test / tick-level CCF) 자동화 파이프라인**을 남김.
-
-선행연구 ("Herding, information cascades, and cryptocurrencies", 2024)는 CSAD/SCSAD + VPIN + SUR 모형으로 informed trading 측면을 다뤘고, 본 연구는 자산 간 **directional lead-lag matrix** 측면을 추가해 보완적 관점을 제공.
-
----
-
-## Key Findings
-
-| 결과 | 검증 도구 | 결론 |
+| 질문 | 결과 | 현재 해석 |
 |---|---|---|
-| 1분봉 baseline CSAD β₂ = +4.53 | 105만 obs OLS | 광범위 herding ❌ |
-| 주간 paper-like CSAD β₂ 음수 | SCSAD 회귀 | 학술 herding 재현 ✓ |
-| Tick 15-min → 30-min event study | XRP 5년 dual tracker | 후보 발견, 거래비용 후 marginal |
-| **Lead-lag matrix** `DOGE down → AVAX`, t=3.42 | 5년, 7-자산, 84 cell | **BH-FDR q=0.05 통과 (2 cell)** |
-| Stability split (전반 vs 후반 2.5년) | OOS 검증 | 같은 부호 유지, 후반에 강도 ↑ |
-| Permutation test (1000 shuffles) | random null 분포 | 시간적 lead-lag 가설 p=0.208 (reject) |
-| Tick-level CCF | 1분 단위 cross-correlation | **lag=0 peak → 동시 반응** |
-| **VPIN-proxy conditional split** | DOGE 581M aggTrades, toxicity 3분위 | 공동반응이 **low-toxicity(noise)에 집중** → informed cascade ❌ |
-| **Funding/OI conditional split** | Binance futures funding + 5-min OI | `crowded funding × no OI-flush` 셀만 **+0.13~0.17%/30min (t=1.9~2.8, 알트 4종)** — 첫 ex-ante 수수료권 후보 |
-| Permutation + 실행 시뮬 | circular-shift null 1000회 / fee 시나리오 | **p=0.041**, maker net +0.13%/trade — 단 **2024-12 이후 레짐 휴면** (crowded funding 미발생), 추적 지위 |
+| Binance 14자산 2년 1분봉에서 classical CSAD herding이 나타나는가? | Standard CSAD의 `beta2 > 0` | 지지하지 않음 |
+| 선행논문의 CMC fixed-62 결과를 재현할 수 있는가? | Daily no-intercept `-1.837`, SCSAD `-2.902` | 수치 재현 성공 |
+| corrected 모형이 기간·거래소·point-in-time universe를 넘어 유지되는가? | CMC holdout 4/4, Binance 3/4, OKX 3/4·1/4, Binance PIT 2/4·0/4 | 보편적 강건성 없음 |
+| 음의 계수가 intentional herding을 식별하는가? | 비허딩 null에서 no-intercept 99~100%, SCSAD 97~100% false positive | 식별하지 못함 |
+| 기계적 음의 계수를 수학적으로 설명할 수 있는가? | Gaussian 식 3/3, 원 v1 수렴 5/6, 독립 v1.1 보충 12/12 | 수학식·유한표본 수렴 지지, 원 실패는 보존 |
+| Tick run-clustering이 단기 방향을 예측하는가? | 사전등록 OOS 0/9 | 방향성 alpha 없음 |
+| Zero-run이 시장상태와 미래 변동을 설명하는가? | 동시점 5/5, 미래 family 0/2 | 상태 기술 가능, 미래 예측력 없음 |
 
----
+논문 수치를 재현했다는 것과 투자자의 의도적 모방을 식별했다는 것은 서로 다른 주장입니다. 이 저장소는 두 주장을 분리합니다.
 
-## Repository Structure
+## CSAD
 
-```
-herding/
-├── src/                              # Core library modules
-│   ├── csad.py                       # CSAD / SCSAD regression
-│   ├── event_detection.py            # Herding / shock event detection
-│   ├── event_study.py                # Forward-return event study
-│   ├── tick_short_horizon.py         # Tick-level micro-herding events
-│   ├── tick_lead_lag.py              # 7×7 directed lead-lag matrix
-│   ├── tick_archive_backfill.py      # Binance aggTrades downloader
-│   ├── news_sentiment.py             # News headline scoring
-│   ├── reddit_sentiment.py           # Reddit post sentiment scoring
-│   └── ...
-│
-├── scripts/                          # Pipeline entry points
-│   ├── run_pipeline.py               # 1m baseline CSAD + event study
-│   ├── run_paper_like_pipeline.py    # SCSAD (Wang-Hudson) weekly
-│   ├── run_tick_short_horizon_study.py
-│   ├── run_tick_lead_lag_matrix.py   # 7-symbol directed matrix
-│   ├── run_tick_dual_tracker.py
-│   ├── run_tick_candidate_basket_tracker.py
-│   ├── collect_news_headlines.py
-│   ├── collect_reddit_posts.py
-│   └── ...
-│
-├── experiments/                      # Hypothesis-specific deep dives
-│   ├── lead_lag_robustness/          # 4-step robustness validation
-│   │   ├── step1_multiple_comparison.py
-│   │   ├── step2_stability_split.py
-│   │   ├── step3_tick_level_lead_time.py     # CCF + event-triggered curve
-│   │   ├── step4_5y_robustness.py
-│   │   ├── step5_5y_ccf.py
-│   │   ├── step6_vol_regime.py               # Low vs high vol split
-│   │   └── step7_period_split.py             # Bull / winter / recovery
-│   │
-│   ├── cointegration_lead_lag/       # Cross-validation with pair trading
-│   │   ├── step1_15m_screening.py            # Engle-Granger 3-day rolling
-│   │   ├── step2_15m_backtest.py             # Z-score backtest + LAG sweep
-│   │   └── step3_permutation_test.py         # 1000-shuffle null distribution
-│   │
-│   └── informed_trading/             # VPIN-proxy × lead-lag integration
-│       ├── step1_doge_vpin.py                # aggTrades → 15m order-flow toxicity
-│       └── step2_conditional_leadlag.py      # toxicity-tercile conditional split
-│
-├── configs/                          # YAML configuration files
-│   ├── baseline/config.yaml          # 2-year 1m baseline
-│   ├── paper_like/{daily,weekly}.yaml
-│   └── tick/
-│       ├── xrp_5y/                   # XRP 5-year mainline
-│       ├── multi_asset_365d/         # 7-symbol 1-year
-│       └── multi_asset_5y/           # 7-symbol 5-year (lead-lag matrix)
-│
-├── outputs/                          # Curated reports (heavy CSVs gitignored)
-│   ├── presentation_2026-05-08.md    # Detailed presentation notes
-│   ├── presentation_short_2026-05-09.{md,pdf}
-│   ├── research_master_report_2026-04-22.md
-│   └── tick/multi_asset_5y/lead_lag_matrix/
-│
-└── data/                             # Raw market data (gitignored)
+횡단면 절대편차(CSAD)는 시점 `t`에서 각 자산 수익률이 시장수익률에서 얼마나 떨어져 있는지 측정합니다.
+
+```text
+CSAD_t = mean_i |R_i,t - R_m,t|
+
+CSAD_t = alpha + beta1 * |R_m,t| + beta2 * R_m,t^2 + error_t
 ```
 
----
+Standard 모형에서 `beta2 < 0`은 시장 움직임이 커질수록 횡단면 분산의 증가세가 둔화되는 현상을 뜻합니다. 그러나 이것만으로 투자자의 의도적 집단추종이나 미래수익률 alpha를 입증하지는 않습니다.
 
-## Methodology
+## 저장소 구조
 
-### 1. Baseline CSAD (Cross-Sectional Absolute Deviation)
-
+```text
+.
+├── configs/               # baseline, replication, external-validation 설정
+├── data/                  # 로컬 원자료 안내; 실제 데이터는 Git 제외
+├── docs/                  # 외부 독자를 위한 통합 문서
+├── experiments/           # 과거 탐색 연구와 무효화 기록
+├── outputs/v2/            # 수정된 연구 결과; 공개 파일은 명시적 opt-in
+├── research_protocols/    # 결과 확인 전 고정한 연구 프로토콜
+├── scripts/               # 실행기, 보고서 생성기, 읽기 전용 verifier
+├── src/                   # 분석·simulation·reporting 모듈
+└── tests/                 # 단위·통합·재현성 테스트
 ```
-CSAD_t = α + β₁ |R_m,t| + β₂ R_m,t² + ε
-```
 
-- Binance 14-symbol USDT universe, 1-minute OHLCV, 2-year window
-- `β₂ < 0` ⟹ herding (dispersion compresses with market volatility)
-- Result: **β₂ = +4.53** (rejects broad herding)
+## 설치
 
-### 2. SCSAD (Standardized CSAD, Wang-Hudson)
-
-Per-asset dispersion을 자산별 변동성으로 정규화해 mechanical scale effect 제거. 주간 회귀에 적용해 학술 herding signal 재현.
-
-### 3. Tick Microstructure Event Study
-
-Binance `aggTrades` → 15-minute buckets → micro-herding score (run-based, Patterson-Sharma–inspired) → event = lowest 15%-tile bucket → 30-minute forward return vs control.
-
-### 4. Lead-Lag Matrix (Novel Contribution)
-
-For each `(leader, target, direction)` ∈ 7 × 6 × 2 = **84 directed cells**:
-```
-Δ_{L,T,d} = E[R_T(t+30m) | L has micro_herding_d event at t]
-           − E[R_T(t+30m) | no event]
-```
-Welch t-stat 적용, 84개 hypothesis에 대해 BH-FDR 보정.
-
-### 5. Robustness Stack (the core engineering value)
-
-| Step | Test | Implementation |
-|---|---|---|
-| 1 | Multiple comparison (BH-FDR + Bonferroni) | [`step1_multiple_comparison.py`](experiments/lead_lag_robustness/step1_multiple_comparison.py) |
-| 2 | Stability split (in-sample halves) | [`step2_stability_split.py`](experiments/lead_lag_robustness/step2_stability_split.py) |
-| 3 | Tick-level CCF + event-triggered curve | [`step3_tick_level_lead_time.py`](experiments/lead_lag_robustness/step3_tick_level_lead_time.py) |
-| 4 | 5y window OOS extension | [`step4_5y_robustness.py`](experiments/lead_lag_robustness/step4_5y_robustness.py) |
-| 5 | Vol regime split (low vs high) | [`step6_vol_regime.py`](experiments/lead_lag_robustness/step6_vol_regime.py) |
-| 6 | Period split (bull/winter/recovery) | [`step7_period_split.py`](experiments/lead_lag_robustness/step7_period_split.py) |
-| 7 | Permutation test (1000 shuffles) | [`step3_permutation_test.py`](experiments/cointegration_lead_lag/step3_permutation_test.py) |
-
----
-
-## Getting Started
-
-### Prerequisites
-
-- Python 3.12+
-- ~100 GB free disk space if backfilling full 5-year tick archive (much less for OHLCV only)
-- (Optional) MariaDB/MySQL for raw OHLCV persistence
-
-### Install
+Python 3.11 이상을 권장합니다.
 
 ```bash
 git clone https://github.com/rhwhdgks/crypto-herding-research.git
 cd crypto-herding-research
 python -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+python -m pip install --upgrade pip
+python -m pip install -e .
 ```
 
-Recommended GitHub About:
+## 최소 재현
 
-```text
-Reproducible crypto herding research: CSAD/SCSAD, Binance tick microstructure event studies, lead-lag robustness, and news/Reddit sentiment features.
-```
-
-### Configure secrets (optional — only if using DB export)
+먼저 코드와 공개 결과의 무결성을 확인합니다.
 
 ```bash
-cp .env.example .env
-# edit .env with your DB credentials
-export $(cat .env | xargs)
+PYTHONPATH=src python -m pytest -q
+PYTHONPATH=src python scripts/verify_csad_mechanical_derivation_v1_1_amended.py
 ```
 
-### Run baseline pipeline
+`verify_final_research_completion.py`는 로컬의 전체 tick intermediate와 대형 입력까지 해시로 검사하는 strict verifier입니다. 공개 저장소에 제외된 대형 입력을 별도로 복원한 환경에서 실행하세요.
+
+원자료가 준비된 환경에서는 개별 연구를 다시 실행할 수 있습니다.
 
 ```bash
-# 1-minute Binance baseline CSAD + event study
-python scripts/run_pipeline.py --config configs/baseline/config.yaml
+# Binance 14자산, 정확한 2년 1분봉 baseline
+PYTHONPATH=src python scripts/run_pipeline.py \
+  --config configs/baseline/config.yaml
 
-# Weekly paper-like SCSAD
-python scripts/run_paper_like_pipeline.py --config configs/paper_like/weekly.yaml
+# CSAD specification audit
+PYTHONPATH=src python scripts/run_csad_specification_audit.py \
+  --config configs/research/csad_specification_audit_v1.yaml
 
-# Tick 5-year lead-lag matrix (downloads aggTrades from Binance public archive)
-python scripts/run_tick_lead_lag_matrix.py --config configs/tick/multi_asset_5y/lead_lag_matrix.yaml
-
-# Robustness validation suite
-python experiments/lead_lag_robustness/step1_multiple_comparison.py
-python experiments/lead_lag_robustness/step2_stability_split.py
-python experiments/lead_lag_robustness/step3_tick_level_lead_time.py
+# 기계적 음의 계수 simulation
+PYTHONPATH=src python scripts/run_csad_mechanical_derivation.py \
+  --config configs/research/csad_mechanical_derivation_v1.yaml
 ```
 
-### Reproduce final report
+전체 simulation과 tick 연구는 시간이 오래 걸리고 로컬 raw archive를 요구합니다. 각 프로토콜과 config의 기간·seed·판정 기준을 변경하면 원 사전등록 결과의 재현으로 간주할 수 없습니다.
 
-```bash
-# Key results in outputs/tick/multi_asset_5y/lead_lag_matrix/
-ls outputs/tick/multi_asset_5y/lead_lag_matrix/
-# tick_lead_lag_matrix_report.md   ← 7×7 matrix + top edges
-# lead_lag_matrix_summary.csv      ← 84 cells flat table
-# plots/lead_lag_matrix_{up,down}.png
-```
+## 핵심 문서
 
----
+- [외부용 통합 연구 보고서](docs/EXTERNAL_RESEARCH_REPORT_KO.md)
+- [최종 논문형 원고](outputs/v2/final_research_completion_v1/final_research_manuscript.md)
+- [최종 재현 안내](outputs/v2/final_research_completion_v1/REPRODUCIBILITY.md)
+- [CSAD specification audit](outputs/v2/csad_specification_audit_v1/csad_specification_audit_report_v1_1.md)
+- [기계적 음의 계수 보고서 v1](outputs/v2/csad_mechanical_derivation_v1/csad_mechanical_derivation_report.md)
+- [독립 수렴 보충 v1.1](outputs/v2/csad_mechanical_derivation_v1/supplement_v1_1/csad_mechanical_convergence_supplement_report.md)
+- [Zero-run 미시구조 보고서](outputs/v2/zero_run_microstructure_v1/zero_run_microstructure_report.md)
 
-## Reference Paper
+## 데이터와 결과물 정책
 
-> **Herding, information cascades, and cryptocurrencies — New evidence using low frequency and high frequency data** (2024)
+Raw OHLCV, aggTrades, CoinMarketCap·OKX 응답, 뉴스·Reddit archive, DB dump는 크기·라이선스·보안 문제로 Git에 포함하지 않습니다. [data/README.md](data/README.md)에 출처와 생성 방법을 정리했습니다.
 
-본 연구는 이 논문의 informed-trading axis (VPIN + SUR)에 더해 **자산 간 directional lead-lag matrix** 차원을 추가. 두 framework는 직교적이고 보완적이며, 다음 단계는 두 axis 통합. 상세 비교: [`outputs/presentation_short_2026-05-09.md`](outputs/presentation_short_2026-05-09.md).
+`outputs/`도 기본적으로 Git에서 제외됩니다. 공개 저장소에는 결론을 확인하는 데 필요한 보고서, 판정표, manifest, 그림만 파일 단위로 검토해 포함합니다. 대형 parquet와 intermediate는 로컬에 보존하며, immutable 결과의 경로나 해시는 바꾸지 않습니다.
 
----
+## 한계
 
-## Limitations & Honest Disclosure
+- CSAD는 수익률 동조를 측정할 뿐 투자자의 의도나 정보전파 경로를 직접 관찰하지 않습니다.
+- Fixed universe에는 survivorship·listing bias가, 시가총액 가중에는 동시성 문제가 남을 수 있습니다.
+- Standard CSAD도 공통요인, 시변변동성, fat tail 아래에서 null 크기 교정이 필요합니다.
+- Tick 결과는 aggTrades 기반이며 bid-ask spread, depth, 주문 취소를 직접 보지 못합니다.
+- News·Reddit sentiment는 검증된 point-in-time archive가 부족해 confirmatory 결론에 사용하지 않았습니다.
 
-- **No live alpha**: BH-FDR 보정 통과한 cell도 effect size가 taker fee (왕복 ~0.15%)에 비해 작음 (5y mean +0.058% / 30min).
-- **VPIN-proxy only, no SUR model yet**: informed-trading axis는 15분 시간버킷 order-flow toxicity(정확한 aggressor side 기반)로 1차 검증 — canonical equal-volume VPIN과 SUR 모형은 다음 단계.
-- **CCF lag=0**: 통계적으로 유의한 lead-lag 쌍도 동시 반응이고 시간차 leading이 아님. 이를 숨기지 않고 명시.
-- **Single exchange (Binance USDT)**: Cross-exchange spillover 미검증.
-- 모든 결과는 **research hypothesis**, production strategy 아님.
-
----
-
-## Roadmap
-
-- [x] VPIN-proxy (order-flow toxicity) × lead-lag conditional split — **공동반응은 low-toxicity(noise)에 집중, informed cascade 기각** ([`experiments/informed_trading/`](experiments/informed_trading/informed_trading_report.md))
-- [x] Funding-rate / OI (레버리지 상태) conditional layer — **crowded funding × no OI-flush 셀이 첫 ex-ante 수수료권 후보 (추적 지위, 승격 아님)**
-- [x] crowded × no_flush 후보: basket pooled + permutation (p=0.041) + 비용 시뮬 (maker net +0.13%/trade)
-- [x] crowded × no_flush 후보: forward tracker 등록 (`scripts/run_leverage_candidate_tracker.py`) — 첫 실행 2026-07-06: OOS 2개월 DORMANT (crowded 버킷 0%), 신호 0건. 다음 crowded 레짐에서 생존 판정
-- [ ] Canonical VPIN (equal-volume bucket) + SUR(herding × VPIN × vol) model
-- [ ] Idiosyncratic vol grouping per Patterson-Sharma decomposition
-- [ ] Perp-spot basis layer (funding-rate layer는 완료, basis는 미착수)
-- [ ] Cross-exchange (Coinbase / OKX / Bybit) spillover
-- [ ] GJR-GARCH volatility-asymmetry layer
-
----
-
-## Author
-
-**고종한 (Jonghan Ko)**
-Finance × Quantitative Research
-
-5단 pipeline (baseline → paper-like → tick → multi-asset → sentiment) + 4단 자동화 robustness validation을 결합한 research repo.
-
----
+이 프로젝트는 자동매매 봇, 투자 권유, 수익 보장 프로젝트가 아닙니다. 사전 기준을 통과한 미래수익률 alpha가 없으므로 tracker와 paper-sim은 활성 연구 결론에서 제외합니다.
 
 ## License
 
-[MIT](LICENSE)
+코드와 저장소 문서는 [MIT License](LICENSE)로 배포됩니다. 외부 데이터와 참고 논문에는 각 제공자의 별도 이용조건이 적용됩니다.

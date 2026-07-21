@@ -97,6 +97,7 @@ def fetch_reddit_query(
             timestamp = pd.to_datetime(float(created_utc), unit="s", utc=True, errors="coerce")
             if pd.isna(timestamp):
                 continue
+            collected_at = pd.Timestamp.now(tz="UTC")
             rows.append(
                 {
                     "timestamp": timestamp,
@@ -113,7 +114,8 @@ def fetch_reddit_query(
                     "query_text": query,
                     "post_fullname": post.get("name"),
                     "post_id": post.get("id"),
-                    "collected_at_utc": pd.Timestamp.now(tz="UTC"),
+                    "collected_at_utc": collected_at,
+                    "first_seen_at_utc": collected_at,
                     "collection_source": "reddit_public_json",
                 }
             )
@@ -152,12 +154,13 @@ def load_existing_reddit(path: str | Path) -> pd.DataFrame:
                 "post_fullname",
                 "post_id",
                 "collected_at_utc",
+                "first_seen_at_utc",
                 "collection_source",
             ]
         )
 
     frame = pd.read_csv(resolved)
-    for column in ["timestamp", "collected_at_utc"]:
+    for column in ["timestamp", "collected_at_utc", "first_seen_at_utc"]:
         if column in frame.columns:
             frame[column] = pd.to_datetime(frame[column], utc=True, errors="coerce")
     if "asset" in frame.columns:
@@ -230,10 +233,13 @@ def merge_and_save_reddit(existing: pd.DataFrame, fresh: pd.DataFrame, output_pa
     if not combined.empty:
         if "asset" in combined.columns:
             combined["asset"] = combined["asset"].apply(_normalize_asset)
-        for column in ["timestamp", "collected_at_utc"]:
+        if "first_seen_at_utc" not in combined.columns:
+            combined["first_seen_at_utc"] = combined.get("collected_at_utc")
+        for column in ["timestamp", "collected_at_utc", "first_seen_at_utc"]:
             if column in combined.columns:
                 combined[column] = pd.to_datetime(combined[column], utc=True, errors="coerce")
         dedupe_cols = ["timestamp", "subreddit", "headline", "permalink"]
+        combined["first_seen_at_utc"] = combined.groupby(dedupe_cols, dropna=False)["first_seen_at_utc"].transform("min")
         combined = combined.drop_duplicates(subset=dedupe_cols, keep="last").sort_values("timestamp")
 
     resolved = Path(output_path)

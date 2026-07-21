@@ -1,0 +1,16 @@
+{
+  "pipeline_version": "csad-mechanical-derivation-v1",
+  "schema_version": 1,
+  "created_at_utc": "2026-07-21T04:45:32.082675+00:00",
+  "protocol_sha256": "e321e53712f86f767e2f8a9625958acfb39b334976fbc3f19fa603da32c07bb4",
+  "config_sha256": "2262fde4375feeb2c942ea54ad73c1ab94c8de16d96af8a5bb1dbbcf6492b78c",
+  "convergence_seed": 2026072101,
+  "convergence_repetitions": 200,
+  "robustness_seed": 2026072102,
+  "robustness_repetitions": 300,
+  "dgp_count": 8,
+  "scenario_count": 9,
+  "output_overwrite_permitted": false,
+  "interpretation_scope": "statistical_mechanism_not_imitation_or_alpha",
+  "final_classification": "mechanical_null_not_confirmed"
+}

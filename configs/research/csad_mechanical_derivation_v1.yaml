@@ -1,0 +1,116 @@
+protocol:
+  path: research_protocols/csad_mechanical_derivation_v1.md
+  frozen_at_utc: "2026-07-21T04:31:43Z"
+  version: 1
+
+models:
+  names: [standard_csad, no_intercept_csad, intercept_restored, scsad]
+  original_bh_family: [standard_csad, no_intercept_csad, scsad]
+  alpha: 0.05
+  cov_type: HAC
+  hac_maxlags: auto
+
+theory:
+  sigma: 0.025
+  minimum_assets: 3
+  equation_tolerance: 1.0e-10
+  convergence_relative_tolerance: 0.075
+  convergence_confidence: 0.99
+  negative_sign_rate_minimum: 0.95
+  mechanical_raw_fpr_minimum: 0.90
+  mechanical_bh_fpr_minimum: 0.90
+  nominal_raw_fpr_maximum: 0.075
+
+convergence_simulation:
+  seed: 2026072101
+  repetitions: 200
+  observations: 12000
+  assets: [14, 50, 62]
+  weighting: equal
+  dgp: independent_gaussian
+
+robustness_simulation:
+  seed: 2026072102
+  repetitions: 300
+  symmetric_negative_rate_minimum: 0.80
+  symmetric_cell_share_minimum: 0.75
+  symmetric_dgps:
+    - independent_gaussian
+    - common_factor
+    - stochastic_volatility_factor
+    - student_t_factor
+    - time_varying_correlation
+  scenarios:
+    - {id: n14_t250_equal, observations: 250, assets: 14, weighting: equal}
+    - {id: n14_t1000_equal, observations: 1000, assets: 14, weighting: equal}
+    - {id: n14_t2500_equal, observations: 2500, assets: 14, weighting: equal}
+    - {id: n50_t1000_equal, observations: 1000, assets: 50, weighting: equal}
+    - {id: n62_t2500_equal, observations: 2500, assets: 62, weighting: equal}
+    - {id: n14_t1000_lagged, observations: 1000, assets: 14, weighting: lagged_lognormal_liquidity}
+    - {id: n50_t1000_lagged, observations: 1000, assets: 50, weighting: lagged_lognormal_liquidity}
+    - {id: n14_t1000_concentrated, observations: 1000, assets: 14, weighting: concentrated_static}
+    - {id: n62_t1000_concentrated, observations: 1000, assets: 62, weighting: concentrated_static}
+
+dgp:
+  independent_gaussian:
+    idiosyncratic_scale: 0.025
+  common_factor:
+    factor_scale: 0.018
+    idiosyncratic_scale: 0.025
+    factor_loading_mean: 1.0
+    factor_loading_std: 0.20
+  stochastic_volatility_factor:
+    factor_scale: 0.018
+    idiosyncratic_scale: 0.025
+    factor_loading_mean: 1.0
+    factor_loading_std: 0.20
+    log_volatility_phi: 0.95
+    log_volatility_innovation: 0.16
+  student_t_factor:
+    factor_scale: 0.018
+    idiosyncratic_scale: 0.025
+    factor_loading_mean: 1.0
+    factor_loading_std: 0.20
+    degrees_of_freedom: 5
+  skewed_factor:
+    factor_scale: 0.018
+    idiosyncratic_scale: 0.025
+    factor_loading_mean: 1.0
+    factor_loading_std: 0.20
+    lognormal_shape: 0.65
+  jump_diffusion_factor:
+    factor_scale: 0.014
+    idiosyncratic_scale: 0.020
+    factor_loading_mean: 1.0
+    factor_loading_std: 0.20
+    common_jump_probability: 0.015
+    common_jump_scale: 0.055
+    idiosyncratic_jump_probability: 0.006
+    idiosyncratic_jump_scale: 0.045
+  time_varying_correlation:
+    total_scale: 0.030
+    correlation_mean: 0.35
+    correlation_phi: 0.97
+    correlation_innovation: 0.16
+    correlation_minimum: 0.05
+    correlation_maximum: 0.85
+  asymmetric_common_shock:
+    factor_scale: 0.018
+    idiosyncratic_scale: 0.025
+    factor_loading_mean: 1.0
+    factor_loading_std: 0.20
+    negative_volatility_multiplier: 1.80
+
+weight_process:
+  lognormal_sigma: 1.25
+  liquidity_ar1: 0.97
+  liquidity_innovation: 0.12
+  concentrated_top_weight: 0.45
+  minimum_weight: 1.0e-12
+
+output:
+  base_dir: outputs/v2/csad_mechanical_derivation_v1
+  overwrite: false
+
+logging:
+  level: INFO

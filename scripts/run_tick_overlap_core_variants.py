@@ -1,13 +1,11 @@
 from __future__ import annotations
 
 import argparse
-import sys
 from pathlib import Path
 
+import pandas as pd
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SRC_DIR = PROJECT_ROOT / "src"
-if str(SRC_DIR) not in sys.path:
-    sys.path.insert(0, str(SRC_DIR))
 
 from tick_overlap_core_variants import (
     build_variant_masks,
@@ -46,7 +44,7 @@ def main() -> None:
     analysis_cfg = config.get("analysis", {})
 
     sample = load_overlap_core_regime_sample(input_dir)
-    sample, thresholds = enrich_variant_buckets(sample)
+    sample, thresholds = enrich_variant_buckets(sample, pd.Timestamp(analysis_cfg["threshold_fit_end"]))
     masks = build_variant_masks(sample)
     trade_log = build_variant_trade_log(sample, masks)
 

@@ -1,5 +1,5 @@
 input:
-  base_dir: outputs/tick/xrp_365d/short_horizon
+  base_dir: outputs/v2/tick/xrp_365d/short_horizon
 
 rule:
   interval_minutes: 15
@@ -22,7 +22,7 @@ analysis:
   enforce_non_overlap: true
 
 output:
-  base_dir: outputs/tick/xrp_365d/cost_sanity
+  base_dir: outputs/v2/tick/xrp_365d/cost_sanity
 
 logging:
   level: INFO

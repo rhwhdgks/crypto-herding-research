@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "pipeline_version": "cmc-factor-adjusted-convergence-v1",
+  "git_commit": "0b47f9d20ab9bbbb2e30528cdfa1ac5b386c538a",
+  "git_worktree_dirty": true,
+  "config_sha256": "610de80c0553de576f82ccf8326c268debe17f233f30706f050f6915264387cc",
+  "input_manifest_sha256": "f312016d581582919ddcc272b8fcec877f8983ad7de6a240cd4d89160eecfc7d",
+  "generated_at_utc": "2026-07-19T03:32:52.340171+00:00",
+  "train_start": "2018-01-01",
+  "train_end": "2024-04-09",
+  "oos_start": null,
+  "oos_end": null,
+  "statistical_method": "Point-in-time rolling leave-one-out market model; normal-residual counterfactual CSAD; Newey-West HAC and six-period BH-FDR",
+  "random_seed": null,
+  "status": "corrected"
+}

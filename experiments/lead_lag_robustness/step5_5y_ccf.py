@@ -10,11 +10,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-DATA_DIR = Path("/home/jonghan/findalpha/herding/data")
-MICRO_FRAME = Path(
-    "/home/jonghan/findalpha/herding/outputs/tick/multi_asset_5y/lead_lag_matrix/intermediate/tick_micro_frame_15m.csv"
-)
-OUT_DIR = Path("/home/jonghan/findalpha/herding/experiments/lead_lag_robustness/outputs")
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+DATA_DIR = PROJECT_ROOT / "data"
+MICRO_FRAME = PROJECT_ROOT / "outputs/v2/tick/multi_asset_5y/lead_lag_matrix/intermediate/tick_micro_frame_15m.csv"
+OUT_DIR = PROJECT_ROOT / "experiments/lead_lag_robustness/outputs"
 
 WINDOW_BEFORE = 60
 WINDOW_AFTER = 60
@@ -40,7 +39,13 @@ def main() -> None:
     mf = pd.read_csv(MICRO_FRAME)
     mf["bucket_start"] = pd.to_datetime(mf["bucket_start"], utc=True)
     events = pd.to_datetime(
-        mf.loc[(mf["symbol"] == "DOGEUSDT") & (mf["event_label"] == "micro_herding_down"), "bucket_start"].values,
+        mf.loc[
+            (mf["symbol"] == "DOGEUSDT")
+            & mf["is_micro_run_clustering_event"].fillna(False).astype(bool)
+            & mf["run_clustering_side"].eq("down")
+            & mf["price_direction"].eq("down"),
+            "bucket_start",
+        ].values,
         utc=True,
     )
     events = events[(events >= df.index.min()) & (events <= df.index.max() - pd.Timedelta(minutes=WINDOW_AFTER))]

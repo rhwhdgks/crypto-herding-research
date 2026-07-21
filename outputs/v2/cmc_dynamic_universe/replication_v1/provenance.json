@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "pipeline_version": "cmc-dynamic-universe-replication-v1",
+  "git_commit": "0b47f9d20ab9bbbb2e30528cdfa1ac5b386c538a",
+  "git_worktree_dirty": true,
+  "config_sha256": "5cb16b9dae6b98fb0d33bb5658e02986181753340f64307c3c260f8dade2dc25",
+  "input_manifest_sha256": "c3479353f94ebb3cd4ab6652fe6a84caa779f4cf6829d1c5c46926bf2c8b8021",
+  "generated_at_utc": "2026-07-18T17:29:29.125107+00:00",
+  "train_start": "2018-01-01",
+  "train_end": "2024-04-09",
+  "oos_start": null,
+  "oos_end": null,
+  "statistical_method": "Daily and weekly HAC corrected CSAD with period-wise six-test BH-FDR",
+  "random_seed": null,
+  "status": "corrected"
+}

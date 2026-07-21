@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from tick_event_schema import build_run_side_event_mask, require_tick_schema_v2
+
 
 def load_micro_frame(base_dir: str | Path, interval_minutes: int) -> pd.DataFrame:
     path = Path(base_dir) / "intermediate" / f"tick_micro_frame_{int(interval_minutes)}m.csv"
@@ -19,6 +21,10 @@ def load_micro_frame(base_dir: str | Path, interval_minutes: int) -> pd.DataFram
     else:
         timestamp = timestamp.dt.tz_convert("UTC")
     frame["bucket_start"] = timestamp
+    for column in ["bucket_end", "signal_timestamp"]:
+        if column in frame.columns:
+            frame[column] = pd.to_datetime(frame[column], utc=True)
+    require_tick_schema_v2(frame)
     return frame.sort_values(["symbol", "bucket_start"]).reset_index(drop=True)
 
 
@@ -59,7 +65,7 @@ def summarize_fixed_rule(
     summary_rows: list[dict] = []
     symbol_rows: list[dict] = []
 
-    event_mask = frame["is_micro_herding_event"] if event_label == "all" else frame["event_label"] == f"micro_herding_{event_label}"
+    event_mask = build_run_side_event_mask(frame, event_label)
     control_mask = frame["is_control_bucket"]
 
     for period_name, period_mask in period_masks.items():

@@ -1,0 +1,59 @@
+input:
+  micro_frame_path: outputs/v2/tick/multi_asset_5y/lead_lag_matrix/intermediate/tick_micro_frame_15m.csv
+  futures_state_path: experiments/informed_trading/outputs/doge_futures_state_15m.csv
+  state_timestamp_column: bucket_start
+  state_columns: [funding_pre, d_oi_event]
+
+sample_split:
+  train_start: "2021-12-01T00:00:00Z"
+  train_end: "2024-12-31T23:59:59Z"
+  oos_start: "2025-01-01T00:00:00Z"
+  oos_end: "2026-04-30T23:59:59Z"
+
+threshold_fit:
+  column: d_oi_event
+  quantile: 0.3333333333333333
+
+candidate_family:
+  - leader: DOGEUSDT
+    targets: [AVAXUSDT, ADAUSDT, XRPUSDT, SOLUSDT]
+    price_direction: down
+    run_clustering_side: down
+    horizon_minutes: 30
+    session_hours_utc: [16, 17, 18, 19, 20, 21, 22, 23]
+    funding_threshold: 0.0001
+    oi_rule: above_fitted_threshold
+  - leader: DOGEUSDT
+    targets: [AVAXUSDT, ADAUSDT, XRPUSDT, SOLUSDT]
+    price_direction: down
+    run_clustering_side: up
+    horizon_minutes: 30
+    session_hours_utc: [16, 17, 18, 19, 20, 21, 22, 23]
+    funding_threshold: 0.0001
+    oi_rule: above_fitted_threshold
+  - leader: DOGEUSDT
+    targets: [AVAXUSDT, ADAUSDT, XRPUSDT, SOLUSDT]
+    price_direction: up
+    run_clustering_side: down
+    horizon_minutes: 30
+    session_hours_utc: [16, 17, 18, 19, 20, 21, 22, 23]
+    funding_threshold: 0.0001
+    oi_rule: above_fitted_threshold
+
+permutation:
+  n_draws: 1000
+  seed: 20260715
+  min_shift: 96
+  statistic: t_stat
+
+execution:
+  mode: taker
+  overlap_policy: skip_while_position_open
+  round_trip_fee: 0.0010
+  slippage: 0.0002
+  funding: 0.0
+  latency_minutes: 1.0
+  price_proxy: bucket_close_return_with_explicit_slippage
+
+output:
+  base_dir: outputs/v2/tick/corrected_candidate/validation

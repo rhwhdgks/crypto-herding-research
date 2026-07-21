@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from tick_event_schema import require_tick_schema_v2
+
 
 def load_symbol_focus(path: str | Path, focus_horizon_minutes: int) -> pd.DataFrame:
     frame = pd.read_csv(path)
@@ -31,20 +33,18 @@ def load_micro_frames(config: dict) -> pd.DataFrame:
     combined["bucket_start"] = pd.to_datetime(combined["bucket_start"], utc=True)
     combined["is_target_session"] = combined["is_target_session"].astype(bool)
     combined["meets_trade_count"] = combined["meets_trade_count"].astype(bool)
-    combined["is_micro_herding_event"] = combined["is_micro_herding_event"].astype(bool)
+    require_tick_schema_v2(combined)
+    combined["is_micro_run_clustering_event"] = combined["is_micro_run_clustering_event"].astype(bool)
     combined["is_control_bucket"] = combined["is_control_bucket"].astype(bool)
 
     eligible = combined.loc[
         combined["is_target_session"]
         & combined["meets_trade_count"]
-        & combined["herding_threshold"].notna()
+        & combined["run_clustering_threshold"].notna()
     ].copy()
-    eligible["event_side"] = eligible["event_label"].map(
-        {
-            "micro_herding_up": "up",
-            "micro_herding_down": "down",
-        }
-    ).fillna("none")
+    eligible["event_side"] = np.where(
+        eligible["is_micro_run_clustering_event"], eligible["run_clustering_side"], "none"
+    )
     eligible["abs_bucket_return"] = eligible["bucket_return"].abs()
     eligible["signed_imbalance"] = (
         (eligible["up_ticks"] - eligible["down_ticks"])

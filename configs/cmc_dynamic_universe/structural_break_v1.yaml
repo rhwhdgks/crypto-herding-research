@@ -1,0 +1,62 @@
+protocol:
+  path: research_protocols/cmc_scsad_structural_break_v1.md
+
+input:
+  replication_dir: outputs/v2/cmc_dynamic_universe/replication_v1
+  csad_path: outputs/v2/cmc_dynamic_universe/replication_v1/daily_csad.csv
+  market_return_path: outputs/v2/cmc_dynamic_universe/replication_v1/daily_market_return.csv
+  replication_provenance_path: outputs/v2/cmc_dynamic_universe/replication_v1/provenance.json
+  start: "2018-01-01"
+  end: "2024-04-09"
+
+break_search:
+  model: scsad_full_coefficient_change
+  trimming_fraction: 0.15
+  maximum_breaks: 5
+  primary_criterion: bic
+  strong_evidence_delta_bic: 10.0
+  report_criteria:
+    - aic
+    - bic
+    - hqic
+  paper_fixed_break_count: 4
+
+regression:
+  cov_type: HAC
+  hac_maxlags: auto
+  fdr_alpha: 0.05
+
+paper_benchmark:
+  citation: Natashekara and Sampath (2026), Table A.2
+  regime_starts:
+    - "2019-06-26"
+    - "2020-06-03"
+    - "2021-05-12"
+    - "2022-12-07"
+  regime_gamma3:
+    - regime: 1
+      gamma3: -13.377
+      t_stat: -3.752
+      nobs: 541
+    - regime: 2
+      gamma3: -2.636
+      t_stat: -2.130
+      nobs: 343
+    - regime: 3
+      gamma3: -54.097
+      t_stat: -5.247
+      nobs: 343
+    - regime: 4
+      gamma3: -7.882
+      t_stat: -1.741
+      nobs: 574
+    - regime: 5
+      gamma3: -125.620
+      t_stat: -7.244
+      nobs: 490
+
+output:
+  base_dir: outputs/v2/cmc_dynamic_universe/structural_break_v1
+
+logging:
+  level: INFO

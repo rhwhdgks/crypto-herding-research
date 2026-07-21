@@ -1,5 +1,5 @@
 input:
-  base_dir: outputs/tick/xrp_365d/overlap_core
+  base_dir: outputs/v2/tick/xrp_365d/overlap_core
 
 analysis:
   recent_days_list:
@@ -10,7 +10,7 @@ analysis:
   as_of_mode: now_utc
 
 output:
-  base_dir: outputs/tick/xrp_365d/overlap_core/tracker
+  base_dir: outputs/v2/tick/xrp_365d/overlap_core/tracker
 
 logging:
   level: INFO

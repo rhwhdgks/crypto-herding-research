@@ -1,93 +1,69 @@
-# GitHub Publishing Guide
+# Public Release Checklist
 
-이 파일은 본인이 GitHub에 올릴 때 실행할 명령어 모음입니다. 공개 후 삭제 또는 `.gitignore`에 추가하세요.
+이 문서는 새 공개 커밋을 만들기 전 확인할 최소 절차입니다. 원자료와 전체 산출물은 로컬에 두고, 검토한 코드·문서·경량 결과만 명시적으로 추가합니다.
 
-## 0. 사전 점검 (보안)
-
-```bash
-# DB password가 더 이상 평문으로 남아있지 않은지 확인
-grep -rn "208307\|password:" configs/ src/ scripts/ | grep -v "\${" | grep -v "환경변수"
-# (결과가 비어있어야 안전)
-
-# 기타 자격증명 흔적 점검
-grep -rIn -E "(secret|api[_-]?key|bearer|token)" configs/ src/ scripts/ | head
-```
-
-## 1. Git init + first commit
+## 1. 보안 점검
 
 ```bash
-cd /home/jonghan/findalpha/herding
+git status --short
+git diff --check
 
-git init -b main
-git add .gitignore LICENSE README.md requirements.txt .env.example
-git add agents.md claude.md       # 빼고 싶다면 .gitignore에 이미 들어있음
-git add configs/ src/ scripts/ experiments/ data/README.md
-git add outputs/*.md outputs/*.pdf outputs/README.md
-git add outputs/tick/multi_asset_5y/lead_lag_matrix/tick_lead_lag_matrix_report.md
-git add outputs/tick/multi_asset_5y/lead_lag_matrix/lead_lag_matrix_summary.csv
-git add outputs/tick/multi_asset_5y/lead_lag_matrix/plots/
-git add experiments/lead_lag_robustness/outputs/*.md
-git add experiments/lead_lag_robustness/outputs/*.csv
-git add experiments/lead_lag_robustness/outputs/*.png
-git add experiments/cointegration_lead_lag/outputs/*.csv
-git add references/  # (논문 PDF 저작권 주의 — 제외 권장. .gitignore 이미 포함)
-
-git status                         # 의도하지 않은 파일이 staging되지 않았는지 확인
-git diff --cached --stat | tail -20
-
-git config user.name "Jonghan Ko"
-git config user.email "your_email@example.com"
-
-git commit -m "Initial release: crypto herding research pipeline + lead-lag matrix"
+# 실제 값이 들어간 자격증명과 개인 절대경로를 점검합니다.
+rg -n --hidden -g '!.git/**' -g '!.venv/**' -g '!data/**' -g '!outputs/**' \
+  '(PASSWORD|API_KEY|API_SECRET|ACCESS_TOKEN).*[=:]|/home/[^/]+' .
 ```
 
-## 2. GitHub remote 추가
+`.env`, DB 접속정보, API key, 개인 절대경로는 커밋하지 않습니다. 예제 설정은 환경변수 또는 placeholder만 사용합니다.
+
+## 2. 공개 대상
+
+- 프로젝트 문서: `README.md`, `docs/`, `research_protocols/`
+- 재현 코드: `src/`, `scripts/`, `tests/`
+- 설정 예시: `configs/`, `.env.example`
+- 경량 핵심 결과: 검토한 보고서, 판정 CSV, manifest, 그림
+
+다음은 기본 제외합니다.
+
+- `data/`의 raw·normalized market data
+- `.env`, credentials, DB dump
+- `outputs/`의 intermediate·대형 parquet·전체 로컬 결과
+- `dist/`, cache, staging, virtual environment
+- 저작권이 있는 `references/` 원문
+
+## 3. 검증
 
 ```bash
-# GitHub에서 빈 repo 생성 후 (Add README, gitignore, license 모두 체크해제)
-git remote add origin git@github.com:rhwhdgks/crypto-herding-research.git
-git push -u origin main
+PYTHONPATH=src .venv/bin/python -m pytest -q
+PYTHONPATH=src .venv/bin/python scripts/verify_csad_specification_audit.py
+PYTHONPATH=src .venv/bin/python scripts/verify_csad_mechanical_derivation_v1_1_amended.py
+PYTHONPATH=src .venv/bin/python scripts/verify_final_research_completion.py
+git diff --check
 ```
 
-## 3. 권장 후속 작업
-
-- [ ] GitHub repo 설정에서 **Topics** 추가: `quantitative-finance`, `cryptocurrency`, `herding`, `event-study`, `microstructure`, `python`
-- [ ] **About** 섹션에 한 줄 설명 입력
-- [ ] `outputs/presentation_short_2026-05-09.pdf`를 GitHub Release로 첨부하면 채용 담당자가 바로 다운로드 가능
-- [ ] 핵심 그림 (`experiments/lead_lag_robustness/outputs/tick_level_lead_time_5y.png`)을 README 상단에 임베드
-- [ ] GitHub Actions로 lint 또는 import test 추가 (선택)
-
-## 4. 제외 권장 파일 (사이즈 / 민감성)
-
-| 경로 | 사이즈 | 처리 |
-|---|---|---|
-| `.venv/` | ~수백 MB | `.gitignore` ✓ |
-| `data/` | ~106 GB | `.gitignore` ✓ |
-| `outputs/legacy/` | ~6.4 GB | `.gitignore` ✓ |
-| `outputs/baseline/*.csv` | ~수백 MB | `.gitignore` ✓ |
-| `outputs/tick/**/intermediate/` | ~수 GB | `.gitignore` ✓ |
-| `agents.md`, `claude.md`, `.claude/` | dev internal | `.gitignore` (선택) |
-| `logs/`, `*.log` | 크지 않지만 노이즈 | `.gitignore` ✓ |
-| `references/*.pdf` | 저작권 이슈 | `.gitignore` ✓ |
-
-## 5. 최종 확인
+## 4. Staging 감사
 
 ```bash
-# repo 크기 확인 (수십 MB 이하여야 정상)
-git count-objects -vH
+git diff --cached --name-status
+git diff --cached --stat
 
-# 무엇이 트래킹되고 있는지 한번에 검토
-git ls-files | head -50
-git ls-files | wc -l
+# GitHub 일반 파일 제한보다 큰 신규 blob이 없는지 확인합니다.
+git diff --cached --name-only -z | xargs -0 -r stat -c '%s %n' | sort -nr | head
+
+# staged 파일에 민감정보가 없는지 재검사합니다.
+git diff --cached | rg '(PASSWORD|API_KEY|API_SECRET|ACCESS_TOKEN).*[=:]|/home/[^/]+'
 ```
 
-## 6. 문제 발생 시 (실수로 큰 파일 commit)
+`outputs/`는 `.gitignore`에서 opt-in입니다. 필요한 경량 결과만 파일 단위로 검토한 뒤 `git add -f <path>`를 사용합니다.
+
+## 5. Commit과 Push
 
 ```bash
-# 마지막 commit에서 특정 파일만 제거
-git rm --cached path/to/large_file
-git commit --amend
-
-# 이미 push했다면 git-filter-repo 또는 BFG Repo-Cleaner 권장
-# https://rtyley.github.io/bfg-repo-cleaner/
+git commit -m "docs: prepare crypto herding research for public release"
+git show --stat --oneline HEAD
 ```
+
+Push는 커밋과 별도 단계입니다. 최종 diff, 원격 저장소, 브랜치를 다시 확인한 뒤 일반 `git push`만 사용하며 force push와 history rewrite는 하지 않습니다.
+
+## 6. 기존 이력 주의
+
+현재 저장소의 과거 이력에는 오래된 대형 intermediate blob이 존재할 수 있습니다. 이번 공개 정리에서는 새 대형 파일을 추가하지 않으며, 기존 이력을 정리해야 한다면 별도의 백업·합의·마이그레이션 계획으로 수행합니다. 이 작업에서 `commit --amend`, force push, history rewrite를 사용하지 않습니다.

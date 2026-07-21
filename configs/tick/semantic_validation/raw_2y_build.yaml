@@ -1,0 +1,37 @@
+data:
+  source: binance_public_data
+  trade_kind: aggTrades
+  local_data_dir: data/tick_archive
+  overwrite_existing: false
+  prefer_monthly_archives: true
+  monthly_chunk_rows: 1000000
+  symbols:
+    - BTCUSDT
+    - ETHUSDT
+    - XRPUSDT
+    - SOLUSDT
+    - DOGEUSDT
+    - ADAUSDT
+    - AVAXUSDT
+  start: "2024-04-08"
+  end: "2026-04-07"
+
+backfill:
+  # Each symbol is processed sequentially; independent symbols may run in parallel.
+  max_workers: 4
+
+analysis:
+  interval_minutes: [15]
+  forward_horizons_minutes: [30]
+  session_hours_utc: [16, 17, 18, 19, 20, 21, 22, 23]
+  lookback_days_for_threshold: 5
+  run_clustering_score_percentile: 0.15
+  min_trades_per_bucket: 200
+  flat_return_epsilon: 0.0
+  aggressor_balance_epsilon: 0.0
+
+output:
+  base_dir: outputs/v2/tick/semantic_validation/raw_2y
+
+logging:
+  level: INFO

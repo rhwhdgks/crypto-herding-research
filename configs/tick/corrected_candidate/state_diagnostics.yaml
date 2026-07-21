@@ -1,0 +1,25 @@
+input:
+  micro_frame_path: outputs/v2/tick/multi_asset_5y/lead_lag_matrix/intermediate/tick_micro_frame_15m.csv
+  futures_state_path: experiments/informed_trading/outputs/doge_futures_state_15m.csv
+  flow_state_path: experiments/informed_trading/outputs/doge_vpin_15m.csv
+
+sample_split:
+  fit_end: "2024-12-31T23:59:59Z"
+  oos_start: "2025-01-01T00:00:00Z"
+  oos_end: "2026-04-30T23:59:59Z"
+
+analysis:
+  leader: DOGEUSDT
+  targets: [AVAXUSDT, ADAUSDT, XRPUSDT, SOLUSDT]
+  horizon_minutes: 30
+  run_clustering_side: down
+  price_direction: down
+  state_columns: [funding_pre, d_oi_event, d_oi_24h_pre]
+  threshold_columns: [toxicity, vpin_50, d_oi_event, d_oi_24h_pre, vol_24h]
+  volatility_reference: BTCUSDT
+  volatility_window_buckets: 96
+  bootstrap_draws: 1000
+  seed: 20260715
+
+output:
+  base_dir: outputs/v2/tick/corrected_candidate/state_diagnostics

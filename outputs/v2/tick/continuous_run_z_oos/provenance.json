@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "pipeline_version": "tick-continuous-run-z-oos-v1",
+  "git_commit": "0b47f9d20ab9bbbb2e30528cdfa1ac5b386c538a",
+  "git_worktree_dirty": true,
+  "config_sha256": "3d517c545bdb2e1a1e077a9a9a6d8a17d085fbc5209bd7bed75ec80608f4cd17",
+  "input_manifest_sha256": "bf2f2b8c4d01d06a2e47055c3a954d9c553d907a6f31ae6631c8bb1981b34773",
+  "generated_at_utc": "2026-07-18T16:37:36.997214+00:00",
+  "train_start": "2024-04-08T00:00:00Z",
+  "train_end": "2025-04-08T00:00:00Z",
+  "oos_start": "2025-04-08T00:00:00Z",
+  "oos_end": "2026-04-08T00:00:00Z",
+  "statistical_method": "joint run-intensity OLS with UTC-day clustered covariance; separate three-hypothesis BH-FDR families by split and outcome",
+  "random_seed": null,
+  "status": "corrected"
+}

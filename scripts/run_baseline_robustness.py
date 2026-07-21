@@ -2,13 +2,9 @@ from __future__ import annotations
 
 import argparse
 import logging
-import sys
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SRC_DIR = PROJECT_ROOT / "src"
-if str(SRC_DIR) not in sys.path:
-    sys.path.insert(0, str(SRC_DIR))
 
 from baseline_robustness import (
     build_baseline_robustness_report,
@@ -23,10 +19,25 @@ from baseline_robustness import (
     plot_rolling_beta2,
     summarize_segments,
 )
-from utils import load_config, save_dataframe, save_text, setup_logging
+from utils import (
+    load_config,
+    save_config_snapshot,
+    save_dataframe,
+    save_input_manifest,
+    save_provenance_manifest,
+    save_text,
+    setup_logging,
+)
 
 
 LOGGER = logging.getLogger(__name__)
+
+
+def _display_path(path: Path) -> str:
+    try:
+        return path.resolve().relative_to(PROJECT_ROOT).as_posix()
+    except ValueError:
+        return path.resolve().as_posix()
 
 
 def parse_args() -> argparse.Namespace:
@@ -122,11 +133,11 @@ def main() -> None:
     )
 
     plot_paths = [
-        str(plots_dir / "chronological_beta2.png"),
-        str(plots_dir / "session_beta2.png"),
-        str(plots_dir / "session_1d_returns.png"),
-        str(plots_dir / "volatility_1d_returns.png"),
-        str(plots_dir / "rolling_beta2_30d.png"),
+        _display_path(plots_dir / "chronological_beta2.png"),
+        _display_path(plots_dir / "session_beta2.png"),
+        _display_path(plots_dir / "session_1d_returns.png"),
+        _display_path(plots_dir / "volatility_1d_returns.png"),
+        _display_path(plots_dir / "rolling_beta2_30d.png"),
     ]
     report = build_baseline_robustness_report(
         regression_summary=regression_summary,
@@ -136,6 +147,25 @@ def main() -> None:
         plot_paths=plot_paths,
     )
     save_text(report, output_dir / "baseline_robustness_report.md")
+    save_config_snapshot(config, output_dir / "config_snapshot.yaml")
+    input_manifest = save_input_manifest(
+        [
+            baseline_output_dir / "intermediate" / "analysis_frame.csv",
+            baseline_output_dir / "intermediate" / "market_return_series.csv",
+        ],
+        output_dir / "input_manifest.json",
+    )
+    save_provenance_manifest(
+        config,
+        output_dir / "provenance.json",
+        schema_version=2,
+        pipeline_version="baseline-robustness-v2",
+        train_start=config["data"].get("start"),
+        train_end=config["data"].get("end"),
+        statistical_method="HAC segment regressions; block event-study inference; rolling beta2",
+        input_manifest_path=input_manifest,
+        random_seed=20260715,
+    )
 
     LOGGER.info(
         "baseline robustness 분석이 완료됐습니다. segment=%d, rolling_windows=%d.",

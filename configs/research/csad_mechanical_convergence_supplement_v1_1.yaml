@@ -1,0 +1,45 @@
+protocol:
+  path: research_protocols/csad_mechanical_derivation_v1_1_amendment.md
+  parent_protocol: research_protocols/csad_mechanical_derivation_v1.md
+  frozen_at_utc: "2026-07-21T04:46:51Z"
+  version: "1.1"
+
+models:
+  names: [standard_csad, no_intercept_csad, intercept_restored, scsad]
+  original_bh_family: [standard_csad, no_intercept_csad, scsad]
+  alpha: 0.05
+
+theory:
+  sigma: 0.025
+  convergence_confidence: 0.99
+  relative_error_maximum: 0.025
+  negative_sign_rate_minimum: 0.95
+  mechanical_raw_fpr_minimum: 0.95
+  mechanical_bh_fpr_minimum: 0.95
+  nominal_raw_fpr_maximum: 0.075
+
+simulation:
+  seed: 2026072103
+  repetitions: 300
+  dgp: independent_gaussian
+  assets: [14, 50, 62]
+  observations: [3000, 12000, 48000]
+  weighting: equal
+
+dgp:
+  independent_gaussian:
+    idiosyncratic_scale: 0.025
+
+weight_process:
+  lognormal_sigma: 1.25
+  liquidity_ar1: 0.97
+  liquidity_innovation: 0.12
+  concentrated_top_weight: 0.45
+  minimum_weight: 1.0e-12
+
+output:
+  base_dir: outputs/v2/csad_mechanical_derivation_v1/supplement_v1_1
+  overwrite: false
+
+logging:
+  level: INFO

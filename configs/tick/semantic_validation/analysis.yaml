@@ -1,0 +1,27 @@
+data:
+  migrated_cache_path: outputs/v2/tick/multi_asset_5y/lead_lag_matrix/intermediate/tick_micro_frame_15m.csv
+  raw_pilot_path: outputs/v2/tick/semantic_validation/raw_pilot_2024_04/intermediate/tick_micro_frame_15m.csv
+  symbols:
+    - BTCUSDT
+    - ETHUSDT
+    - XRPUSDT
+    - SOLUSDT
+    - DOGEUSDT
+    - ADAUSDT
+    - AVAXUSDT
+
+analysis:
+  horizon_minutes: 30
+  trailing_volatility_buckets: 96
+  minimum_directional_events: 30
+  directional_proxy_minimum_concordance: 0.60
+  economic_effect_threshold_bps: 5.0
+  price_direction_family_size: 8
+  predictive_family_size: 3
+  fdr_alpha: 0.05
+
+output:
+  base_dir: outputs/v2/tick/semantic_validation/analysis
+
+logging:
+  level: INFO

@@ -1,0 +1,136 @@
+protocol:
+  path: research_protocols/cmc_fixed_62_replication_v1.md
+
+source:
+  provider: coinmarketcap_public_individual_historical
+  endpoint: https://api.coinmarketcap.com/data-api/v3.1/cryptocurrency/historical
+  cache_dir: data/coinmarketcap/fixed_62
+  state_path: data/coinmarketcap/fixed_62/collection_state.json
+  manifest_path: data/coinmarketcap/fixed_62/checkpoint_manifest.csv
+  normalized_path: data/coinmarketcap/fixed_62/fixed_62_daily.parquet
+  source_start: "2017-12-31"
+  source_end: "2024-04-09"
+  chunk_days: 400
+  usd_convert_id: 2781
+  max_workers: 6
+  request_timeout_seconds: 60
+  maximum_attempts: 6
+  backoff_seconds: 1.5
+  user_agent: crypto-herding-fixed-62-replication/1.0
+
+universe:
+  - {symbol: ADA, cmc_id: 2010}
+  - {symbol: AGRS, cmc_id: 1037}
+  - {symbol: ANT, cmc_id: 1680}
+  - {symbol: ARDR, cmc_id: 1320}
+  - {symbol: ARK, cmc_id: 1586}
+  - {symbol: BAT, cmc_id: 1697}
+  - {symbol: BCH, cmc_id: 1831}
+  - {symbol: BNB, cmc_id: 1839}
+  - {symbol: BNT, cmc_id: 1727}
+  - {symbol: BTC, cmc_id: 1}
+  - {symbol: BTG, cmc_id: 2083}
+  - {symbol: CVC, cmc_id: 1816}
+  - {symbol: DASH, cmc_id: 131}
+  - {symbol: DCR, cmc_id: 1168}
+  - {symbol: DENT, cmc_id: 1886}
+  - {symbol: DGB, cmc_id: 109}
+  - {symbol: DNT, cmc_id: 1856}
+  - {symbol: DOGE, cmc_id: 74}
+  - {symbol: ELF, cmc_id: 2299}
+  - {symbol: ENJ, cmc_id: 2130}
+  - {symbol: EOS, cmc_id: 1765}
+  - {symbol: ETC, cmc_id: 1321}
+  - {symbol: ETH, cmc_id: 1027}
+  - {symbol: ETN, cmc_id: 2137}
+  - {symbol: GAS, cmc_id: 1785}
+  - {symbol: GLM, cmc_id: 1455}
+  - {symbol: GNO, cmc_id: 1659}
+  - {symbol: ICX, cmc_id: 2099}
+  - {symbol: IOTA, cmc_id: 1720}
+  - {symbol: KCS, cmc_id: 2087}
+  - {symbol: LINK, cmc_id: 1975}
+  - {symbol: LRC, cmc_id: 1934}
+  - {symbol: LSK, cmc_id: 1214}
+  - {symbol: LTC, cmc_id: 2}
+  - {symbol: MANA, cmc_id: 1966}
+  - {symbol: MED, cmc_id: 2303}
+  - {symbol: MTL, cmc_id: 1788}
+  - {symbol: NEO, cmc_id: 1376}
+  - {symbol: OMG, cmc_id: 1808}
+  - {symbol: POWR, cmc_id: 2132}
+  - {symbol: QTUM, cmc_id: 1684}
+  - {symbol: REQ, cmc_id: 2071}
+  - {symbol: RLC, cmc_id: 1637}
+  - {symbol: SC, cmc_id: 1042}
+  - {symbol: SNT, cmc_id: 1759}
+  - {symbol: STEEM, cmc_id: 1230}
+  - {symbol: STMX, cmc_id: 2297}
+  - {symbol: STORJ, cmc_id: 1772}
+  - {symbol: STRAX, cmc_id: 1343}
+  - {symbol: SYS, cmc_id: 541}
+  - {symbol: TRX, cmc_id: 1958}
+  - {symbol: WAVES, cmc_id: 1274}
+  - {symbol: WAXP, cmc_id: 2300}
+  - {symbol: XEM, cmc_id: 873}
+  - {symbol: XLM, cmc_id: 512}
+  - {symbol: XMR, cmc_id: 328}
+  - {symbol: XNO, cmc_id: 1567}
+  - {symbol: XRP, cmc_id: 52}
+  - {symbol: XVG, cmc_id: 693}
+  - {symbol: ZEC, cmc_id: 1437}
+  - {symbol: ZEN, cmc_id: 1698}
+  - {symbol: ZRX, cmc_id: 1896}
+
+analysis:
+  start: "2018-01-01"
+  end: "2024-04-09"
+  minimum_active_assets: 55
+  minimum_asset_day_coverage: 0.95
+  minimum_eligible_day_share: 0.99
+  minimum_positive_price_share: 0.99
+  variants:
+    - name: replication_primary
+      return_method: log
+      market_cap_weighting: contemporaneous
+    - name: no_lookahead_sensitivity
+      return_method: log
+      market_cap_weighting: lagged
+  method_audit_variants:
+    - {name: simple_contemporaneous, return_method: simple, market_cap_weighting: contemporaneous}
+    - {name: simple_lagged, return_method: simple, market_cap_weighting: lagged}
+    - {name: log_contemporaneous, return_method: log, market_cap_weighting: contemporaneous}
+    - {name: log_lagged, return_method: log, market_cap_weighting: lagged}
+  frequencies: [daily, weekly]
+  regression:
+    models: [standard_csad, no_intercept_csad, scsad]
+    cov_type: HAC
+    hac_maxlags: auto
+    fdr_alpha: 0.05
+    family_size_per_period_variant: 6
+  subperiods:
+    - {name: full_sample, start: "2018-01-01", end: "2024-04-09"}
+    - {name: pre_covid, start: "2018-01-01", end: "2020-03-10"}
+    - {name: covid, start: "2020-03-11", end: "2022-02-23"}
+    - {name: post_covid, start: "2022-02-24", end: "2024-04-09"}
+
+benchmark:
+  citation: Natashekara and Sampath (2026), Tables 2, A.1, A.5
+  values:
+    - {period: full_sample, frequency: daily, model: no_intercept_csad, coefficient: -1.850, t_stat: -3.523, nobs: 2291}
+    - {period: pre_covid, frequency: daily, model: no_intercept_csad, coefficient: -4.634, t_stat: -4.426, nobs: 800}
+    - {period: covid, frequency: daily, model: no_intercept_csad, coefficient: -1.757, t_stat: -7.220, nobs: 715}
+    - {period: post_covid, frequency: daily, model: no_intercept_csad, coefficient: -6.543, t_stat: -7.625, nobs: 776}
+    - {period: full_sample, frequency: daily, model: scsad, coefficient: -2.924, t_stat: -4.471, nobs: 2291}
+    - {period: pre_covid, frequency: daily, model: scsad, coefficient: -14.892, t_stat: -3.209, nobs: 800}
+    - {period: covid, frequency: daily, model: scsad, coefficient: -4.807, t_stat: -6.006, nobs: 715}
+    - {period: post_covid, frequency: daily, model: scsad, coefficient: -30.813, t_stat: -7.546, nobs: 776}
+    - {period: full_sample, frequency: weekly, model: standard_csad, coefficient: -0.115, t_stat: -0.405, nobs: 307}
+    - {period: full_sample, frequency: weekly, model: no_intercept_csad, coefficient: -2.096, t_stat: -5.904, nobs: 307}
+    - {period: full_sample, frequency: weekly, model: scsad, coefficient: -3.359, t_stat: -3.632, nobs: 307}
+
+output:
+  base_dir: outputs/v2/cmc_fixed_62/replication_v1
+
+logging:
+  level: INFO

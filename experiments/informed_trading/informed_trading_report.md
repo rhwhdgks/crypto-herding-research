@@ -1,5 +1,7 @@
 # Informed-Trading Axis 통합 — 1차 결과 (VPIN-proxy conditional lead-lag)
 
+> **INVALIDATED (2026-07-15):** 이 문서의 수치와 결론은 가격 방향이 아닌 legacy `micro_herding_up/down` 라벨을 방향 이벤트로 해석했습니다. 감사 이력으로만 보존하며 alpha, p-value, execution 또는 tracker 근거로 사용할 수 없습니다. 현재 판정은 `outputs/v2/CORRECTION_REPORT_2026-07-15.md`를 따릅니다.
+
 작성: 2026-07-06 · 트랙: `experiments/informed_trading/` (baseline / lead_lag_matrix 미변경, 읽기 전용)
 
 ## 배경

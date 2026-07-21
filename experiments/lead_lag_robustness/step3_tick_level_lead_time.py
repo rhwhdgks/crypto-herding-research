@@ -6,7 +6,7 @@
 
 방법:
 1. AVAX, DOGE 1분봉 log return 시계열
-2. DOGE micro_herding_down event 875건의 bucket_start를 anchor
+2. DOGE schema-v2 run-side-down and price-down event 875건의 bucket_start를 anchor
 3. 각 anchor 기준 [-60min, +60min] window의 AVAX cumulative return
 4. 모든 event 평균 → event-triggered average response curve
 5. + Cross-correlation function (CCF) for ±60min lags
@@ -19,11 +19,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-DATA_DIR = Path("/home/jonghan/findalpha/herding/data")
-MICRO_FRAME = Path(
-    "/home/jonghan/findalpha/herding/outputs/tick/multi_asset_365d/lead_lag_matrix/intermediate/tick_micro_frame_15m.csv"
-)
-OUT_DIR = Path("/home/jonghan/findalpha/herding/experiments/lead_lag_robustness/outputs")
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+DATA_DIR = PROJECT_ROOT / "data"
+MICRO_FRAME = PROJECT_ROOT / "outputs/v2/tick/multi_asset_365d/lead_lag_matrix/intermediate/tick_micro_frame_15m.csv"
+OUT_DIR = PROJECT_ROOT / "experiments/lead_lag_robustness/outputs"
 
 WINDOW_MINUTES_BEFORE = 60
 WINDOW_MINUTES_AFTER = 60
@@ -49,7 +48,10 @@ def main() -> None:
     mf = pd.read_csv(MICRO_FRAME)
     mf["bucket_start"] = pd.to_datetime(mf["bucket_start"], utc=True)
     events = mf.loc[
-        (mf["symbol"] == "DOGEUSDT") & (mf["event_label"] == "micro_herding_down"),
+        (mf["symbol"] == "DOGEUSDT")
+        & mf["is_micro_run_clustering_event"].fillna(False).astype(bool)
+        & mf["run_clustering_side"].eq("down")
+        & mf["price_direction"].eq("down"),
         "bucket_start",
     ]
     events = pd.to_datetime(events.values, utc=True)

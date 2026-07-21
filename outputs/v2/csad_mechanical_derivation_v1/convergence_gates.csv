@@ -1,0 +1,13 @@
+assets,model,theoretical_target_coefficient,mean_target_coefficient,absolute_relative_error,theory_inside_mean_ci,negative_coefficient_rate,raw_false_positive_rate,bh3_false_positive_rate,relative_error_pass,mean_ci_pass,negative_rate_pass,raw_fpr_pass,bh_fpr_pass,gate_type,gate_pass
+14,standard_csad,0.0,-0.029322059717400536,,True,0.515,0.02,0.02,,True,,True,,nominal_control,True
+14,no_intercept_csad,-259.40717487154114,-260.07794454443973,0.0025857791837513855,True,1.0,1.0,1.0,True,True,True,True,True,mechanical_convergence,True
+14,intercept_restored,0.0,-0.03141160695302242,,True,0.515,0.02,,,True,,True,,nominal_control,True
+14,scsad,-8569.363533716636,-8639.115256218225,0.008139661974561705,True,1.0,1.0,1.0,True,True,True,True,True,mechanical_convergence,True
+50,standard_csad,0.0,0.045136252662119125,,True,0.44,0.03,0.03,,True,,True,,nominal_control,True
+50,no_intercept_csad,-951.7641278414769,-950.6037273133945,0.0012192101951920425,True,1.0,1.0,1.0,True,True,True,True,True,mechanical_convergence,True
+50,intercept_restored,0.0,0.0392349179982918,,True,0.445,0.03,,,True,,True,,nominal_control,True
+50,scsad,-59417.84542097426,-59385.74026428691,0.0005403285235249754,True,1.0,1.0,1.0,True,True,True,True,True,mechanical_convergence,True
+62,standard_csad,0.0,-0.32694124222532495,,True,0.58,0.015,0.015,,True,,True,,nominal_control,True
+62,no_intercept_csad,-1182.5160722872697,-1186.8563691550808,0.00367039143866846,True,1.0,1.0,1.0,True,True,True,True,True,mechanical_convergence,True
+62,intercept_restored,0.0,-0.32847825166303324,,True,0.58,0.015,,,True,,True,,nominal_control,True
+62,scsad,-82206.36826405322,-83044.91193694755,0.010200470968390966,False,1.0,1.0,1.0,True,False,True,True,True,mechanical_convergence,False

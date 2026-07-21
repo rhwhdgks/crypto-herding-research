@@ -1,0 +1,39 @@
+{
+  "files": [
+    {
+      "path": "configs/research/zero_run_mechanical_null_audit_v1.yaml",
+      "size": 1684,
+      "sha256": "9a0b43281750e6cf42d113247e886629945d02e1a88adc8332d418f3abde35b6"
+    },
+    {
+      "path": "research_protocols/zero_run_mechanical_null_audit_v1.md",
+      "size": 7221,
+      "sha256": "6b9fe460f399976bde5908e766f3e727ad317b8bdaf8787beb6b18646d25a869"
+    },
+    {
+      "path": "research_protocols/zero_run_mechanical_null_audit_v1.seal.json",
+      "size": 497,
+      "sha256": "22a852bc510a606d2fce32e80a4cb4c2bf50e3e054cd21577d0945b3a918fa48"
+    },
+    {
+      "path": "outputs/v2/tick/semantic_validation/raw_2y/intermediate/tick_micro_frame_15m.parquet",
+      "size": 60094168,
+      "sha256": "1b19c5f05d862f8ec6225a5f841da9844d4797eee2cd9668cb8f7b9840320bfd"
+    },
+    {
+      "path": "outputs/v2/zero_run_microstructure_v1/analysis_frame.parquet",
+      "size": 124366697,
+      "sha256": "d61dffbe86bd8e721f91023fa8ecab0b4be6a96b89b9716df63f8b2c1d50b7fe"
+    },
+    {
+      "path": "outputs/v2/zero_run_microstructure_v1/scaling_artifact.json",
+      "size": 2115,
+      "sha256": "cffde803ecde2dccc3e747181a996eecaaee5f4341f3a85a7e9e1392db1c752c"
+    },
+    {
+      "path": "outputs/v2/zero_run_microstructure_v1/mechanism_decisions.csv",
+      "size": 1458,
+      "sha256": "12389d440beebb2bf22bca05e43d1f1540bcd491260be8330ce20d7ed9d08740"
+    }
+  ]
+}

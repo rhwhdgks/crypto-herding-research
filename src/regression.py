@@ -11,7 +11,7 @@ from statsmodels.regression.linear_model import RegressionResultsWrapper
 def run_csad_regression(
     csad: pd.Series,
     market_return: pd.Series,
-    cov_type: str = "nonrobust",
+    cov_type: str = "HAC",
     hac_maxlags: int | str | None = None,
 ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, RegressionResultsWrapper, dict]:
     regression_frame = prepare_regression_frame(csad, market_return)
@@ -36,7 +36,7 @@ def run_csad_regression(
 def run_no_intercept_csad_regression(
     csad: pd.Series,
     market_return: pd.Series,
-    cov_type: str = "nonrobust",
+    cov_type: str = "HAC",
     hac_maxlags: int | str | None = None,
 ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, RegressionResultsWrapper, dict]:
     regression_frame = prepare_regression_frame(csad, market_return)
@@ -66,7 +66,7 @@ def run_no_intercept_csad_regression(
 def run_scsad_regression(
     csad: pd.Series,
     market_return: pd.Series,
-    cov_type: str = "nonrobust",
+    cov_type: str = "HAC",
     hac_maxlags: int | str | None = None,
 ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, RegressionResultsWrapper, dict]:
     regression_frame = prepare_regression_frame(csad, market_return)
@@ -150,6 +150,12 @@ def build_generic_regression_json_summary(
         "rsquared": float(model.rsquared),
         "adj_rsquared": float(model.rsquared_adj),
         "nobs": float(model.nobs),
+        "cov_type": str(model.cov_type),
+        "covariance_metadata": {
+            key: value
+            for key, value in dict(getattr(model, "cov_kwds", {}) or {}).items()
+            if isinstance(value, (str, int, float, bool, type(None)))
+        },
         "interpretation": interpretation,
     }
 
@@ -159,6 +165,8 @@ def run_rolling_csad_regression(
     market_return: pd.Series,
     window: int,
     min_periods: int | None = None,
+    cov_type: str = "HAC",
+    hac_maxlags: int | str | None = None,
 ) -> pd.DataFrame:
     regression_frame = prepare_regression_frame(csad, market_return)
     if regression_frame.empty:
@@ -176,7 +184,7 @@ def run_rolling_csad_regression(
             continue
 
         x = sm.add_constant(subset[["abs_market_return", "market_return_sq"]])
-        model = sm.OLS(subset["csad"], x).fit()
+        model = _fit_ols(subset["csad"], x, cov_type=cov_type, hac_maxlags=hac_maxlags)
         results.append(
             {
                 "timestamp": subset.index[-1],
@@ -186,6 +194,7 @@ def run_rolling_csad_regression(
                 "beta2_p_value": model.pvalues.get("market_return_sq"),
                 "rsquared": model.rsquared,
                 "nobs": model.nobs,
+                "cov_type": str(model.cov_type),
             }
         )
 
@@ -200,7 +209,7 @@ def run_rolling_csad_regression(
 def _fit_ols(
     dependent: pd.Series,
     design_matrix: pd.DataFrame,
-    cov_type: str = "nonrobust",
+    cov_type: str = "HAC",
     hac_maxlags: int | str | None = None,
 ) -> RegressionResultsWrapper:
     cov_type_normalized = str(cov_type or "nonrobust").upper()

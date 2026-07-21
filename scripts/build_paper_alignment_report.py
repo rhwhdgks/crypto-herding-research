@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import sys
 from pathlib import Path
 
 import pandas as pd
@@ -201,4 +200,4 @@ def _pick_row(frame: pd.DataFrame, model_name: str, period_name: str) -> pd.Seri
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(main())

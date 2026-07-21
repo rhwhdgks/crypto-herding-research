@@ -17,6 +17,8 @@ def attach_event_sentiment_features(
     timestamp_column: str = "timestamp",
     positive_threshold: float = 0.05,
     negative_threshold: float = -0.05,
+    availability_timestamp_column: str = "first_seen_at_utc",
+    require_point_in_time: bool = True,
 ) -> pd.DataFrame:
     frame = events.copy()
     frame[timestamp_column] = pd.to_datetime(frame[timestamp_column], utc=True, errors="coerce")
@@ -36,9 +38,17 @@ def attach_event_sentiment_features(
         return frame
 
     news = scored_news.copy()
-    news["timestamp"] = pd.to_datetime(news["timestamp"], utc=True, errors="coerce")
-    news = news.sort_values("timestamp").reset_index(drop=True)
-    news_times = news["timestamp"].astype("int64").to_numpy()
+    if availability_timestamp_column not in news.columns:
+        if require_point_in_time:
+            raise ValueError(
+                f"Point-in-time sentiment requires {availability_timestamp_column!r}; historical publication time alone is insufficient"
+            )
+        availability_timestamp_column = "timestamp"
+    news[availability_timestamp_column] = pd.to_datetime(
+        news[availability_timestamp_column], utc=True, errors="coerce"
+    )
+    news = news.dropna(subset=[availability_timestamp_column]).sort_values(availability_timestamp_column).reset_index(drop=True)
+    news_times = news[availability_timestamp_column].astype("int64").to_numpy()
     event_times = frame[timestamp_column].astype("int64").to_numpy()
 
     metric_map = {
@@ -104,12 +114,12 @@ def build_sentiment_event_groups(
     def _map_group(row: pd.Series) -> str:
         event_type = str(row.get(event_type_column, "none"))
         sentiment_label = str(row.get(sentiment_column, "neutral"))
-        if event_type == "herding" and sentiment_label == "positive":
-            return "bullish_herd"
-        if event_type == "herding" and sentiment_label == "negative":
-            return "panic_herd"
-        if event_type == "herding":
-            return "neutral_herd"
+        if event_type == "low_dispersion" and sentiment_label == "positive":
+            return "bullish_low_dispersion"
+        if event_type == "low_dispersion" and sentiment_label == "negative":
+            return "panic_low_dispersion"
+        if event_type == "low_dispersion":
+            return "neutral_low_dispersion"
         if event_type == "shock" and sentiment_label == "positive":
             return "positive_shock"
         if event_type == "shock" and sentiment_label == "negative":
@@ -153,6 +163,17 @@ def engineer_sentiment_feature_layer(
     frame[f"has_news_{prefix}"] = frame[news_count_col].fillna(0).astype(int) > 0
 
     news_with_coverage = frame.loc[frame[news_count_col].fillna(0).astype(int) > 0].copy()
+    threshold_fit_end = feature_cfg.get("threshold_fit_end")
+    uses_fitted_quantiles = feature_cfg.get("dense_news_threshold") is None or feature_cfg.get("strong_sentiment_threshold") is None
+    if uses_fitted_quantiles:
+        if threshold_fit_end is None:
+            raise ValueError("Sentiment quantile thresholds require feature_layer.threshold_fit_end")
+        if "timestamp" not in news_with_coverage.columns:
+            raise ValueError("Sentiment threshold fitting requires an event timestamp column")
+        fit_end = pd.Timestamp(threshold_fit_end)
+        news_with_coverage = news_with_coverage.loc[
+            pd.to_datetime(news_with_coverage["timestamp"], utc=True) <= fit_end
+        ]
     dense_news_threshold = _resolve_threshold(
         news_with_coverage[news_count_col].astype(float),
         feature_cfg.get("dense_news_threshold"),
@@ -174,16 +195,16 @@ def engineer_sentiment_feature_layer(
         event_type = str(row.get(event_type_column, "none"))
         sentiment_label = str(row.get(sentiment_label_col, "neutral"))
         is_confirmed = bool(row.get(f"is_news_confirmed_{prefix}", False))
-        if event_type == "herding" and sentiment_label == "positive" and is_confirmed:
-            return "bullish_herd_strong"
-        if event_type == "herding" and sentiment_label == "negative" and is_confirmed:
-            return "panic_herd_strong"
+        if event_type == "low_dispersion" and sentiment_label == "positive" and is_confirmed:
+            return "bullish_low_dispersion_strong"
+        if event_type == "low_dispersion" and sentiment_label == "negative" and is_confirmed:
+            return "panic_low_dispersion_strong"
         if event_type == "shock" and sentiment_label == "positive" and is_confirmed:
             return "positive_shock_strong"
         if event_type == "shock" and sentiment_label == "negative" and is_confirmed:
             return "negative_shock_strong"
-        if event_type == "herding":
-            return "herding_other"
+        if event_type == "low_dispersion":
+            return "low_dispersion_other"
         if event_type == "shock":
             return "shock_other"
         return "none"
@@ -198,6 +219,7 @@ def engineer_sentiment_feature_layer(
                 "strong_sentiment_threshold": strong_sentiment_threshold,
                 "dense_news_quantile": float(feature_cfg.get("dense_news_quantile", 0.75)),
                 "strong_sentiment_quantile": float(feature_cfg.get("strong_sentiment_quantile", 0.75)),
+                "threshold_fit_end": threshold_fit_end,
             }
         ]
     )
@@ -277,9 +299,9 @@ def plot_sentiment_split_summary(summary: pd.DataFrame, path: str | Path) -> Non
         return
 
     ordered_groups = [
-        "bullish_herd",
-        "panic_herd",
-        "neutral_herd",
+        "bullish_low_dispersion",
+        "panic_low_dispersion",
+        "neutral_low_dispersion",
         "positive_shock",
         "negative_shock",
         "neutral_shock",
@@ -293,9 +315,9 @@ def plot_sentiment_split_summary(summary: pd.DataFrame, path: str | Path) -> Non
     plotted = plotted.sort_values(["event_sentiment_group", "horizon_minutes"])
 
     palette = {
-        "bullish_herd": "#2E8B57",
-        "panic_herd": "#C0392B",
-        "neutral_herd": "#7F8C8D",
+        "bullish_low_dispersion": "#2E8B57",
+        "panic_low_dispersion": "#C0392B",
+        "neutral_low_dispersion": "#7F8C8D",
         "positive_shock": "#1F77B4",
         "negative_shock": "#8E44AD",
         "neutral_shock": "#95A5A6",
@@ -334,9 +356,9 @@ def plot_feature_group_summary(summary: pd.DataFrame, path: str | Path) -> None:
         return
 
     ordered_groups = [
-        "bullish_herd_strong",
-        "panic_herd_strong",
-        "herding_other",
+        "bullish_low_dispersion_strong",
+        "panic_low_dispersion_strong",
+        "low_dispersion_other",
         "positive_shock_strong",
         "negative_shock_strong",
         "shock_other",

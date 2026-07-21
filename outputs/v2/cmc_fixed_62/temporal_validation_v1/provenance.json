@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "pipeline_version": "cmc-fixed-62-temporal-validation-v1",
+  "git_commit": "0b47f9d20ab9bbbb2e30528cdfa1ac5b386c538a",
+  "git_worktree_dirty": true,
+  "config_sha256": "fda79cc033fcefc792a1e5425902983f80a16bbc5067714d29dc55267ffc2e14",
+  "input_manifest_sha256": "1ac182152b0db162cc2857060fd7676bc168f2ce08287cd99632d69650d6c03c",
+  "generated_at_utc": "2026-07-19T04:44:35.590238+00:00",
+  "train_start": "2024-04-10",
+  "train_end": "2026-07-18",
+  "oos_start": null,
+  "oos_end": null,
+  "statistical_method": "Temporal holdout daily-weekly HAC corrected CSAD with variant-period BH-FDR",
+  "random_seed": null,
+  "status": "corrected"
+}

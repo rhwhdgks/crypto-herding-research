@@ -1,0 +1,19 @@
+{
+  "files": [
+    {
+      "path": "data/coinmarketcap/dynamic_universe/snapshot_manifest.csv",
+      "size": 524521,
+      "sha256": "6f48560a9a3325b28a759854debea0bc6957a81568a48b3611cd9abb6f6e2d71"
+    },
+    {
+      "path": "data/coinmarketcap/dynamic_universe/current_metadata.parquet",
+      "size": 301655,
+      "sha256": "2a953505086c8b028f55ee03b391e47cf0ff4411c8bef24cff4e6cfb2be7c58e"
+    },
+    {
+      "path": "research_protocols/cmc_dynamic_universe_replication_v1.md",
+      "size": 8050,
+      "sha256": "86772e13bb8a8bec46300efcd832b4450cb33d4d47a9cfc18d0afa14412986ba"
+    }
+  ]
+}

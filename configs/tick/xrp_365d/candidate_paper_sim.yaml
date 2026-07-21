@@ -1,5 +1,5 @@
 input:
-  base_dir: outputs/tick/xrp_365d/cost_sanity
+  base_dir: outputs/v2/tick/xrp_365d/cost_sanity
 
 analysis:
   candidates:
@@ -12,7 +12,7 @@ analysis:
     - 90
 
 output:
-  base_dir: outputs/tick/xrp_365d/candidate_paper_sim
+  base_dir: outputs/v2/tick/xrp_365d/candidate_paper_sim
 
 logging:
   level: INFO

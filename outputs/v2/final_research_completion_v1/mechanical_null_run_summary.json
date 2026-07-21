@@ -1,0 +1,12 @@
+{
+  "population_rows": 233201,
+  "audit_sample_rows": 9044,
+  "strata": 141,
+  "null_repetitions": 999,
+  "group_tests_per_family": 23,
+  "mechanism_tests": 5,
+  "final_passed": false,
+  "final_classification": "clustering_beyond_counts_but_mechanism_not_distinct",
+  "directional_alpha_tested": false,
+  "tracker_activation_allowed": false
+}

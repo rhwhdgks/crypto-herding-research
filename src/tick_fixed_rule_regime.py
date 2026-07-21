@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 
 from tick_fixed_rule_oos import load_micro_frame
+from tick_event_schema import build_run_side_event_mask
 
 
 def compute_rolling_regime_summary(
@@ -19,7 +20,7 @@ def compute_rolling_regime_summary(
     if return_column not in frame.columns:
         raise ValueError(f"Column not found: {return_column}")
 
-    event_mask = frame["is_micro_herding_event"] if event_label == "all" else frame["event_label"] == f"micro_herding_{event_label}"
+    event_mask = build_run_side_event_mask(frame, event_label)
     control_mask = frame["is_control_bucket"]
 
     unique_dates = sorted(frame["bucket_start"].dt.normalize().unique().tolist())

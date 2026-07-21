@@ -1,0 +1,12 @@
+research_axis,final_status,key_result
+Binance classical CSAD,falsified,beta2=+4.534759
+Frequency/universe sensitivity,falsified,12/12 cells do not support negative curvature
+CMC dynamic paper-like relation,numerically replicated,corrected 4/4
+CMC fixed-62 direct replication,numerically replicated,daily SCSAD -2.902
+CMC fixed-62 temporal holdout,numerically persistent,corrected 4/4
+Exchange/universe external validity,not universal,"strict criteria fail on Binance, OKX, PIT Top-50"
+Corrected CSAD behavioral identification,methodologically invalid,non-herding FPR 97-100%
+Factor-adjusted convergence,conditional/descriptive,full sample positive; window and regime sensitivity
+Tick winner semantics,falsified,price/aggressor agreement near 50%
+Zero-run array clustering,supported,87.347% observed vs 2.537% conditional-null FPR
+Zero-run mechanism and prediction,descriptive/no prediction,mechanism null 0/5; future families 0/2

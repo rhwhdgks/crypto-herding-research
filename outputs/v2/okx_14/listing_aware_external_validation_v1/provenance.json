@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "pipeline_version": "okx-14-listing-aware-external-validation-v1",
+  "git_commit": "0b47f9d20ab9bbbb2e30528cdfa1ac5b386c538a",
+  "git_worktree_dirty": true,
+  "config_sha256": "804b84d2e1e0348cd377c81e8c88f7ceac34ff6d252ed03c4f5d3587db04b911",
+  "input_manifest_sha256": "9c128c0c0cbda79d15c6c6518fd25a83e7fbe19a6d212630f92bb1ede2bb8c54",
+  "generated_at_utc": "2026-07-20T06:39:14.817379+00:00",
+  "train_start": "2021-04-10",
+  "train_end": "2026-04-09",
+  "oos_start": null,
+  "oos_end": null,
+  "statistical_method": "Daily-weekly HAC corrected CSAD with variant-period BH-FDR",
+  "random_seed": null,
+  "status": "corrected"
+}

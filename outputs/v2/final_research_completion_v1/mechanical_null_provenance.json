@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "pipeline_version": "zero-run-mechanical-null-audit-v1",
+  "git_commit": "0b47f9d20ab9bbbb2e30528cdfa1ac5b386c538a",
+  "git_worktree_dirty": true,
+  "config_sha256": "2938ec7539849da45b8486a7d8aac932c8420d2ae5442754e44ed2f6fb2436ea",
+  "input_manifest_sha256": "1386b8066579c6f91a65aa339e323ff73543dfa799dff033f2078fa83a128584",
+  "generated_at_utc": "2026-07-20T13:16:55.228155+00:00",
+  "train_start": null,
+  "train_end": null,
+  "oos_start": "2025-04-08T00:00:00Z",
+  "oos_end": "2026-04-08T00:00:00Z",
+  "statistical_method": "exact conditional binary-arrangement run distribution; stratified WLS; 999 Monte Carlo draws; 23-group and 5-outcome BH-FDR",
+  "random_seed": 20260720,
+  "status": "corrected"
+}

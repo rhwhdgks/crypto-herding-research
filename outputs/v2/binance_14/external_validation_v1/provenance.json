@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "pipeline_version": "binance-14-external-validation-v1",
+  "git_commit": "0b47f9d20ab9bbbb2e30528cdfa1ac5b386c538a",
+  "git_worktree_dirty": true,
+  "config_sha256": "1a7af2737f235641e2b523fb0090256d18bb81a6e0ce648bc973ac1ae4bf9a63",
+  "input_manifest_sha256": "f9b608ab08d759dd201737e982e440bbfebaffad625ecc3a8339b07f7f09093c",
+  "generated_at_utc": "2026-07-19T08:15:14.940729+00:00",
+  "train_start": "2021-04-10",
+  "train_end": "2026-04-09",
+  "oos_start": null,
+  "oos_end": null,
+  "statistical_method": "Daily-weekly HAC corrected CSAD with variant-period BH-FDR",
+  "random_seed": null,
+  "status": "corrected"
+}

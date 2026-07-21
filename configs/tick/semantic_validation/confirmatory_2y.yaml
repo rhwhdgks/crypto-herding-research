@@ -1,0 +1,32 @@
+data:
+  input_path: outputs/v2/tick/semantic_validation/raw_2y/intermediate/tick_micro_frame_15m.parquet
+  expected_start: "2024-04-08T00:00:00Z"
+  expected_end: "2026-04-07T23:45:00Z"
+  expected_rows: 490560
+  expected_interval_minutes: 15
+  minimum_aggressor_available_share: 1.0
+  symbols:
+    - BTCUSDT
+    - ETHUSDT
+    - XRPUSDT
+    - SOLUSDT
+    - DOGEUSDT
+    - ADAUSDT
+    - AVAXUSDT
+
+analysis:
+  trailing_volatility_buckets: 96
+  minimum_directional_events: 30
+  price_proxy_minimum_concordance: 0.60
+  aggressor_proxy_minimum_concordance: 0.60
+  economic_effect_threshold_bps: 5.0
+  price_direction_family_size: 8
+  aggressor_direction_family_size: 8
+  predictive_family_size: 3
+  fdr_alpha: 0.05
+
+output:
+  base_dir: outputs/v2/tick/semantic_validation/confirmatory_2y
+
+logging:
+  level: INFO

@@ -1,10 +1,9 @@
-# Leverage-state 후보 forward tracker
-#
-# 후보: DOGE down micro-herding event + crowded funding + OI no-flush
-#       → 알트 4종(+DOGE) 동일가중 long basket, 30분 보유
-# 근거: experiments/informed_trading/ step5~9 (2026-07-06)
-#       permutation p=0.041 / maker net +0.131%/trade / 단 2024-12 이후 레짐 휴면
-# 지위: 추적 후보 — 다음 crowded funding 레짐에서의 생존 여부가 최종 판정
+# Legacy leverage-state tracker — disabled pending schema-v2 rebuild.
+# 과거 DOGE "down"은 가격 하락이 아니라 run category였으므로 기존 후보 수치와
+# pointwise permutation 결과는 audit-only다. 아래 explicit filter로 전체 downstream
+# 재검증과 selection-aware permutation을 마치기 전에는 활성화하지 않는다.
+
+status: disabled_pending_event_semantics_rebuild
 
 data:
   source: binance_public_data
@@ -29,6 +28,8 @@ backfill:
   max_workers: 4
 
 analysis:
+  disabled: true
+  disabled_reason: "Legacy directional event semantics invalidated on 2026-07-15; rebuild on schema v2 before enabling."
   # lead_lag_matrix.yaml 과 동일 (이벤트 정의 일치가 생명)
   interval_minutes:
     - 15
@@ -44,7 +45,7 @@ analysis:
     - 22
     - 23
   lookback_days_for_threshold: 5
-  herding_score_percentile: 0.15
+  run_clustering_score_percentile: 0.15
   min_trades_per_bucket: 200
   symbols:
     - DOGEUSDT
@@ -52,12 +53,18 @@ analysis:
     - ADAUSDT
     - XRPUSDT
     - SOLUSDT
-  directions:
-    - down
+  flat_return_epsilon: 0.0
+  aggressor_balance_epsilon: 0.0
+  event_filter:
+    run_clustering_side:
+      - down
+    price_direction:
+      - down
 
 candidate:
   leader: DOGEUSDT
-  direction: down
+  price_direction: down
+  run_clustering_side: down
   basket_targets:
     - AVAXUSDT
     - ADAUSDT
@@ -68,7 +75,8 @@ candidate:
   funding_threshold: 0.0001          # crowded = 기본요율 초과
   # in-sample(2021-12~2026-04, 3899 DOGE down events) d_oi_event 하위 tercile 컷.
   # no-flush 조건: d_oi_event > flush_cut. 고정값 사용 (OOS 순수성).
-  flush_cut: -0.001146
+  threshold_artifact_path: outputs/v2/tick/corrected_candidate/validation/threshold_artifact.json
+  threshold_column: d_oi_event
   oos_start: "2026-05-08"
   fee_scenarios:
     maker_rt: 0.0004
@@ -79,7 +87,7 @@ futures_state:
   local_data_dir: data/futures_archive
 
 output:
-  base_dir: outputs/tick/leverage_candidate/tracker
+  base_dir: outputs/v2/tick/leverage_candidate/tracker
 
 logging:
   level: INFO

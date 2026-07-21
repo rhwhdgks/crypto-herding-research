@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from tick_event_schema import TICK_EVENT_SCHEMA_VERSION, TICK_PIPELINE_VERSION
+
 
 RUN_TYPE_MAP = {
     "up": "p",
@@ -61,6 +63,8 @@ def compute_daily_tick_herding_statistics(
 ) -> dict:
     if classified_ticks.empty:
         return {
+            "schema_version": TICK_EVENT_SCHEMA_VERSION,
+            "pipeline_version": TICK_PIPELINE_VERSION,
             "symbol": symbol,
             "date": date,
             "transaction_count": 0,
@@ -77,6 +81,8 @@ def compute_daily_tick_herding_statistics(
     max_run_lengths = run_frame.groupby("tick_type")["run_length"].max().to_dict()
 
     stats = {
+        "schema_version": TICK_EVENT_SCHEMA_VERSION,
+        "pipeline_version": TICK_PIPELINE_VERSION,
         "symbol": symbol,
         "date": date,
         "transaction_count": n_transactions,
@@ -88,15 +94,19 @@ def compute_daily_tick_herding_statistics(
     }
 
     for tick_type in ["up", "down", "zero"]:
-        suffix = RUN_TYPE_MAP[tick_type]
         runs = int(run_counts.get(tick_type, 0))
-        h_value = _compute_herding_intensity(runs=runs, n_transactions=n_transactions)
+        category_count = int(tick_counts.get(tick_type, 0))
+        run_z = compute_conditional_run_z(
+            runs=runs,
+            category_count=category_count,
+            n_transactions=n_transactions,
+        )
         stats[f"{tick_type}_ticks"] = int(tick_counts.get(tick_type, 0))
         stats[f"{tick_type}_runs"] = runs
         stats[f"mean_{tick_type}_run_length"] = float(mean_run_lengths.get(tick_type, np.nan))
         stats[f"max_{tick_type}_run_length"] = float(max_run_lengths.get(tick_type, np.nan))
-        stats[f"h_{suffix}"] = h_value
-        stats[f"is_herding_{tick_type}"] = bool(pd.notna(h_value) and h_value <= herding_threshold)
+        stats[f"run_z_{tick_type}"] = run_z
+        stats[f"is_run_clustering_{tick_type}"] = bool(pd.notna(run_z) and run_z <= herding_threshold)
 
     return stats
 
@@ -113,15 +123,15 @@ def summarize_tick_herding_by_symbol(daily_stats: pd.DataFrame) -> pd.DataFrame:
             "total_transactions": int(group["transaction_count"].sum()),
             "mean_transactions_per_day": float(group["transaction_count"].mean()),
         }
-        for suffix, label in [("p", "up"), ("n", "down"), ("z", "zero")]:
-            h_column = f"h_{suffix}"
-            flag_column = f"is_herding_{label}"
-            record[f"mean_h_{suffix}"] = float(group[h_column].mean())
-            record[f"median_h_{suffix}"] = float(group[h_column].median())
-            record[f"min_h_{suffix}"] = float(group[h_column].min())
-            record[f"max_h_{suffix}"] = float(group[h_column].max())
-            record[f"herding_days_{suffix}"] = int(group[flag_column].sum())
-            record[f"herding_share_{suffix}"] = float(group[flag_column].mean())
+        for label in ["up", "down", "zero"]:
+            z_column = f"run_z_{label}"
+            flag_column = f"is_run_clustering_{label}"
+            record[f"mean_{z_column}"] = float(group[z_column].mean())
+            record[f"median_{z_column}"] = float(group[z_column].median())
+            record[f"min_{z_column}"] = float(group[z_column].min())
+            record[f"max_{z_column}"] = float(group[z_column].max())
+            record[f"clustering_days_{label}"] = int(group[flag_column].sum())
+            record[f"clustering_share_{label}"] = float(group[flag_column].mean())
         summary_records.append(record)
 
     return pd.DataFrame(summary_records).sort_values("symbol")
@@ -134,12 +144,12 @@ def build_market_level_tick_summary(daily_stats: pd.DataFrame) -> pd.DataFrame:
     grouped = daily_stats.groupby("date").agg(
         symbol_count=("symbol", "nunique"),
         total_transactions=("transaction_count", "sum"),
-        mean_h_p=("h_p", "mean"),
-        mean_h_n=("h_n", "mean"),
-        mean_h_z=("h_z", "mean"),
-        herding_symbol_count_p=("is_herding_up", "sum"),
-        herding_symbol_count_n=("is_herding_down", "sum"),
-        herding_symbol_count_z=("is_herding_zero", "sum"),
+        mean_run_z_up=("run_z_up", "mean"),
+        mean_run_z_down=("run_z_down", "mean"),
+        mean_run_z_zero=("run_z_zero", "mean"),
+        clustering_symbol_count_up=("is_run_clustering_up", "sum"),
+        clustering_symbol_count_down=("is_run_clustering_down", "sum"),
+        clustering_symbol_count_zero=("is_run_clustering_zero", "sum"),
     )
     grouped = grouped.reset_index()
     grouped["date"] = pd.to_datetime(grouped["date"], utc=True)
@@ -172,9 +182,9 @@ def plot_tick_herding_series(daily_stats: pd.DataFrame, path: str | Path) -> Non
     plot_frame = daily_stats.copy()
     plot_frame["date"] = pd.to_datetime(plot_frame["date"], utc=True)
     axis_meta = [
-        ("h_p", "Up-Run Herding Intensity (Hp)"),
-        ("h_n", "Down-Run Herding Intensity (Hn)"),
-        ("h_z", "Zero-Run Herding Intensity (Hz)"),
+        ("run_z_up", "Up-Run Conditional Z"),
+        ("run_z_down", "Down-Run Conditional Z"),
+        ("run_z_zero", "Zero-Run Conditional Z"),
     ]
     palette = ["#4C78A8", "#E45756", "#54A24B", "#F58518"]
 
@@ -201,7 +211,24 @@ def plot_tick_herding_series(daily_stats: pd.DataFrame, path: str | Path) -> Non
     plt.close(fig)
 
 
-def _compute_herding_intensity(runs: int, n_transactions: int) -> float:
+def compute_conditional_run_z(runs: int, category_count: int, n_transactions: int) -> float:
+    """Conditional category-run z score; negative values indicate clustering."""
+    n = int(n_transactions)
+    k = int(category_count)
+    r = int(runs)
+    if n <= 1 or k <= 0 or k >= n or r < 0:
+        return np.nan
+
+    m = n - k
+    mean = k * (m + 1) / n
+    variance = k * m * (k - 1) * (m + 1) / ((n**2) * (n - 1))
+    if variance <= 0 or not np.isfinite(variance):
+        return np.nan
+    return float((r - mean) / np.sqrt(variance))
+
+
+def compute_legacy_equal_probability_run_score(runs: int, n_transactions: int) -> float:
+    """Legacy fixed-p score retained only for explicit historical reproduction."""
     if n_transactions <= 0:
         return np.nan
 

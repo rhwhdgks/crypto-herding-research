@@ -10,6 +10,7 @@ matplotlib>=3.8.0
 # Data IO
 pyarrow>=17.0.0
 PyYAML>=6.0.1
+pytest>=8.0.0
 
 # Crypto market data
 ccxt>=4.4.0

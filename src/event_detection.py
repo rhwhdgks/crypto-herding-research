@@ -16,9 +16,9 @@ def detect_events(csad: pd.Series, market_return: pd.Series, config: dict) -> pd
     volatility_window = int(config["volatility_window"])
     cooldown_periods = int(config.get("cooldown_periods", 0))
 
-    herding_cfg = config.get("herding", {})
+    low_dispersion_cfg = config.get("low_dispersion", config.get("herding", {}))
     shock_cfg = config.get("shock", {})
-    herding_volatility_gate_cfg = herding_cfg.get("volatility_gate", {})
+    herding_volatility_gate_cfg = low_dispersion_cfg.get("volatility_gate", {})
 
     frame["abs_market_return"] = frame["market_return"].abs()
     frame["rolling_volatility"] = frame["market_return"].rolling(
@@ -30,13 +30,13 @@ def detect_events(csad: pd.Series, market_return: pd.Series, config: dict) -> pd
         frame["csad"],
         lookback_window,
         min_history,
-        float(herding_cfg.get("csad_low_percentile", config.get("csad_low_percentile", 0.20))),
+        float(low_dispersion_cfg.get("csad_low_percentile", config.get("csad_low_percentile", 0.20))),
     )
     frame["market_abs_upper_threshold"] = _trailing_quantile(
         frame["abs_market_return"],
         lookback_window,
         min_history,
-        float(herding_cfg.get("market_abs_upper_percentile", config.get("market_abs_upper_percentile", 0.60))),
+        float(low_dispersion_cfg.get("market_abs_upper_percentile", config.get("market_abs_upper_percentile", 0.60))),
     )
     frame["shock_abs_return_threshold"] = _trailing_quantile(
         frame["abs_market_return"],
@@ -71,17 +71,17 @@ def detect_events(csad: pd.Series, market_return: pd.Series, config: dict) -> pd
         series=frame["csad"],
         threshold_series=frame["csad_low_threshold"],
         zscore_series=frame["csad_zscore"],
-        method=str(herding_cfg.get("csad_method", "percentile")).lower(),
+        method=str(low_dispersion_cfg.get("csad_method", "percentile")).lower(),
         direction="low",
-        zscore_threshold=float(herding_cfg.get("csad_zscore_threshold", -1.0)),
+        zscore_threshold=float(low_dispersion_cfg.get("csad_zscore_threshold", -1.0)),
     )
     frame["is_moderate_market_condition"] = _build_condition(
         series=frame["abs_market_return"],
         threshold_series=frame["market_abs_upper_threshold"],
         zscore_series=frame["abs_market_return_zscore"],
-        method=str(herding_cfg.get("market_abs_method", "percentile")).lower(),
+        method=str(low_dispersion_cfg.get("market_abs_method", "percentile")).lower(),
         direction="low",
-        zscore_threshold=float(herding_cfg.get("market_abs_zscore_threshold", 0.5)),
+        zscore_threshold=float(low_dispersion_cfg.get("market_abs_zscore_threshold", 0.5)),
     )
     frame["is_high_abs_return_condition"] = _build_condition(
         series=frame["abs_market_return"],
@@ -113,22 +113,22 @@ def detect_events(csad: pd.Series, market_return: pd.Series, config: dict) -> pd
     else:
         frame["is_herding_volatility_condition"] = True
 
-    herding_raw = (
+    low_dispersion_raw = (
         frame["is_low_csad_condition"]
         & frame["is_moderate_market_condition"]
         & frame["is_herding_volatility_condition"]
     )
     shock_raw = frame["is_high_abs_return_condition"] | frame["is_high_vol_condition"]
-    herding_raw = herding_raw & ~shock_raw
+    low_dispersion_raw = low_dispersion_raw & ~shock_raw
 
-    frame["is_herding_event_raw"] = herding_raw
+    frame["is_low_dispersion_event_raw"] = low_dispersion_raw
     frame["is_shock_event_raw"] = shock_raw
-    frame["is_herding_event"] = _apply_cooldown(herding_raw, cooldown_periods)
-    frame["is_shock_event"] = _apply_cooldown(shock_raw & ~frame["is_herding_event"], cooldown_periods)
+    frame["is_low_dispersion_event"] = _apply_cooldown(low_dispersion_raw, cooldown_periods)
+    frame["is_shock_event"] = _apply_cooldown(shock_raw & ~frame["is_low_dispersion_event"], cooldown_periods)
 
     frame["event_type"] = "none"
     frame.loc[frame["is_shock_event"], "event_type"] = "shock"
-    frame.loc[frame["is_herding_event"], "event_type"] = "herding"
+    frame.loc[frame["is_low_dispersion_event"], "event_type"] = "low_dispersion"
 
     return frame
 

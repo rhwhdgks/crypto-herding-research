@@ -4,7 +4,7 @@ import logging
 import shutil
 import zipfile
 from pathlib import Path
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 from urllib.request import urlopen
 
 import pandas as pd
@@ -131,17 +131,20 @@ def ensure_tick_archive(
     archive_name = f"{symbol}-{trade_kind}-{date.strftime('%Y-%m-%d')}.zip"
     archive_path = local_dir / archive_name
 
-    if archive_path.exists() and not data_cfg.get("overwrite_existing", False):
+    if archive_path.exists() and not data_cfg.get("overwrite_existing", False) and _is_readable_zip(archive_path):
         return archive_path, "cache"
 
     url = build_tick_archive_url(symbol=symbol, date=date, trade_kind=trade_kind)
     LOGGER.info("Downloading tick archive for %s on %s from %s.", symbol, date.strftime("%Y-%m-%d"), url)
+    temporary_path = archive_path.with_suffix(archive_path.suffix + ".part")
     try:
-        with urlopen(url) as response, archive_path.open("wb") as handle:
+        with urlopen(url) as response, temporary_path.open("wb") as handle:
             shutil.copyfileobj(response, handle)
-    except HTTPError as exc:
-        if archive_path.exists():
-            archive_path.unlink(missing_ok=True)
+        if not _is_readable_zip(temporary_path):
+            raise zipfile.BadZipFile(f"Downloaded tick archive is invalid: {url}")
+        temporary_path.replace(archive_path)
+    except (HTTPError, URLError, zipfile.BadZipFile) as exc:
+        temporary_path.unlink(missing_ok=True)
         raise FileNotFoundError(f"Tick archive is not available: {url}") from exc
 
     return archive_path, "download"
@@ -158,17 +161,20 @@ def ensure_tick_month_archive(
     archive_name = f"{symbol}-{trade_kind}-{month_start.strftime('%Y-%m')}.zip"
     archive_path = local_dir / archive_name
 
-    if archive_path.exists() and not data_cfg.get("overwrite_existing", False):
+    if archive_path.exists() and not data_cfg.get("overwrite_existing", False) and _is_readable_zip(archive_path):
         return archive_path, "cache"
 
     url = build_tick_month_archive_url(symbol=symbol, month_start=month_start, trade_kind=trade_kind)
     LOGGER.info("Downloading monthly tick archive for %s on %s from %s.", symbol, month_start.strftime("%Y-%m"), url)
+    temporary_path = archive_path.with_suffix(archive_path.suffix + ".part")
     try:
-        with urlopen(url) as response, archive_path.open("wb") as handle:
+        with urlopen(url) as response, temporary_path.open("wb") as handle:
             shutil.copyfileobj(response, handle)
-    except HTTPError as exc:
-        if archive_path.exists():
-            archive_path.unlink(missing_ok=True)
+        if not _is_readable_zip(temporary_path):
+            raise zipfile.BadZipFile(f"Downloaded monthly tick archive is invalid: {url}")
+        temporary_path.replace(archive_path)
+    except (HTTPError, URLError, zipfile.BadZipFile) as exc:
+        temporary_path.unlink(missing_ok=True)
         raise FileNotFoundError(f"Monthly tick archive is not available: {url}") from exc
 
     return archive_path, "download"
@@ -186,6 +192,15 @@ def build_tick_month_archive_url(symbol: str, month_start: pd.Timestamp, trade_k
         "https://data.binance.vision/"
         f"data/spot/monthly/{trade_kind}/{symbol}/{symbol}-{trade_kind}-{month_start.strftime('%Y-%m')}.zip"
     )
+
+
+def _is_readable_zip(path: Path) -> bool:
+    try:
+        with zipfile.ZipFile(path) as archive:
+            _select_archive_member(archive)
+            return True
+    except (OSError, zipfile.BadZipFile, FileNotFoundError):
+        return False
 
 
 def _read_tick_archive(archive_path: Path, trade_kind: str) -> pd.DataFrame:

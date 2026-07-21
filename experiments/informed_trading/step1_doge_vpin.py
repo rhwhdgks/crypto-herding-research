@@ -26,7 +26,6 @@ buy/sell 분류는 BVC 근사가 아니라 aggTrades 의 실제 aggressor side �
 """
 from __future__ import annotations
 
-import sys
 import time
 from collections import defaultdict
 from pathlib import Path
@@ -34,8 +33,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-PROJECT_ROOT = Path("/home/jonghan/findalpha/herding")
-sys.path.insert(0, str(PROJECT_ROOT / "src"))
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 from tick_data import iter_tick_archive_chunks  # type: ignore
 
 LEADER = "DOGEUSDT"

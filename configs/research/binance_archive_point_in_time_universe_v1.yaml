@@ -1,0 +1,118 @@
+protocol:
+  path: research_protocols/binance_archive_point_in_time_universe_v1.md
+
+source:
+  provider: binance_vision_spot_monthly_klines
+  bucket_endpoint: https://s3-ap-northeast-1.amazonaws.com/data.binance.vision
+  download_endpoint: https://data.binance.vision
+  root_prefix: data/spot/monthly/klines/
+  interval: 1d
+  cache_dir: data/binance_archive/point_in_time_v1
+  inventory_dir: data/binance_archive/point_in_time_v1/inventory
+  zip_dir: data/binance_archive/point_in_time_v1/monthly_zips
+  checksum_dir: data/binance_archive/point_in_time_v1/checksums
+  state_path: data/binance_archive/point_in_time_v1/collection_state.json
+  candidate_inventory_path: data/binance_archive/point_in_time_v1/candidate_symbol_inventory.csv
+  archive_index_path: data/binance_archive/point_in_time_v1/archive_file_index.csv
+  inventory_manifest_path: data/binance_archive/point_in_time_v1/inventory_manifest.csv
+  file_manifest_path: data/binance_archive/point_in_time_v1/file_manifest.csv
+  source_quality_path: data/binance_archive/point_in_time_v1/source_quality_audit.csv
+  normalized_path: data/binance_archive/point_in_time_v1/daily_history.parquet
+  source_start: "2021-03-01"
+  source_end: "2026-04-09"
+  first_month: "2021-03"
+  last_month: "2026-04"
+  request_timeout_seconds: 60
+  maximum_attempts: 6
+  backoff_seconds: 1.5
+  max_workers: 12
+  user_agent: crypto-herding-binance-archive-point-in-time/1.0
+  duplicate_policy: exact_row_deduplicate_conflict_fail
+
+universe:
+  quote_suffix: USDT
+  top_n: 50
+  minimum_prior_month_days: 20
+  episode_gap_days: 7
+  minimum_active_assets: 30
+  leveraged_suffixes: [UP, DOWN, BULL, BEAR, HEDGE, HALF]
+  excluded_base_assets:
+    - AEUR
+    - AUD
+    - BIDR
+    - BRL
+    - BUSD
+    - BVND
+    - DAI
+    - EUR
+    - EURI
+    - FDUSD
+    - GBP
+    - GUSD
+    - IDRT
+    - NGN
+    - PAX
+    - RUB
+    - TUSD
+    - UAH
+    - USDC
+    - USDP
+    - UST
+    - USTC
+    - VAI
+    - ZAR
+  excluded_wrapped_staked_assets:
+    - BETH
+    - BTCB
+    - CBETH
+    - RETH
+    - STETH
+    - WBTC
+    - WBETH
+    - WBNB
+    - WETH
+
+analysis:
+  start: "2021-04-10"
+  end: "2026-04-09"
+  minimum_active_assets: 30
+  minimum_eligible_day_share: 0.99
+  minimum_positive_price_share: 1.0
+  variants:
+    - name: point_in_time_equal_weight
+      return_method: log
+      market_weighting: equal
+    - name: point_in_time_lagged_liquidity
+      return_method: log
+      market_weighting: lagged_quote_volume
+  frequencies: [daily, weekly]
+  regression:
+    models: [standard_csad, no_intercept_csad, scsad]
+    cov_type: HAC
+    hac_maxlags: auto
+    fdr_alpha: 0.05
+    family_size_per_period_variant: 6
+  subperiods:
+    - {name: full_5y, start: "2021-04-10", end: "2026-04-09"}
+    - {name: early_half, start: "2021-04-10", end: "2023-10-09"}
+    - {name: late_half, start: "2023-10-10", end: "2026-04-09"}
+
+decision:
+  primary_variant: point_in_time_equal_weight
+  sensitivity_variant: point_in_time_lagged_liquidity
+  decision_period: full_5y
+  required_models: [no_intercept_csad, scsad]
+  required_frequencies: [daily, weekly]
+  alpha: 0.05
+
+comparison:
+  cmc_historical_targets: outputs/v2/cmc_fixed_62/replication_v1/regression_targets.csv
+  cmc_holdout_targets: outputs/v2/cmc_fixed_62/temporal_validation_v1/regression_targets.csv
+  binance_targets: outputs/v2/binance_14/external_validation_v1/regression_targets.csv
+  okx_targets: outputs/v2/okx_14/listing_aware_external_validation_v1/regression_targets.csv
+
+output:
+  base_dir: outputs/v2/binance_archive/point_in_time_universe_v1
+
+logging:
+  level: INFO

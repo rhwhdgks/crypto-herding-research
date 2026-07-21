@@ -1,0 +1,55 @@
+protocol:
+  path: research_protocols/cmc_multifactor_convergence_v1.md
+
+input:
+  member_rows_path: outputs/v2/cmc_dynamic_universe/replication_v1/intermediate/daily_member_rows.parquet
+  snapshot_dir: data/coinmarketcap/dynamic_universe/daily_snapshots
+  snapshot_manifest_path: data/coinmarketcap/dynamic_universe/snapshot_manifest.csv
+  replication_provenance_path: outputs/v2/cmc_dynamic_universe/replication_v1/provenance.json
+  structural_break_dates_path: outputs/v2/cmc_dynamic_universe/structural_break_v1/selected_break_dates.csv
+  structural_provenance_path: outputs/v2/cmc_dynamic_universe/structural_break_v1/provenance.json
+  single_factor_dir: outputs/v2/cmc_dynamic_universe/factor_adjusted_convergence_v1
+  single_factor_provenance_path: outputs/v2/cmc_dynamic_universe/factor_adjusted_convergence_v1/provenance.json
+  start: "2018-01-01"
+  end: "2024-04-09"
+
+factor_construction:
+  tail_fraction: 0.30
+  momentum_calendar_days: 30
+  minimum_leg_assets: 10
+  factor_columns:
+    - factor_market
+    - factor_size
+    - factor_liquidity
+    - factor_momentum
+
+factor_model:
+  primary_window_observations: 365
+  minimum_daily_model_coverage: 0.80
+  minimum_cross_section_assets: 20
+  maximum_condition_number: 1.0e10
+  minimum_residual_sigma: 1.0e-8
+  empirical_minimum_residuals: 60
+  windows:
+    - name: window_180
+      observations: 180
+      minimum_observations: 120
+    - name: window_365
+      observations: 365
+      minimum_observations: 180
+    - name: window_730
+      observations: 730
+      minimum_observations: 365
+
+regression:
+  cov_type: HAC
+  hac_maxlags: auto
+  fdr_alpha: 0.05
+  primary_target: market_return_sq
+  primary_direction: positive
+
+output:
+  base_dir: outputs/v2/cmc_dynamic_universe/multifactor_convergence_v1
+
+logging:
+  level: INFO

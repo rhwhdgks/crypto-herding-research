@@ -1,0 +1,9 @@
+{
+  "sealed_at_utc": "2026-07-20T13:07:22Z",
+  "protocol_path": "research_protocols/zero_run_mechanical_null_audit_v1.md",
+  "protocol_sha256": "6b9fe460f399976bde5908e766f3e727ad317b8bdaf8787beb6b18646d25a869",
+  "config_path": "configs/research/zero_run_mechanical_null_audit_v1.yaml",
+  "config_sha256": "9a0b43281750e6cf42d113247e886629945d02e1a88adc8332d418f3abde35b6",
+  "results_observed_at_seal": false,
+  "research_status": "post-result mechanism audit; null outcomes not yet observed"
+}

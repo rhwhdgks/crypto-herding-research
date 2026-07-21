@@ -25,7 +25,9 @@ def enrich_trade_features(trades: pd.DataFrame) -> pd.DataFrame:
     if trades.empty:
         return trades.copy()
     enriched = trades.copy()
-    enriched["strength_ratio"] = enriched["herding_score"].abs() / enriched["herding_threshold"].abs()
+    enriched["strength_ratio"] = (
+        enriched["run_clustering_score"].abs() / enriched["run_clustering_threshold"].abs()
+    )
     enriched["prior_negative_bucket"] = enriched["bucket_return"] < 0
     enriched["session_16_18"] = enriched["hour_utc"].isin([16, 17, 18])
     return enriched

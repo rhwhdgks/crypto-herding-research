@@ -1,0 +1,82 @@
+protocol:
+  path: research_protocols/okx_14_listing_aware_external_validation_v1.md
+
+source:
+  provider: okx_public_spot_history_candles
+  endpoint: https://www.okx.com/api/v5/market/history-candles
+  instruments_endpoint: https://www.okx.com/api/v5/public/instruments
+  cache_dir: data/okx/listing_aware_14
+  instruments_path: data/okx/listing_aware_14/instruments.json.gz
+  state_path: data/okx/listing_aware_14/collection_state.json
+  manifest_path: data/okx/listing_aware_14/checkpoint_manifest.csv
+  normalized_path: data/okx/listing_aware_14/okx_14_daily.parquet
+  bar: 1Dutc
+  source_start: "2021-04-09"
+  source_end: "2026-04-09"
+  chunk_days: 100
+  limit: 100
+  request_timeout_seconds: 45
+  maximum_attempts: 6
+  backoff_seconds: 1.5
+  request_interval_seconds: 0.15
+  user_agent: crypto-herding-okx-external-validation/1.0
+  instruments:
+    - {research_symbol: BTCUSDT, instrument_id: BTC-USDT}
+    - {research_symbol: ETHUSDT, instrument_id: ETH-USDT}
+    - {research_symbol: XRPUSDT, instrument_id: XRP-USDT}
+    - {research_symbol: ADAUSDT, instrument_id: ADA-USDT}
+    - {research_symbol: SOLUSDT, instrument_id: SOL-USDT}
+    - {research_symbol: DOGEUSDT, instrument_id: DOGE-USDT}
+    - {research_symbol: LINKUSDT, instrument_id: LINK-USDT}
+    - {research_symbol: AVAXUSDT, instrument_id: AVAX-USDT}
+    - {research_symbol: DOTUSDT, instrument_id: DOT-USDT}
+    - {research_symbol: LTCUSDT, instrument_id: LTC-USDT}
+    - {research_symbol: TRXUSDT, instrument_id: TRX-USDT}
+    - {research_symbol: ATOMUSDT, instrument_id: ATOM-USDT}
+    - {research_symbol: NEARUSDT, instrument_id: NEAR-USDT}
+    - {research_symbol: BNBUSDT, instrument_id: BNB-USDT}
+
+analysis:
+  start: "2021-04-10"
+  end: "2026-04-09"
+  minimum_active_assets: 12
+  minimum_asset_coverage: 0.99
+  minimum_eligible_day_share: 0.99
+  minimum_positive_price_share: 1.0
+  variants:
+    - name: equal_weight_primary
+      return_method: log
+      market_weighting: equal
+    - name: lagged_quote_volume_sensitivity
+      return_method: log
+      market_weighting: lagged_quote_volume
+  frequencies: [daily, weekly]
+  regression:
+    models: [standard_csad, no_intercept_csad, scsad]
+    cov_type: HAC
+    hac_maxlags: auto
+    fdr_alpha: 0.05
+    family_size_per_period_variant: 6
+  subperiods:
+    - {name: full_5y, start: "2021-04-10", end: "2026-04-09"}
+    - {name: early_half, start: "2021-04-10", end: "2023-10-09"}
+    - {name: late_half, start: "2023-10-10", end: "2026-04-09"}
+
+decision:
+  primary_variant: equal_weight_primary
+  sensitivity_variant: lagged_quote_volume_sensitivity
+  decision_period: full_5y
+  required_models: [no_intercept_csad, scsad]
+  required_frequencies: [daily, weekly]
+  alpha: 0.05
+
+comparison:
+  cmc_historical_targets: outputs/v2/cmc_fixed_62/replication_v1/regression_targets.csv
+  cmc_holdout_targets: outputs/v2/cmc_fixed_62/temporal_validation_v1/regression_targets.csv
+  binance_targets: outputs/v2/binance_14/external_validation_v1/regression_targets.csv
+
+output:
+  base_dir: outputs/v2/okx_14/listing_aware_external_validation_v1
+
+logging:
+  level: INFO

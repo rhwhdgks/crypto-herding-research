@@ -1,7 +1,8 @@
 input:
-  base_dir: outputs/tick/xrp_5y/overlap_core/regime
+  base_dir: outputs/v2/tick/xrp_5y/overlap_core/regime
 
 analysis:
+  threshold_fit_end: "2024-12-31T23:59:59Z"
   holdout_days_list:
     - 30
     - 60
@@ -14,7 +15,7 @@ analysis:
     - 10
 
 output:
-  base_dir: outputs/tick/xrp_5y/overlap_core/variants
+  base_dir: outputs/v2/tick/xrp_5y/overlap_core/variants
 
 logging:
   level: INFO

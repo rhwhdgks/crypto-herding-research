@@ -1,13 +1,9 @@
 from __future__ import annotations
 
 import argparse
-import sys
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SRC_DIR = PROJECT_ROOT / "src"
-if str(SRC_DIR) not in sys.path:
-    sys.path.insert(0, str(SRC_DIR))
 
 from tick_fixed_rule_oos import filter_micro_frame_by_symbols, load_micro_frame
 from tick_fixed_rule_walkforward import build_walkforward_report, compute_walkforward_summary, plot_walkforward_delta

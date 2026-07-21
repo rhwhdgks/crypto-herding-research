@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import sys
 from pathlib import Path
 import pandas as pd
 
@@ -57,8 +56,18 @@ def main() -> None:
         filtered = event_study[event_study["count"] >= 20] if "count" in event_study.columns else event_study
         if filtered.empty:
             filtered = event_study
+        inference_columns = [
+            column
+            for column in [
+                "p_value_block",
+                "confidence_interval_lower",
+                "confidence_interval_upper",
+                "n_nonoverlapping_events",
+            ]
+            if column in filtered.columns
+        ]
         best_rows = filtered.sort_values("mean_return", ascending=False)[
-            ["event_type", "horizon_label", "count", "mean_return", "t_stat", "win_rate"]
+            ["event_type", "horizon_label", "count", "mean_return", *inference_columns, "win_rate"]
         ].head(8)
         print(best_rows.to_string(index=False))
     else:
@@ -79,4 +88,4 @@ def _read_csv(name: str) -> pd.DataFrame:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(main())

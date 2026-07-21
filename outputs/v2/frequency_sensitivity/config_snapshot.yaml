@@ -1,0 +1,81 @@
+data:
+  input_path: outputs/baseline/intermediate/aligned_return_panel.csv
+  start: '2024-04-08T00:00:00Z'
+  end: '2026-04-08T00:00:00Z'
+  expected_symbols:
+  - BTCUSDT
+  - ETHUSDT
+  - BNBUSDT
+  - XRPUSDT
+  - ADAUSDT
+  - SOLUSDT
+  - DOGEUSDT
+  - LINKUSDT
+  - AVAXUSDT
+  - DOTUSDT
+  - LTCUSDT
+  - TRXUSDT
+  - ATOMUSDT
+  - NEARUSDT
+analysis:
+  frequencies:
+  - label: 1m
+    minutes: 1
+  - label: 5m
+    minutes: 5
+  - label: 15m
+    minutes: 15
+  - label: 1h
+    minutes: 60
+  - label: 4h
+    minutes: 240
+  - label: 1d
+    minutes: 1440
+  universes:
+  - name: ew14
+    display_name: "\uB3D9\uC77C\uAC00\uC911 14\uC885\uBAA9"
+    symbols:
+    - BTCUSDT
+    - ETHUSDT
+    - BNBUSDT
+    - XRPUSDT
+    - ADAUSDT
+    - SOLUSDT
+    - DOGEUSDT
+    - LINKUSDT
+    - AVAXUSDT
+    - DOTUSDT
+    - LTCUSDT
+    - TRXUSDT
+    - ATOMUSDT
+    - NEARUSDT
+  - name: ew12_ex_btc_eth
+    display_name: "BTC\xB7ETH \uC81C\uC678 \uB3D9\uC77C\uAC00\uC911 12\uC885\uBAA9"
+    symbols:
+    - BNBUSDT
+    - XRPUSDT
+    - ADAUSDT
+    - SOLUSDT
+    - DOGEUSDT
+    - LINKUSDT
+    - AVAXUSDT
+    - DOTUSDT
+    - LTCUSDT
+    - TRXUSDT
+    - ATOMUSDT
+    - NEARUSDT
+regression:
+  cov_type: HAC
+  hac_maxlags: auto
+multiple_testing:
+  method: benjamini_hochberg
+  family_size: 12
+  alpha: 0.05
+decision_rule:
+  require_all_universes: true
+  required_negative_beta2: true
+  required_q_value: 0.05
+output:
+  base_dir: outputs/v2/frequency_sensitivity
+logging:
+  level: INFO

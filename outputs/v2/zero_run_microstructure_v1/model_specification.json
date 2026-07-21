@@ -1,0 +1,43 @@
+{
+  "focal_feature": "zero_run_intensity = -run_z_zero",
+  "fixed_effects": [
+    "symbol",
+    "hour_utc",
+    "weekday_utc"
+  ],
+  "covariance": "UTC-day clustered with finite-sample correction",
+  "mechanism_outcomes": [
+    "log_amihud_illiquidity",
+    "zero_tick_share",
+    "log_mean_intertrade_ms",
+    "log_quote_volume",
+    "abs_aggressor_imbalance"
+  ],
+  "mechanism_controls": [
+    "abs_bucket_return",
+    "current_market_abs_return_loo"
+  ],
+  "future_controls": [
+    "abs_bucket_return",
+    "current_market_abs_return_loo",
+    "trailing_volatility",
+    "log_transaction_count",
+    "log_quote_volume",
+    "zero_tick_share",
+    "abs_aggressor_imbalance"
+  ],
+  "future_outcome_families": {
+    "absolute_return_bps": [
+      "abs_forward_return_5m_bps",
+      "abs_forward_return_15m_bps",
+      "abs_forward_return_30m_bps"
+    ],
+    "realized_volatility_bps": [
+      "realized_volatility_5m_bps",
+      "realized_volatility_15m_bps",
+      "realized_volatility_30m_bps"
+    ]
+  },
+  "signed_future_return_outcome": null,
+  "multiple_testing": "BH-FDR within split and preregistered family"
+}

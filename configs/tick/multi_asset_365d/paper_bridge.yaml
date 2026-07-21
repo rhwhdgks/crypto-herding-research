@@ -41,7 +41,7 @@ event_detection:
   min_history: 90
   volatility_window: 20
   cooldown_periods: 1
-  herding:
+  low_dispersion:
     csad_method: percentile
     csad_low_percentile: 0.20
     market_abs_method: percentile
@@ -53,13 +53,13 @@ event_detection:
     volatility_percentile: 0.85
 
 tick:
-  trade_log_path: outputs/tick/xrp_5y/overlap_core/variants/variant_trade_log.csv
+  trade_log_path: outputs/v2/tick/xrp_5y/overlap_core/variants/variant_trade_log.csv
   candidate_names:
     - time_17_18
     - time_17_18_prior_drop_q4
 
 output:
-  base_dir: outputs/tick/multi_asset_365d/paper_bridge
+  base_dir: outputs/v2/tick/multi_asset_365d/paper_bridge
 
 logging:
   level: INFO

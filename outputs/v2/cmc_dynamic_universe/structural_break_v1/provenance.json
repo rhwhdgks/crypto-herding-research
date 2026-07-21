@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "pipeline_version": "cmc-scsad-structural-break-v1",
+  "git_commit": "0b47f9d20ab9bbbb2e30528cdfa1ac5b386c538a",
+  "git_worktree_dirty": true,
+  "config_sha256": "590a6280fef669c19c1bacafbe7ab4887d0c1a98a9b72b0b4b88e4b3ccdab7c6",
+  "input_manifest_sha256": "a540188a1647f380d6d69520a23658db215f0635c739dde981659813aecf8989",
+  "generated_at_utc": "2026-07-19T00:24:01.456527+00:00",
+  "train_start": "2018-01-01",
+  "train_end": "2024-04-09",
+  "oos_start": null,
+  "oos_end": null,
+  "statistical_method": "Exact global multiple-break RSS dynamic programming with BIC selection; regime Newey-West HAC and BH-FDR",
+  "random_seed": null,
+  "status": "corrected"
+}

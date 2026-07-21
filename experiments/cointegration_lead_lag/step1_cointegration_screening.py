@@ -14,8 +14,9 @@ from statsmodels.regression.linear_model import OLS
 from statsmodels.tools.tools import add_constant
 from statsmodels.tsa.stattools import adfuller
 
-DATA_DIR = Path("/home/jonghan/findalpha/herding/data")
-OUT_DIR = Path("/home/jonghan/findalpha/herding/experiments/cointegration_lead_lag/outputs")
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+DATA_DIR = PROJECT_ROOT / "data"
+OUT_DIR = PROJECT_ROOT / "experiments/cointegration_lead_lag/outputs"
 
 WINDOW_MINUTES = 3 * 1440  # 3-day window = 4320 minutes
 STEP_MINUTES = 1440  # 1-day step

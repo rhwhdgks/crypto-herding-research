@@ -1,6 +1,6 @@
 input:
-  overlap_base_dir: outputs/tick/xrp_5y/overlap_core
-  trade_sample_base_dir: outputs/tick/xrp_5y/cost_sanity
+  overlap_base_dir: outputs/v2/tick/xrp_5y/overlap_core
+  trade_sample_base_dir: outputs/v2/tick/xrp_5y/cost_sanity
 
 analysis:
   strength_bucket_count: 4
@@ -10,7 +10,7 @@ analysis:
     - 180
 
 output:
-  base_dir: outputs/tick/xrp_5y/overlap_core/regime
+  base_dir: outputs/v2/tick/xrp_5y/overlap_core/regime
 
 logging:
   level: INFO

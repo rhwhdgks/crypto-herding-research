@@ -5,6 +5,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from tick_event_schema import build_event_mask, require_tick_schema_v2
+
 
 def load_candidate_micro_frames(micro_frame_paths: dict[str, str | Path]) -> pd.DataFrame:
     frames: list[pd.DataFrame] = []
@@ -20,12 +22,13 @@ def load_candidate_micro_frames(micro_frame_paths: dict[str, str | Path]) -> pd.
     combined["bucket_start"] = pd.to_datetime(combined["bucket_start"], utc=True)
     combined["is_target_session"] = combined["is_target_session"].astype(bool)
     combined["meets_trade_count"] = combined["meets_trade_count"].astype(bool)
-    combined["is_micro_herding_event"] = combined["is_micro_herding_event"].astype(bool)
+    require_tick_schema_v2(combined)
+    combined["is_micro_run_clustering_event"] = combined["is_micro_run_clustering_event"].astype(bool)
     combined["is_control_bucket"] = combined["is_control_bucket"].astype(bool)
     eligible = combined.loc[
         combined["is_target_session"]
         & combined["meets_trade_count"]
-        & combined["herding_threshold"].notna()
+        & combined["run_clustering_threshold"].notna()
     ].copy()
     eligible["prior_bucket_return"] = eligible.groupby("symbol")["bucket_return"].shift(1)
     eligible["prior_state"] = np.where(
@@ -34,7 +37,8 @@ def load_candidate_micro_frames(micro_frame_paths: dict[str, str | Path]) -> pd.
         np.where(eligible["prior_bucket_return"].notna(), "prior_pos", "unknown"),
     )
     eligible["strength_ratio"] = (
-        eligible["herding_score"].abs() / eligible["herding_threshold"].abs().replace(0.0, np.nan)
+        eligible["run_clustering_score"].abs()
+        / eligible["run_clustering_threshold"].abs().replace(0.0, np.nan)
     )
     return eligible.reset_index(drop=True)
 
@@ -50,13 +54,15 @@ def build_candidate_variant_trade_log(
     frames: list[pd.DataFrame] = []
 
     for candidate in candidates:
-        side = str(candidate["event_side"]).strip().lower()
+        if "event_side" in candidate:
+            raise ValueError("candidate.event_side is ambiguous; use candidate.event_filter")
+        event_filter = candidate.get("event_filter", {})
         symbol = str(candidate["symbol"]).strip().upper()
         variant_name = str(candidate["variant_name"])
         variant_label = str(candidate.get("variant_label", variant_name))
         mask = (
             (micro_frame["symbol"] == symbol)
-            & (micro_frame["event_label"] == f"micro_herding_{side}")
+            & build_event_mask(micro_frame, event_filter)
             & micro_frame[horizon_column].notna()
         )
 
@@ -82,9 +88,9 @@ def build_candidate_variant_trade_log(
 
         subset["variant_name"] = variant_name
         subset["variant_label"] = variant_label
-        subset["candidate_side"] = side
-        subset["entry_timestamp"] = subset["bucket_start"]
-        subset["exit_timestamp"] = subset["bucket_start"] + pd.Timedelta(minutes=int(focus_horizon_minutes))
+        subset["candidate_filter"] = str(event_filter)
+        subset["entry_timestamp"] = subset["signal_timestamp"]
+        subset["exit_timestamp"] = subset["signal_timestamp"] + pd.Timedelta(minutes=int(focus_horizon_minutes))
         subset["gross_return"] = subset[horizon_column].astype(float)
         subset["round_trip_cost_bps"] = float(round_trip_cost_bps)
         subset["net_return"] = subset["gross_return"] - cost_decimal
@@ -95,7 +101,7 @@ def build_candidate_variant_trade_log(
                     "variant_name",
                     "variant_label",
                     "symbol",
-                    "candidate_side",
+                    "candidate_filter",
                     "bucket_start",
                     "entry_timestamp",
                     "exit_timestamp",
@@ -110,9 +116,11 @@ def build_candidate_variant_trade_log(
                     "transaction_count",
                     "total_quantity",
                     "total_quote_quantity",
-                    "herding_score",
-                    "herding_threshold",
-                    "dominant_side",
+                    "run_clustering_score",
+                    "run_clustering_threshold",
+                    "run_clustering_side",
+                    "price_direction",
+                    "aggressor_direction",
                     "event_label",
                     "candidate_hours",
                 ]
