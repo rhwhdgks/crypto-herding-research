@@ -12,7 +12,7 @@ data:
   end: latest
 
 output:
-  base_dir: outputs/tick/multi_asset_365d/backfill
+  base_dir: outputs/v2/tick/multi_asset_365d/backfill
 
 logging:
   level: INFO

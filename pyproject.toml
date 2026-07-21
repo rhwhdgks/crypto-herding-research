@@ -1,0 +1,92 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "crypto-herding-research"
+version = "0.3.0"
+description = "Corrected reproducible crypto herding and tick microstructure research"
+requires-python = ">=3.11"
+dynamic = ["dependencies"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+py-modules = [
+  "baseline_robustness",
+  "binance_external_validation",
+  "binance_archive_point_in_time",
+  "cmc_fixed_universe",
+  "cmc_dynamic_universe",
+  "cmc_factor_convergence",
+  "cmc_multifactor_convergence",
+  "cmc_structural_breaks",
+  "cmc_temporal_validation",
+  "csad",
+  "csad_mechanical_derivation",
+  "csad_mechanical_reporting",
+  "csad_mechanical_simulation",
+  "csad_mechanical_supplement",
+  "csad_null_simulation",
+  "csad_audit_reporting",
+  "csad_specification_audit",
+  "corrected_candidate",
+  "corrected_diagnostics",
+  "data_loader",
+  "database",
+  "event_detection",
+  "event_sentiment",
+  "event_study",
+  "frequency_sensitivity",
+  "market",
+  "news_collection",
+  "news_collection_slow",
+  "news_sentiment",
+  "okx_external_validation",
+  "preprocessing",
+  "reddit_collection",
+  "reddit_sentiment",
+  "regression",
+  "reporting",
+  "research_validation",
+  "tick_archive_backfill",
+  "tick_candidate_basket",
+  "tick_candidate_paper_sim",
+  "tick_candidate_refinement",
+  "tick_continuous_run_z",
+  "tick_cost_sanity",
+  "tick_cross_sectional_diagnostics",
+  "tick_data",
+  "tick_event_schema",
+  "tick_fixed_rule_oos",
+  "tick_fixed_rule_regime",
+  "tick_fixed_rule_walkforward",
+  "tick_forward_tracker",
+  "tick_herding",
+  "tick_lead_lag",
+  "tick_overlap_core_analysis",
+  "tick_overlap_core_regime",
+  "tick_overlap_core_variants",
+  "tick_paper_bridge",
+  "tick_raw_confirmatory",
+  "tick_resumable_backfill",
+  "tick_short_horizon",
+  "tick_semantic_validation",
+  "tick_sol_xrp_filter",
+  "tick_subset_candidates",
+  "tick_symbol_generalization",
+  "tick_variant_tracker",
+  "utils",
+  "x_api",
+  "x_bridge",
+  "x_sentiment",
+  "zero_run_microstructure",
+  "zero_run_mechanical_null",
+  "zero_run_reporting",
+  "final_research_reporting",
+]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

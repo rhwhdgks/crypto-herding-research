@@ -1,0 +1,2 @@
+rows,start,end,symbols,events,controls,aggressor_available_share,interval_minutes,complete_symbol_grids,duplicate_rows,signal_timestamp_mismatches
+490560,2024-04-08 00:00:00+00:00,2026-04-07 23:45:00+00:00,7,25460,131544,1.0,15,True,0,0

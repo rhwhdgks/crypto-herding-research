@@ -27,7 +27,7 @@ analysis:
     - 22
     - 23
   lookback_days_for_threshold: 5
-  herding_score_percentile: 0.15
+  run_clustering_score_percentile: 0.15
   min_trades_per_bucket: 200
   leader_symbols:
     - ETHUSDT
@@ -35,10 +35,10 @@ analysis:
   target_symbol: XRPUSDT
 
 research:
-  cached_micro_frame_path: outputs/tick/multi_asset_365d/generalization/intermediate/tick_micro_frame_15m.csv
+  cached_micro_frame_path: outputs/v2/tick/multi_asset_365d/generalization/intermediate/tick_micro_frame_15m.csv
 
 output:
-  base_dir: outputs/tick/multi_asset_365d/lead_lag
+  base_dir: outputs/v2/tick/multi_asset_365d/lead_lag
 
 logging:
   level: INFO

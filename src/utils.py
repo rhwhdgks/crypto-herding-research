@@ -1,13 +1,15 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import logging
 import os
 import re
+import subprocess
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Iterable
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import yaml
@@ -119,6 +121,88 @@ def save_config_snapshot(config: dict, path: str | Path) -> None:
         yaml.safe_dump(config, handle, sort_keys=False)
 
 
+def save_provenance_manifest(
+    config: dict,
+    path: str | Path,
+    schema_version: int,
+    pipeline_version: str,
+    statistical_method: str,
+    input_manifest_path: str | Path | None = None,
+    random_seed: int | None = None,
+    train_start: str | None = None,
+    train_end: str | None = None,
+    oos_start: str | None = None,
+    oos_end: str | None = None,
+) -> None:
+    config_bytes = yaml.safe_dump(config, sort_keys=True).encode("utf-8")
+    input_hash = None
+    if input_manifest_path is not None and Path(input_manifest_path).is_file():
+        input_hash = hashlib.sha256(Path(input_manifest_path).read_bytes()).hexdigest()
+    try:
+        git_commit = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=Path(__file__).resolve().parents[1],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        git_worktree_dirty = bool(
+            subprocess.run(
+                ["git", "status", "--porcelain"],
+                cwd=Path(__file__).resolve().parents[1],
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout.strip()
+        )
+    except (OSError, subprocess.CalledProcessError):
+        git_commit = "unavailable"
+        git_worktree_dirty = None
+    data_cfg = config.get("data", {})
+    split_cfg = config.get("sample_split", {})
+    payload = {
+        "schema_version": int(schema_version),
+        "pipeline_version": pipeline_version,
+        "git_commit": git_commit,
+        "git_worktree_dirty": git_worktree_dirty,
+        "config_sha256": hashlib.sha256(config_bytes).hexdigest(),
+        "input_manifest_sha256": input_hash,
+        "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+        "train_start": train_start or split_cfg.get("train_start", data_cfg.get("train_start")),
+        "train_end": train_end or split_cfg.get("train_end", split_cfg.get("fit_end", data_cfg.get("train_end"))),
+        "oos_start": oos_start or split_cfg.get("oos_start", data_cfg.get("oos_start")),
+        "oos_end": oos_end or split_cfg.get("oos_end", data_cfg.get("oos_end")),
+        "statistical_method": statistical_method,
+        "random_seed": random_seed,
+        "status": "corrected",
+    }
+    save_json(payload, path)
+
+
+def save_input_manifest(paths: Iterable[str | Path], path: str | Path) -> Path:
+    entries = []
+    for raw_path in paths:
+        source = Path(raw_path)
+        digest = hashlib.sha256()
+        with source.open("rb") as handle:
+            for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                digest.update(chunk)
+        try:
+            display_path = source.resolve().relative_to(Path.cwd().resolve()).as_posix()
+        except ValueError:
+            display_path = source.name
+        entries.append(
+            {
+                "path": display_path,
+                "size": source.stat().st_size,
+                "sha256": digest.hexdigest(),
+            }
+        )
+    destination = ensure_parent_dir(path)
+    save_json({"files": entries}, destination)
+    return destination
+
+
 def load_table_file(path: str | Path) -> pd.DataFrame:
     path = Path(path)
     suffix = path.suffix.lower()
@@ -173,6 +257,7 @@ def horizon_to_label(minutes: int) -> str:
 
 
 def plot_csad_vs_market(analysis_frame: pd.DataFrame, path: str | Path) -> None:
+    plt = _get_pyplot()
     fig, ax = plt.subplots(figsize=(10, 6))
 
     if analysis_frame.empty:
@@ -189,7 +274,7 @@ def plot_csad_vs_market(analysis_frame: pd.DataFrame, path: str | Path) -> None:
 
     color_map = {
         "none": "#4C78A8",
-        "herding": "#54A24B",
+        "low_dispersion": "#54A24B",
         "shock": "#E45756",
     }
 
@@ -220,6 +305,7 @@ def plot_event_returns(
     path: str | Path,
     label_column: str = "event_type",
 ) -> None:
+    plt = _get_pyplot()
     fig, ax = plt.subplots(figsize=(11, 6))
 
     if event_study_results.empty:
@@ -265,6 +351,7 @@ def plot_event_occurrences(
     path: str | Path,
     label_column: str = "event_type",
 ) -> None:
+    plt = _get_pyplot()
     fig, ax = plt.subplots(figsize=(12, 6))
 
     if market_index.empty:
@@ -277,7 +364,7 @@ def plot_event_occurrences(
 
     if not analysis_frame.empty and label_column in analysis_frame.columns:
         marker_map = {
-            "herding": ("o", "#54A24B"),
+            "low_dispersion": ("o", "#54A24B"),
             "shock": ("x", "#E45756"),
             "bullish_herd": ("^", "#F58518"),
             "panic_herd": ("v", "#B279A2"),
@@ -314,6 +401,7 @@ def plot_event_paths(
     path: str | Path,
     label_column: str = "event_type",
 ) -> None:
+    plt = _get_pyplot()
     fig, ax = plt.subplots(figsize=(11, 6))
 
     if path_frame.empty:
@@ -343,6 +431,7 @@ def plot_event_paths(
 
 
 def plot_backtest_cumulative_pnl(curve_frame: pd.DataFrame, path: str | Path) -> None:
+    plt = _get_pyplot()
     fig, ax = plt.subplots(figsize=(11, 6))
 
     if curve_frame.empty:
@@ -382,8 +471,14 @@ def list_existing_plot_paths(plot_dir: str | Path) -> list[str]:
     return sorted(str(path) for path in plot_dir.glob("*.png"))
 
 
-def _render_empty_plot(fig: plt.Figure, ax: plt.Axes, title: str, message: str) -> None:
+def _render_empty_plot(fig, ax, title: str, message: str) -> None:
     ax.axis("off")
     ax.text(0.5, 0.5, message, ha="center", va="center", fontsize=12)
     ax.set_title(title)
     fig.tight_layout()
+
+
+def _get_pyplot():
+    import matplotlib.pyplot as plt
+
+    return plt

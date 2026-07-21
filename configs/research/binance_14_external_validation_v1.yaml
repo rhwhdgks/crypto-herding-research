@@ -1,0 +1,68 @@
+protocol:
+  path: research_protocols/binance_14_external_validation_v1.md
+
+source:
+  provider: binance_spot_local_parquet
+  data_dir: data
+  timeframe: 1d
+  source_start: "2021-04-09"
+  source_end: "2026-04-09"
+  symbols:
+    - BTCUSDT
+    - ETHUSDT
+    - BNBUSDT
+    - XRPUSDT
+    - ADAUSDT
+    - SOLUSDT
+    - DOGEUSDT
+    - LINKUSDT
+    - AVAXUSDT
+    - DOTUSDT
+    - LTCUSDT
+    - TRXUSDT
+    - ATOMUSDT
+    - NEARUSDT
+
+analysis:
+  start: "2021-04-10"
+  end: "2026-04-09"
+  minimum_active_assets: 14
+  minimum_asset_day_coverage: 1.0
+  minimum_eligible_day_share: 1.0
+  minimum_positive_price_share: 1.0
+  variants:
+    - name: equal_weight_primary
+      return_method: log
+      market_weighting: equal
+    - name: lagged_turnover_sensitivity
+      return_method: log
+      market_weighting: lagged_turnover
+  frequencies: [daily, weekly]
+  regression:
+    models: [standard_csad, no_intercept_csad, scsad]
+    cov_type: HAC
+    hac_maxlags: auto
+    fdr_alpha: 0.05
+    family_size_per_period_variant: 6
+  subperiods:
+    - {name: full_5y, start: "2021-04-10", end: "2026-04-09"}
+    - {name: cmc_historical_overlap, start: "2021-04-10", end: "2024-04-09"}
+    - {name: cmc_holdout_overlap, start: "2024-04-10", end: "2026-04-09"}
+
+decision:
+  primary_variant: equal_weight_primary
+  sensitivity_variant: lagged_turnover_sensitivity
+  decision_period: full_5y
+  required_models: [no_intercept_csad, scsad]
+  required_frequencies: [daily, weekly]
+  alpha: 0.05
+
+comparison:
+  cmc_historical_targets: outputs/v2/cmc_fixed_62/replication_v1/regression_targets.csv
+  cmc_holdout_targets: outputs/v2/cmc_fixed_62/temporal_validation_v1/regression_targets.csv
+
+output:
+  base_dir: outputs/v2/binance_14/external_validation_v1
+
+logging:
+  level: INFO

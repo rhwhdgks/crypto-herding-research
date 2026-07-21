@@ -1,0 +1,3 @@
+split,rows,start,end,symbols,utc_days,minimum_trade_count_rows,complete_run_z_rows,complete_run_z_share,future_outcome_within_split_rows,aggressor_available_share
+development,245280,2024-04-08 00:00:00+00:00,2025-04-07 23:45:00+00:00,7,365,241070,245280,1.0,245259,1.0
+oos,245280,2025-04-08 00:00:00+00:00,2026-04-07 23:45:00+00:00,7,365,233201,245278,0.9999918460534899,245259,1.0

@@ -1,0 +1,7 @@
+split,family,outcome,observations,utc_day_clusters,symbols,rsquared,adj_rsquared,condition_number,design_columns,covariance
+development,construct_aggressor,aggressor_imbalance,240408,365,7,0.24324263842986948,0.24311355589812889,50.8554653430074,42,UTC-day clustered
+development,future_excess_return,future_excess_return_30m,240387,365,7,0.0007187849267094037,0.0005441610083545267,50.85509692945498,43,UTC-day clustered
+development,future_excess_abs_return,future_excess_abs_return_30m,240387,365,7,0.13266133404698865,0.13250976702650952,50.85509692945498,43,UTC-day clustered
+oos,construct_aggressor,aggressor_imbalance,233201,365,7,0.18912282420040383,0.18898023496212535,46.19012200462494,42,UTC-day clustered
+oos,future_excess_return,future_excess_return_30m,233180,365,7,0.000607216974869762,0.00042717478127940467,46.1856459556075,43,UTC-day clustered
+oos,future_excess_abs_return,future_excess_abs_return_30m,233180,365,7,0.11920131827463765,0.11904264099633144,46.1856459556075,43,UTC-day clustered

@@ -209,7 +209,7 @@ def summarize_segments(
             market_return=event_market_return,
             holding_periods=holding_periods,
             event_label_column="event_type",
-            event_types=["herding", "shock"],
+            event_types=["low_dispersion", "shock"],
             max_path_horizon=max(holding_periods),
         )
 
@@ -225,7 +225,7 @@ def summarize_segments(
                 "beta2_t_stat": float(regression_json["beta2_t_stat"]),
                 "beta2_p_value": float(regression_json["beta2_p_value"]),
                 "rsquared": float(regression_json["rsquared"]),
-                "herding_count": int((subset["event_type"] == "herding").sum()),
+                "low_dispersion_count": int((subset["event_type"] == "low_dispersion").sum()),
                 "shock_count": int((subset["event_type"] == "shock").sum()),
                 "negative_beta2": bool(float(regression_json["beta2"]) < 0.0),
             }
@@ -246,7 +246,7 @@ def summarize_segments(
         event_summary.insert(8, "beta2_p_value", float(regression_json["beta2_p_value"]))
         event_rows.extend(event_summary.to_dict("records"))
 
-        for event_type in ["herding", "shock"]:
+        for event_type in ["low_dispersion", "shock"]:
             subset_summary = event_summary[event_summary["event_type"] == event_type].dropna(subset=["mean_return"])
             if subset_summary.empty:
                 continue
@@ -394,7 +394,7 @@ def plot_focus_returns(
         plt.close(fig)
         return
 
-    for axis, event_type in zip(axes, ["herding", "shock"]):
+    for axis, event_type in zip(axes, ["low_dispersion", "shock"]):
         values = []
         labels = []
         for segment_name in order:
@@ -451,7 +451,8 @@ def build_baseline_robustness_report(
         for _, row in quarter_rows.iterrows():
             lines.append(
                 f"- {row['display_name']} ({row['start']} ~ {row['end']}): beta2 {row['beta2']:.4f}, "
-                f"t={row['beta2_t_stat']:.2f}, herding {int(row['herding_count'])}건, shock {int(row['shock_count'])}건"
+                f"HAC t={row['beta2_t_stat']:.2f}, low_dispersion {int(row['low_dispersion_count'])}건, "
+                f"shock {int(row['shock_count'])}건"
             )
 
         quarter_1d = focus_summary[
@@ -464,9 +465,13 @@ def build_baseline_robustness_report(
             most_negative = quarter_1d.sort_values("mean_return", ascending=True).iloc[0]
             lines.extend(
                 [
-                    f"- 1일 보유 기준 최고 구간은 {top_positive['display_name']} / {top_positive['event_type']}로 평균 {top_positive['mean_return']:.4%}, t={top_positive['t_stat']:.2f}였습니다.",
-                    f"- 가장 약한 구간은 {most_negative['display_name']} / {most_negative['event_type']}로 평균 {most_negative['mean_return']:.4%}, t={most_negative['t_stat']:.2f}였습니다.",
-                    "- 분기별 1일 성과가 강한 양수와 강한 음수로 뒤집히므로, full sample 평균이 약하게 보이는 핵심 이유는 regime mixing 가능성이 큽니다.",
+                    f"- 1일 보유 기준 최고 구간은 {top_positive['display_name']} / {top_positive['event_type']}로 "
+                    f"평균 {top_positive['mean_return']:.4%}, UTC-day block p={top_positive['p_value_block']:.4f}, "
+                    f"95% CI [{top_positive['confidence_interval_lower']:.4%}, {top_positive['confidence_interval_upper']:.4%}]였습니다.",
+                    f"- 가장 약한 구간은 {most_negative['display_name']} / {most_negative['event_type']}로 "
+                    f"평균 {most_negative['mean_return']:.4%}, UTC-day block p={most_negative['p_value_block']:.4f}, "
+                    f"95% CI [{most_negative['confidence_interval_lower']:.4%}, {most_negative['confidence_interval_upper']:.4%}]였습니다.",
+                    "- 이 분할은 사후 exploratory diagnostic이며 여러 구간 중 극값을 선택했으므로 별도 FDR 없이 예측 신호로 해석하지 않습니다.",
                 ]
             )
     lines.append("")
@@ -479,7 +484,7 @@ def build_baseline_robustness_report(
     if session_1d.empty:
         lines.append("- 시간대 분석 결과가 없습니다.")
     else:
-        for event_type in ["herding", "shock"]:
+        for event_type in ["low_dispersion", "shock"]:
             subset = session_1d[session_1d["event_type"] == event_type].sort_values("mean_return", ascending=False)
             if subset.empty:
                 continue
@@ -492,7 +497,7 @@ def build_baseline_robustness_report(
         & (focus_summary["horizon_minutes"] == 1440)
     ].copy()
     if not day_type_1d.empty:
-        for event_type in ["herding", "shock"]:
+        for event_type in ["low_dispersion", "shock"]:
             subset = day_type_1d[day_type_1d["event_type"] == event_type].sort_values("mean_return", ascending=False)
             if subset.empty:
                 continue
@@ -509,14 +514,14 @@ def build_baseline_robustness_report(
     if volatility_1d.empty:
         lines.append("- 변동성 상태 분석 결과가 없습니다.")
     else:
-        for event_type in ["herding", "shock"]:
+        for event_type in ["low_dispersion", "shock"]:
             subset = volatility_1d[volatility_1d["event_type"] == event_type].sort_values("mean_return", ascending=False)
             if subset.empty:
                 continue
             best = subset.iloc[0]
             worst = subset.iloc[-1]
             lines.append(_describe_extreme_pair(event_type, "변동성 상태", best, worst))
-        lines.append("- 변동성 상태별 차이가 크면, 이후 threshold 튜닝도 full sample 하나로 고정하기보다 고변동성 조건부로 재설계할 여지가 있습니다.")
+        lines.append("- 변동성 상태 차이는 사후 진단입니다. 새 조건을 도입하려면 별도 train 구간에서 사전 등록하고 이후 OOS에 고정해야 합니다.")
     lines.append("")
 
     lines.append("## 30일 Rolling beta2")
@@ -550,8 +555,8 @@ def build_baseline_robustness_report(
     lines.extend(
         [
             "- baseline full sample을 그대로 신호로 쓰는 것은 설득력이 약합니다. 회귀는 거의 전 구간에서 양(+)의 beta2를 보입니다.",
-            "- 다만 분기·시간대·변동성 상태에 따라 forward return이 크게 달라지므로, 다음 단계는 event 정의를 더 날카롭게 만드는 작업이 맞습니다.",
-            "- 특히 q3 대 q4처럼 부호가 뒤집히는 구간이 있으므로, 향후 sentiment나 tick을 붙이더라도 먼저 regime 조건을 분리하는 편이 안전합니다.",
+            "- 분기·시간대·변동성 분해는 후보 생성용 exploratory 결과이며, 같은 표본에서 threshold를 다시 맞추면 과적합입니다.",
+            "- 새 regime이나 sentiment 조건은 train에서 고정한 뒤 엄격히 이후 OOS에서만 평가합니다.",
         ]
     )
     lines.append("")
@@ -575,13 +580,13 @@ def _describe_extreme_pair(event_type: str, context: str, best: pd.Series, worst
     worst_value = float(worst["mean_return"])
 
     if best_value > 0.0:
-        best_phrase = f"가장 강한 쪽은 {best['display_name']} ({best_value:.4%})"
+        best_phrase = f"가장 강한 쪽은 {best['display_name']} ({best_value:.4%}, block p={best['p_value_block']:.4f})"
     else:
-        best_phrase = f"가장 덜 약한 쪽은 {best['display_name']} ({best_value:.4%})"
+        best_phrase = f"가장 덜 약한 쪽은 {best['display_name']} ({best_value:.4%}, block p={best['p_value_block']:.4f})"
 
     if worst_value < 0.0:
-        worst_phrase = f"가장 약한 쪽은 {worst['display_name']} ({worst_value:.4%})"
+        worst_phrase = f"가장 약한 쪽은 {worst['display_name']} ({worst_value:.4%}, block p={worst['p_value_block']:.4f})"
     else:
-        worst_phrase = f"가장 덜 강한 쪽은 {worst['display_name']} ({worst_value:.4%})"
+        worst_phrase = f"가장 덜 강한 쪽은 {worst['display_name']} ({worst_value:.4%}, block p={worst['p_value_block']:.4f})"
 
     return f"- {event_type} 1일 기준 {context}에서는 {best_phrase}, {worst_phrase}입니다."

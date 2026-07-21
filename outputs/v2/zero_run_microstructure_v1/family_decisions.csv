@@ -1,0 +1,4 @@
+family,primary_horizon_minutes,primary_horizon_pass,passed_horizon_count,passed_horizons,family_success
+future_absolute_return,15.0,False,0,,False
+future_realized_volatility,15.0,False,0,,False
+mechanism,,,5,,True

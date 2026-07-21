@@ -44,7 +44,7 @@ def load_trade_sample_with_prior_features(base_dir: str | Path) -> pd.DataFrame:
         "prior_drop_magnitude",
         "transaction_count",
         "total_quantity",
-        "herding_score",
+        "run_clustering_score",
     ]
     return frame[keep_columns].copy()
 

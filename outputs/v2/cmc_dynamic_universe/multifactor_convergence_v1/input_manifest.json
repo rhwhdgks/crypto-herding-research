@@ -1,0 +1,49 @@
+{
+  "files": [
+    {
+      "path": "outputs/v2/cmc_dynamic_universe/replication_v1/intermediate/daily_member_rows.parquet",
+      "size": 18072381,
+      "sha256": "3b788ab498ae51d955edbc8864d436c35bd0815d8245dc0a0123a2224d4ab4d2"
+    },
+    {
+      "path": "data/coinmarketcap/dynamic_universe/snapshot_manifest.csv",
+      "size": 524521,
+      "sha256": "6f48560a9a3325b28a759854debea0bc6957a81568a48b3611cd9abb6f6e2d71"
+    },
+    {
+      "path": "outputs/v2/cmc_dynamic_universe/replication_v1/provenance.json",
+      "size": 660,
+      "sha256": "dd45de5c8c2aa1d58e4dae18f6c69ab6b30463f38346c59a8ff6cd5a97f19466"
+    },
+    {
+      "path": "outputs/v2/cmc_dynamic_universe/structural_break_v1/selected_break_dates.csv",
+      "size": 538,
+      "sha256": "71ee916b124a369855b997f6579c6041a00de184ac4f57c2aef61ec04f886293"
+    },
+    {
+      "path": "outputs/v2/cmc_dynamic_universe/structural_break_v1/provenance.json",
+      "size": 690,
+      "sha256": "a85f04887b9fedd22f98a21a837f606a524a1ec7a879bd669102c9a67a4d5c45"
+    },
+    {
+      "path": "outputs/v2/cmc_dynamic_universe/factor_adjusted_convergence_v1/provenance.json",
+      "size": 714,
+      "sha256": "6385c051e95794ff3165a9bc50d4c33c9d88c2a5e01d49ca1ed359321c1751c4"
+    },
+    {
+      "path": "outputs/v2/cmc_dynamic_universe/factor_adjusted_convergence_v1/factor_convergence_daily_window_365.csv",
+      "size": 553637,
+      "sha256": "88d5b9f2ec31558bc601540f3dbfae03b97d5b9c364b0b9db2de75c4aebe0a1e"
+    },
+    {
+      "path": "outputs/v2/cmc_dynamic_universe/factor_adjusted_convergence_v1/convergence_regression_targets.csv",
+      "size": 5720,
+      "sha256": "d5bc7b499140c35d68b47782ae33abc5a1f4ecc307c75ec0cb8319f172d10d6b"
+    },
+    {
+      "path": "research_protocols/cmc_multifactor_convergence_v1.md",
+      "size": 5187,
+      "sha256": "fc89d52820bfe0e5489e1ec3a376de1c5884311940cc906e6722b8afccab46cb"
+    }
+  ]
+}

@@ -1,0 +1,196 @@
+protocol:
+  path: research_protocols/csad_specification_audit_v1.md
+  frozen_at_utc: "2026-07-20T00:00:00Z"
+  version: 1
+
+empirical:
+  datasets:
+    - id: cmc_fixed62_historical_current
+      provider: coinmarketcap
+      sample: historical
+      universe_type: fixed_survivor_62
+      weighting_class: contemporaneous_size
+      period_name: full_sample
+      intermediate_dir: outputs/v2/cmc_fixed_62/replication_v1/intermediate/replication_primary
+      targets_path: outputs/v2/cmc_fixed_62/replication_v1/regression_targets.csv
+      target_variant: replication_primary
+    - id: cmc_fixed62_historical_lagged
+      provider: coinmarketcap
+      sample: historical
+      universe_type: fixed_survivor_62
+      weighting_class: lagged_size
+      period_name: full_sample
+      intermediate_dir: outputs/v2/cmc_fixed_62/replication_v1/intermediate/no_lookahead_sensitivity
+      targets_path: outputs/v2/cmc_fixed_62/replication_v1/regression_targets.csv
+      target_variant: no_lookahead_sensitivity
+    - id: cmc_fixed62_holdout_current
+      provider: coinmarketcap
+      sample: temporal_holdout
+      universe_type: fixed_survivor_62
+      weighting_class: contemporaneous_size
+      period_name: holdout_full
+      intermediate_dir: outputs/v2/cmc_fixed_62/temporal_validation_v1/intermediate/replication_primary
+      targets_path: outputs/v2/cmc_fixed_62/temporal_validation_v1/regression_targets.csv
+      target_variant: replication_primary
+    - id: cmc_fixed62_holdout_lagged
+      provider: coinmarketcap
+      sample: temporal_holdout
+      universe_type: fixed_survivor_62
+      weighting_class: lagged_size
+      period_name: holdout_full
+      intermediate_dir: outputs/v2/cmc_fixed_62/temporal_validation_v1/intermediate/no_lookahead_sensitivity
+      targets_path: outputs/v2/cmc_fixed_62/temporal_validation_v1/regression_targets.csv
+      target_variant: no_lookahead_sensitivity
+    - id: binance_fixed14_equal
+      provider: binance
+      sample: five_year
+      universe_type: fixed_survivor_14
+      weighting_class: equal
+      period_name: full_5y
+      intermediate_dir: outputs/v2/binance_14/external_validation_v1/intermediate/equal_weight_primary
+      targets_path: outputs/v2/binance_14/external_validation_v1/regression_targets.csv
+      target_variant: equal_weight_primary
+    - id: binance_fixed14_lagged
+      provider: binance
+      sample: five_year
+      universe_type: fixed_survivor_14
+      weighting_class: lagged_liquidity
+      period_name: full_5y
+      intermediate_dir: outputs/v2/binance_14/external_validation_v1/intermediate/lagged_turnover_sensitivity
+      targets_path: outputs/v2/binance_14/external_validation_v1/regression_targets.csv
+      target_variant: lagged_turnover_sensitivity
+    - id: okx_listing14_equal
+      provider: okx
+      sample: five_year
+      universe_type: listing_aware_survivor_14
+      weighting_class: equal
+      period_name: full_5y
+      intermediate_dir: outputs/v2/okx_14/listing_aware_external_validation_v1/intermediate/equal_weight_primary
+      targets_path: outputs/v2/okx_14/listing_aware_external_validation_v1/regression_targets.csv
+      target_variant: equal_weight_primary
+    - id: okx_listing14_lagged
+      provider: okx
+      sample: five_year
+      universe_type: listing_aware_survivor_14
+      weighting_class: lagged_liquidity
+      period_name: full_5y
+      intermediate_dir: outputs/v2/okx_14/listing_aware_external_validation_v1/intermediate/lagged_quote_volume_sensitivity
+      targets_path: outputs/v2/okx_14/listing_aware_external_validation_v1/regression_targets.csv
+      target_variant: lagged_quote_volume_sensitivity
+    - id: binance_pit50_equal
+      provider: binance_archive
+      sample: five_year
+      universe_type: point_in_time_top50
+      weighting_class: equal
+      period_name: full_5y
+      intermediate_dir: outputs/v2/binance_archive/point_in_time_universe_v1/intermediate/point_in_time_equal_weight
+      targets_path: outputs/v2/binance_archive/point_in_time_universe_v1/regression_targets.csv
+      target_variant: point_in_time_equal_weight
+    - id: binance_pit50_lagged
+      provider: binance_archive
+      sample: five_year
+      universe_type: point_in_time_top50
+      weighting_class: lagged_liquidity
+      period_name: full_5y
+      intermediate_dir: outputs/v2/binance_archive/point_in_time_universe_v1/intermediate/point_in_time_lagged_liquidity
+      targets_path: outputs/v2/binance_archive/point_in_time_universe_v1/regression_targets.csv
+      target_variant: point_in_time_lagged_liquidity
+  frequencies: [daily, weekly]
+  models: [standard_csad, no_intercept_csad, scsad]
+  cov_type: HAC
+  hac_maxlags: auto
+  alpha: 0.05
+  minimum_loo_assets: 3
+  minimum_conditional_observations: 100
+  metric_variance_tolerance: 1.0e-10
+
+volatility_regimes:
+  quantiles: [0.3333333333, 0.6666666667]
+  minimum_regression_observations: 30
+  daily:
+    rolling_window: 30
+    rolling_minimum: 20
+    expanding_minimum: 180
+  weekly:
+    rolling_window: 8
+    rolling_minimum: 6
+    expanding_minimum: 52
+
+simulation:
+  seed: 20260720
+  repetitions: 300
+  alpha: 0.05
+  false_positive_inflated_threshold: 0.075
+  false_positive_material_threshold: 0.10
+  dgp:
+    independent_gaussian:
+      factor_loading_mean: 0.0
+      factor_loading_std: 0.0
+      idiosyncratic_scale: 0.025
+    common_factor:
+      factor_scale: 0.018
+      idiosyncratic_scale: 0.025
+      factor_loading_mean: 1.0
+      factor_loading_std: 0.2
+    heteroskedastic_factor:
+      factor_scale: 0.018
+      idiosyncratic_scale: 0.025
+      factor_loading_mean: 1.0
+      factor_loading_std: 0.2
+      log_volatility_phi: 0.95
+      log_volatility_innovation: 0.16
+    fat_tail_correlated:
+      factor_scale: 0.018
+      idiosyncratic_scale: 0.025
+      factor_loading_mean: 1.0
+      factor_loading_std: 0.2
+      degrees_of_freedom: 5
+  scenarios:
+    - {id: n14_daily_equal, frequency: daily, observations: 1826, assets: 14, weighting: equal}
+    - {id: n14_weekly_equal, frequency: weekly, observations: 261, assets: 14, weighting: equal}
+    - {id: n14_daily_lagged, frequency: daily, observations: 1826, assets: 14, weighting: lagged_lognormal_liquidity}
+    - {id: n14_weekly_lagged, frequency: weekly, observations: 261, assets: 14, weighting: lagged_lognormal_liquidity}
+    - {id: n50_daily_equal, frequency: daily, observations: 1826, assets: 50, weighting: equal}
+    - {id: n50_weekly_equal, frequency: weekly, observations: 261, assets: 50, weighting: equal}
+    - {id: n50_daily_lagged, frequency: daily, observations: 1826, assets: 50, weighting: lagged_lognormal_liquidity}
+    - {id: n50_weekly_lagged, frequency: weekly, observations: 261, assets: 50, weighting: lagged_lognormal_liquidity}
+    - {id: n62_daily_current, frequency: daily, observations: 2291, assets: 62, weighting: contemporaneous_evolving_size}
+    - {id: n62_weekly_current, frequency: weekly, observations: 328, assets: 62, weighting: contemporaneous_evolving_size}
+    - {id: n62_daily_lagged, frequency: daily, observations: 2291, assets: 62, weighting: lagged_evolving_size}
+    - {id: n62_weekly_lagged, frequency: weekly, observations: 328, assets: 62, weighting: lagged_evolving_size}
+    - {id: n62_holdout_daily_current, frequency: daily, observations: 830, assets: 62, weighting: contemporaneous_evolving_size}
+    - {id: n62_holdout_weekly_current, frequency: weekly, observations: 118, assets: 62, weighting: contemporaneous_evolving_size}
+    - {id: n62_holdout_daily_lagged, frequency: daily, observations: 830, assets: 62, weighting: lagged_evolving_size}
+    - {id: n62_holdout_weekly_lagged, frequency: weekly, observations: 118, assets: 62, weighting: lagged_evolving_size}
+  weight_process:
+    lognormal_sigma: 1.25
+    liquidity_ar1: 0.97
+    liquidity_innovation: 0.12
+    minimum_weight: 1.0e-12
+
+null_mapping:
+  cmc_fixed62_historical_current: {daily: n62_daily_current, weekly: n62_weekly_current}
+  cmc_fixed62_historical_lagged: {daily: n62_daily_lagged, weekly: n62_weekly_lagged}
+  cmc_fixed62_holdout_current: {daily: n62_holdout_daily_current, weekly: n62_holdout_weekly_current}
+  cmc_fixed62_holdout_lagged: {daily: n62_holdout_daily_lagged, weekly: n62_holdout_weekly_lagged}
+  binance_fixed14_equal: {daily: n14_daily_equal, weekly: n14_weekly_equal}
+  binance_fixed14_lagged: {daily: n14_daily_lagged, weekly: n14_weekly_lagged}
+  okx_listing14_equal: {daily: n14_daily_equal, weekly: n14_weekly_equal}
+  okx_listing14_lagged: {daily: n14_daily_lagged, weekly: n14_weekly_lagged}
+  binance_pit50_equal: {daily: n50_daily_equal, weekly: n50_weekly_equal}
+  binance_pit50_lagged: {daily: n50_daily_lagged, weekly: n50_weekly_lagged}
+
+decision:
+  intercept_effect_reduction_fraction: 0.50
+  intercept_effect_required_share: 0.50
+  null_effect_required_share: 0.50
+  structural_requires_all_six_cells: true
+  structural_requires_loo_all_six_cells: true
+  regime_forbids_significant_opposite_sign: true
+
+output:
+  base_dir: outputs/v2/csad_specification_audit_v1
+  overwrite: false
+
+logging:
+  level: INFO

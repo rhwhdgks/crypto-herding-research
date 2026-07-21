@@ -1,0 +1,4 @@
+window,is_primary,calendar_days,eligible_factor_days,first_eligible_day,last_eligible_day,mean_model_coverage,minimum_model_coverage,minimum_modelled_assets,nonpositive_expected_csad_days,nonfinite_ratio_days
+window_180,False,2290,2148,2018-05-19 00:00:00+00:00,2024-04-09 00:00:00+00:00,0.9497674608858654,0.8016528925619835,37,0,0
+window_365,True,2290,2078,2018-07-02 00:00:00+00:00,2024-04-09 00:00:00+00:00,0.923637900550967,0.8,37,0,0
+window_730,False,2290,1180,2019-01-01 00:00:00+00:00,2024-04-09 00:00:00+00:00,0.8796201987055857,0.8021390374331551,32,0,0

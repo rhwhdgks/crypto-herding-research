@@ -1,0 +1,25 @@
+input:
+  micro_frame_path: outputs/v2/tick/multi_asset_5y/lead_lag_matrix/intermediate/tick_micro_frame_15m.csv
+
+analysis:
+  symbols: [BTCUSDT, ETHUSDT, XRPUSDT, SOLUSDT, DOGEUSDT, ADAUSDT, AVAXUSDT]
+  interval_minutes: 15
+  forward_horizon_minutes: 30
+  min_inference_events: 30
+  min_inference_unique_days: 20
+  event_filter:
+    run_clustering_side: [up, down, zero]
+    price_direction: [up, down]
+  periods:
+    - {name: p1, start: "2021-05-09T00:00:00Z", end: "2022-12-31T23:59:59Z"}
+    - {name: p2, start: "2023-01-01T00:00:00Z", end: "2024-06-30T23:59:59Z"}
+    - {name: p3, start: "2024-07-01T00:00:00Z", end: "2026-05-07T23:59:59Z"}
+  volatility_regime:
+    reference_symbol: BTCUSDT
+    window_buckets: 96
+    quantile: 0.5
+    fit_end: "2024-12-31T23:59:59Z"
+    oos_start: "2025-01-01T00:00:00Z"
+
+output:
+  base_dir: outputs/v2/tick/multi_asset_5y/lead_lag_robustness

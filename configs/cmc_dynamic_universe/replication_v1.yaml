@@ -1,0 +1,133 @@
+protocol:
+  path: research_protocols/cmc_dynamic_universe_replication_v1.md
+
+source:
+  provider: coinmarketcap_public_historical_snapshot
+  endpoint: https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listings/historical
+  current_listing_endpoint: https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing
+  cache_dir: data/coinmarketcap/dynamic_universe/daily_snapshots
+  metadata_path: data/coinmarketcap/dynamic_universe/current_metadata.parquet
+  state_path: data/coinmarketcap/dynamic_universe/collection_state.json
+  manifest_path: data/coinmarketcap/dynamic_universe/snapshot_manifest.csv
+  source_start: "2017-12-31"
+  source_end: "2024-04-09"
+  retrieval_limit: 500
+  minimum_snapshot_rows: 300
+  current_metadata_limit: 5000
+  usd_convert_id: 2781
+  max_workers: 4
+  request_timeout_seconds: 45
+  maximum_attempts: 6
+  backoff_seconds: 1.5
+  minimum_request_interval_seconds: 0.20
+  minimum_positive_quote_share: 0.95
+  user_agent: crypto-herding-academic-research/1.0
+
+universe:
+  rebalance_frequency: calendar_month
+  formation_rule: previous_calendar_month_end
+  top_n: 200
+  minimum_formation_market_cap_usd: 100000000
+  daily_retrieval_rank_limit: 500
+  excluded_metadata_tags:
+    - stablecoin
+    - wrapped-tokens
+    - liquid-staking-derivatives
+  excluded_slug_terms:
+    - stablecoin
+    - wrapped
+    - bridged
+    - staked
+  peg_filter:
+    trailing_calendar_days: 30
+    minimum_observations: 20
+    median_price_lower_usd: 0.90
+    median_price_upper_usd: 1.10
+    maximum_price_ratio: 1.10
+
+analysis:
+  start: "2018-01-01"
+  end: "2024-04-09"
+  minimum_active_assets: 20
+  minimum_membership_coverage: 0.80
+  minimum_snapshot_positive_quote_share: 0.95
+  minimum_eligible_day_share: 0.95
+  market_return_weighting: lagged_daily_market_cap
+  csad_weighting: equal
+  frequencies:
+    - daily
+    - weekly
+  regression:
+    models:
+      - standard_csad
+      - no_intercept_csad
+      - scsad
+    cov_type: HAC
+    hac_maxlags: auto
+    fdr_alpha: 0.05
+    family_size_per_period: 6
+  subperiods:
+    - name: full_sample
+      start: "2018-01-01"
+      end: "2024-04-09"
+    - name: pre_covid
+      start: "2018-01-01"
+      end: "2020-03-10"
+    - name: covid
+      start: "2020-03-11"
+      end: "2022-02-23"
+    - name: post_covid
+      start: "2022-02-24"
+      end: "2024-04-09"
+
+benchmark:
+  citation: Natashekara and Sampath (2026), Table 2 and Table A.1
+  values:
+    - period: full_sample
+      frequency: daily
+      model: scsad
+      coefficient: -2.924
+      t_stat: -4.471
+      nobs: 2291
+    - period: pre_covid
+      frequency: daily
+      model: scsad
+      coefficient: -14.892
+      t_stat: -3.209
+      nobs: 800
+    - period: covid
+      frequency: daily
+      model: scsad
+      coefficient: -4.807
+      t_stat: -6.006
+      nobs: 715
+    - period: post_covid
+      frequency: daily
+      model: scsad
+      coefficient: -30.813
+      t_stat: -7.546
+      nobs: 776
+    - period: full_sample
+      frequency: weekly
+      model: standard_csad
+      coefficient: -0.115
+      t_stat: -0.405
+      nobs: 307
+    - period: full_sample
+      frequency: weekly
+      model: no_intercept_csad
+      coefficient: -2.096
+      t_stat: -5.904
+      nobs: 307
+    - period: full_sample
+      frequency: weekly
+      model: scsad
+      coefficient: -3.359
+      t_stat: -3.632
+      nobs: 307
+
+output:
+  base_dir: outputs/v2/cmc_dynamic_universe/replication_v1
+
+logging:
+  level: INFO

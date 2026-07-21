@@ -1,0 +1,14 @@
+{
+  "pipeline_version": "csad-mechanical-convergence-supplement-v1.1",
+  "schema_version": 1,
+  "created_at_utc": "2026-07-21T04:53:10.264926+00:00",
+  "protocol_sha256": "b51450e787b8d7884b9ab72d710913a1a7904d6c2d8fd8f22e2c068c711a6d81",
+  "config_sha256": "2b6cfa360829da47c81f03f0329b8bd2c8357196f6947c346e47e1b6bbdcf2a9",
+  "parent_provenance_sha256": "b7769b4af630346541aa9c2788b3aad599cf665ff0d078c28eb641eaba1ef566",
+  "simulation_seed": 2026072103,
+  "simulation_repetitions": 300,
+  "parent_classification_preserved": "mechanical_null_not_confirmed",
+  "supplement_classification": "finite_sample_convergence_supported",
+  "master_report_update_sha256": "95e57c629b103ea4417023392f07aba5b20f5babe132076fd37d034e63090258",
+  "output_overwrite_permitted": false
+}

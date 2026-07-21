@@ -1,0 +1,9 @@
+{
+  "rows": 490560,
+  "symbols": 7,
+  "mechanism_family_success": true,
+  "absolute_return_family_success": false,
+  "realized_volatility_family_success": false,
+  "directional_alpha_tested": false,
+  "tracker_activation_allowed": false
+}

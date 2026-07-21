@@ -1,0 +1,24 @@
+{
+  "files": [
+    {
+      "path": "outputs/v2/cmc_dynamic_universe/replication_v1/daily_csad.csv",
+      "size": 106440,
+      "sha256": "4f0ed6db89ffdc2e75c16757b385d19c79636587b26f68c1d01f6ca702550345"
+    },
+    {
+      "path": "outputs/v2/cmc_dynamic_universe/replication_v1/daily_market_return.csv",
+      "size": 108119,
+      "sha256": "3c749be453500e0bcbb5e6483410c0d15eea266b0b0b92522bc0722a4e9e512d"
+    },
+    {
+      "path": "outputs/v2/cmc_dynamic_universe/replication_v1/provenance.json",
+      "size": 660,
+      "sha256": "dd45de5c8c2aa1d58e4dae18f6c69ab6b30463f38346c59a8ff6cd5a97f19466"
+    },
+    {
+      "path": "research_protocols/cmc_scsad_structural_break_v1.md",
+      "size": 4057,
+      "sha256": "3ff4437137150a7a179828f39f888119ca959368a5be0859e6dd7173a7e2bc78"
+    }
+  ]
+}

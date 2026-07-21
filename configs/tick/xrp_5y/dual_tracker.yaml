@@ -1,5 +1,5 @@
 input:
-  base_dir: outputs/tick/xrp_5y/overlap_core/variants
+  base_dir: outputs/v2/tick/xrp_5y/overlap_core/variants
 
 analysis:
   selected_variants:
@@ -13,7 +13,7 @@ analysis:
   as_of_mode: now_utc
 
 output:
-  base_dir: outputs/tick/xrp_5y/trackers/dual_tracker
+  base_dir: outputs/v2/tick/xrp_5y/trackers/dual_tracker
 
 logging:
   level: INFO

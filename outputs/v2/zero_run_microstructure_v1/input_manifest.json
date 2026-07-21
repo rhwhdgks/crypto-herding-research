@@ -1,0 +1,54 @@
+{
+  "files": [
+    {
+      "path": "configs/research/zero_run_microstructure_v1.yaml",
+      "size": 1398,
+      "sha256": "1f8b0259314c76600e2f4c1367bf5ab69ded145b753bba57e2980a65ebb7a5c1"
+    },
+    {
+      "path": "research_protocols/zero_run_microstructure_v1.md",
+      "size": 7537,
+      "sha256": "8e3547048060663c2e8b414c90fb41a64dceb6096a36082af624f7085341ed07"
+    },
+    {
+      "path": "outputs/v2/tick/semantic_validation/raw_2y/intermediate/tick_micro_frame_15m.parquet",
+      "size": 60094168,
+      "sha256": "1b19c5f05d862f8ec6225a5f841da9844d4797eee2cd9668cb8f7b9840320bfd"
+    },
+    {
+      "path": "data/BTCUSDT_1m.parquet",
+      "size": 36058703,
+      "sha256": "f806b2eb4b760247db32b9f41fa75ad7875b20aca7a9154c84d62882225500fd"
+    },
+    {
+      "path": "data/ETHUSDT_1m.parquet",
+      "size": 30898494,
+      "sha256": "4ddfad915588fdc61ae2e9324d6c382429c483b0962dec4c2da8cddb9110a567"
+    },
+    {
+      "path": "data/XRPUSDT_1m.parquet",
+      "size": 21359698,
+      "sha256": "4401a6da4e6e4a10e699def1f234a074d0224eb7bab418d265860504bd5f3798"
+    },
+    {
+      "path": "data/SOLUSDT_1m.parquet",
+      "size": 21821816,
+      "sha256": "fe012d2713e3b452ccc2a8db1a1ca2cbb36ba9e764fee15d1c46a4b4967fc200"
+    },
+    {
+      "path": "data/DOGEUSDT_1m.parquet",
+      "size": 22571193,
+      "sha256": "18df907f391078f768a184e93070a9264d5f8c620599a50cd4bc0d738a6ecfd3"
+    },
+    {
+      "path": "data/ADAUSDT_1m.parquet",
+      "size": 20852552,
+      "sha256": "b7bbe533b3c0a4a7043ce97e3d8b78e926fa93ba65e1d857f8568fef7f510219"
+    },
+    {
+      "path": "data/AVAXUSDT_1m.parquet",
+      "size": 19104996,
+      "sha256": "04327a6d6df148f29c9d0cbdbbe3d113a26584315094ab7c7476a94e14b8cf94"
+    }
+  ]
+}

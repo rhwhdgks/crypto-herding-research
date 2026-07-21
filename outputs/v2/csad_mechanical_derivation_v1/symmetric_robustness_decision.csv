@@ -1,0 +1,2 @@
+symmetric_dgp_count,scenario_count,evaluated_cells,passing_cells,passing_cell_share,required_cell_share,negative_rate_threshold,distributional_robustness_pass
+5,9,45,45,1.0,0.75,0.8,True

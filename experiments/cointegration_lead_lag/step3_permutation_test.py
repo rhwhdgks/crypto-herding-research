@@ -6,13 +6,11 @@
 """
 from __future__ import annotations
 
-import sys
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
-sys.path.insert(0, str(Path(__file__).parent))
 # Reuse step2_15m_backtest helpers
 from step2_15m_backtest import (  # type: ignore
     COIN_A,
@@ -73,7 +71,13 @@ def main() -> None:
     mf = pd.read_csv(MICRO_FRAME_PATH)
     mf["bucket_start"] = pd.to_datetime(mf["bucket_start"], utc=True)
     real_events = pd.to_datetime(
-        mf.loc[(mf["symbol"] == "DOGEUSDT") & (mf["event_label"] == "micro_herding_down"), "bucket_start"].values,
+        mf.loc[
+            (mf["symbol"] == "DOGEUSDT")
+            & mf["is_micro_run_clustering_event"].fillna(False).astype(bool)
+            & mf["run_clustering_side"].eq("down")
+            & mf["price_direction"].eq("down"),
+            "bucket_start",
+        ].values,
         utc=True,
     )
     # Map events to integer positions in our 15min frame

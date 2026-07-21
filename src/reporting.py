@@ -45,6 +45,8 @@ def generate_report_summary(
             f"- beta2: {regression_json.get('beta2', float('nan')):.6f}",
             f"- beta2 t-통계량: {regression_json.get('beta2_t_stat', float('nan')):.3f}",
             f"- beta2 p-값: {regression_json.get('beta2_p_value', float('nan')):.6g}",
+            f"- 공분산 추정: {regression_json.get('cov_type', 'unknown')} "
+            f"(maxlags={regression_json.get('covariance_metadata', {}).get('maxlags', 'n/a')})",
             f"- 결정계수 R-squared: {regression_json.get('rsquared', float('nan')):.4f}",
             f"- 해석: {_translate_baseline_interpretation(regression_json)}",
             "",
@@ -72,9 +74,13 @@ def generate_report_summary(
     else:
         for _, row in best_rows.iterrows():
             label_column = _detect_label_column(best_rows)
+            block_p = row.get("p_value_block", float("nan"))
+            ci_low = row.get("confidence_interval_lower", float("nan"))
+            ci_high = row.get("confidence_interval_upper", float("nan"))
             lines.append(
                 f"- {row[label_column]} / {row['horizon_label']}: 평균 수익률 {row['mean_return']:.4%}, "
-                f"t-통계량 {row['t_stat']:.2f}, 승률 {row['win_rate']:.2%}"
+                f"UTC-day block p={block_p:.4f}, 95% CI [{ci_low:.4%}, {ci_high:.4%}], "
+                f"non-overlap n={int(row.get('n_nonoverlapping_events', row['count']))}, 승률 {row['win_rate']:.2%}"
             )
     lines.append("")
 

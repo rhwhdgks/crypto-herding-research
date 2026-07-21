@@ -1,0 +1,67 @@
+protocol:
+  path: research_protocols/cmc_fixed_62_temporal_validation_v1.md
+
+universe:
+  source_config_path: configs/cmc_fixed_62/replication_v1.yaml
+  expected_assets: 62
+
+source:
+  provider: coinmarketcap_public_individual_historical
+  endpoint: https://api.coinmarketcap.com/data-api/v3.1/cryptocurrency/historical
+  cache_dir: data/coinmarketcap/fixed_62_temporal
+  state_path: data/coinmarketcap/fixed_62_temporal/collection_state.json
+  manifest_path: data/coinmarketcap/fixed_62_temporal/checkpoint_manifest.csv
+  normalized_path: data/coinmarketcap/fixed_62_temporal/fixed_62_temporal_daily.parquet
+  source_start: "2024-04-09"
+  source_end: "2026-07-18"
+  chunk_days: 400
+  usd_convert_id: 2781
+  max_workers: 6
+  request_timeout_seconds: 60
+  maximum_attempts: 6
+  backoff_seconds: 1.5
+  user_agent: crypto-herding-fixed-62-temporal-validation/1.0
+
+analysis:
+  start: "2024-04-10"
+  end: "2026-07-18"
+  minimum_active_assets: 55
+  minimum_asset_day_coverage: 0.95
+  minimum_eligible_day_share: 0.99
+  minimum_positive_price_share: 0.99
+  variants:
+    - name: replication_primary
+      return_method: log
+      market_cap_weighting: contemporaneous
+    - name: no_lookahead_sensitivity
+      return_method: log
+      market_cap_weighting: lagged
+  frequencies: [daily, weekly]
+  regression:
+    models: [standard_csad, no_intercept_csad, scsad]
+    cov_type: HAC
+    hac_maxlags: auto
+    fdr_alpha: 0.05
+    family_size_per_period_variant: 6
+  subperiods:
+    - {name: holdout_full, start: "2024-04-10", end: "2026-07-18"}
+    - {name: holdout_year1, start: "2024-04-10", end: "2025-04-09"}
+    - {name: holdout_later, start: "2025-04-10", end: "2026-07-18"}
+
+historical_comparison:
+  targets_path: outputs/v2/cmc_fixed_62/replication_v1/regression_targets.csv
+  historical_variant: replication_primary
+  historical_period: full_sample
+  holdout_variant: replication_primary
+  holdout_period: holdout_full
+
+decision:
+  required_models: [no_intercept_csad, scsad]
+  required_frequencies: [daily, weekly]
+  alpha: 0.05
+
+output:
+  base_dir: outputs/v2/cmc_fixed_62/temporal_validation_v1
+
+logging:
+  level: INFO

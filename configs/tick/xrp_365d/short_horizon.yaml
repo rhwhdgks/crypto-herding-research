@@ -23,11 +23,13 @@ analysis:
     - 22
     - 23
   lookback_days_for_threshold: 5
-  herding_score_percentile: 0.15
+  run_clustering_score_percentile: 0.15
   min_trades_per_bucket: 200
+  flat_return_epsilon: 0.0
+  aggressor_balance_epsilon: 0.0
 
 output:
-  base_dir: outputs/tick/xrp_365d/short_horizon
+  base_dir: outputs/v2/tick/xrp_365d/short_horizon
 
 logging:
   level: INFO

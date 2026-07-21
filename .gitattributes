@@ -1,0 +1,11 @@
+# These preregistered and manifest-sealed files retain their original bytes.
+research_protocols/csad_mechanical_derivation_v1.md whitespace=-blank-at-eof
+research_protocols/csad_mechanical_derivation_v1_1_amendment.md whitespace=-blank-at-eof
+outputs/v2/csad_mechanical_derivation_v1/protocol_snapshot.md whitespace=-blank-at-eof
+outputs/v2/csad_mechanical_derivation_v1/supplement_v1_1/protocol_snapshot.md whitespace=-blank-at-eof
+scripts/build_csad_mechanical_manifest_amendment.py whitespace=-blank-at-eof
+scripts/run_csad_mechanical_supplement.py whitespace=-blank-at-eof
+scripts/verify_csad_mechanical_derivation.py whitespace=-blank-at-eof
+scripts/verify_csad_mechanical_derivation_v1_1.py whitespace=-blank-at-eof
+tests/test_csad_mechanical_derivation.py whitespace=-blank-at-eof
+tests/test_csad_mechanical_supplement.py whitespace=-blank-at-eof

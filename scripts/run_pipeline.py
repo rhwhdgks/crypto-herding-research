@@ -2,15 +2,11 @@ from __future__ import annotations
 
 import argparse
 import logging
-import sys
 from pathlib import Path
 
 import pandas as pd
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SRC_DIR = PROJECT_ROOT / "src"
-if str(SRC_DIR) not in sys.path:
-    sys.path.insert(0, str(SRC_DIR))
 
 from csad import compute_csad
 from data_loader import load_multi_asset_ohlcv
@@ -32,6 +28,8 @@ from utils import (
     save_config_snapshot,
     save_dataframe,
     save_json,
+    save_input_manifest,
+    save_provenance_manifest,
     save_text,
     setup_logging,
 )
@@ -91,9 +89,12 @@ def main() -> None:
     market_index = compute_market_index(market_return)
     csad = compute_csad(log_returns, market_return, min_active_assets=min_active_assets)
 
+    regression_cfg = config.get("regression", {})
     regression_results, regression_diagnostics, regression_frame, model, regression_json = run_csad_regression(
         csad,
         market_return,
+        cov_type=regression_cfg.get("cov_type", "HAC"),
+        hac_maxlags=regression_cfg.get("hac_maxlags", "auto"),
     )
     rolling_cfg = config.get("regression", {}).get("rolling", {})
     rolling_regression = pd.DataFrame()
@@ -103,6 +104,8 @@ def main() -> None:
             market_return=market_return,
             window=int(rolling_cfg.get("window", 720)),
             min_periods=int(rolling_cfg.get("min_periods", 720)),
+            cov_type=regression_cfg.get("cov_type", "HAC"),
+            hac_maxlags=regression_cfg.get("hac_maxlags", "auto"),
         )
 
     event_frame = detect_events(csad, market_return, config["event_detection"])
@@ -121,9 +124,9 @@ def main() -> None:
         "is_high_abs_return_condition",
         "is_high_vol_condition",
         "is_herding_volatility_condition",
-        "is_herding_event_raw",
+        "is_low_dispersion_event_raw",
         "is_shock_event_raw",
-        "is_herding_event",
+        "is_low_dispersion_event",
         "is_shock_event",
         "event_type",
     ]
@@ -138,7 +141,7 @@ def main() -> None:
     event_count_summary = summarize_event_counts(
         analysis_frame,
         label_column="event_type",
-        labels=["herding", "shock"],
+        labels=["low_dispersion", "shock"],
     )
     event_timestamps = extract_event_timestamps(analysis_frame, label_column="event_type")
 
@@ -147,7 +150,7 @@ def main() -> None:
         market_return=market_return,
         holding_periods=config["event_study"]["holding_periods"],
         event_label_column="event_type",
-        event_types=["herding", "shock"],
+        event_types=["low_dispersion", "shock"],
         max_path_horizon=int(config["event_study"].get("max_path_horizon", max(config["event_study"]["holding_periods"]))),
     )
 
@@ -219,10 +222,10 @@ def main() -> None:
     plot_event_paths(event_paths, output_dirs["plots"] / "event_paths.png", label_column="event_type")
 
     plot_paths = [
-        str(output_dirs["plots"] / "csad_vs_market_return.png"),
-        str(output_dirs["plots"] / "event_occurrences.png"),
-        str(output_dirs["plots"] / "event_forward_returns.png"),
-        str(output_dirs["plots"] / "event_paths.png"),
+        (output_dirs["plots"] / "csad_vs_market_return.png").relative_to(PROJECT_ROOT).as_posix(),
+        (output_dirs["plots"] / "event_occurrences.png").relative_to(PROJECT_ROOT).as_posix(),
+        (output_dirs["plots"] / "event_forward_returns.png").relative_to(PROJECT_ROOT).as_posix(),
+        (output_dirs["plots"] / "event_paths.png").relative_to(PROJECT_ROOT).as_posix(),
     ]
     generate_report_summary(
         output_path=output_dirs["base"] / "report_summary.md",
@@ -233,12 +236,30 @@ def main() -> None:
         universe_coverage_summary=universe_coverage_summary,
     )
 
-    herding_count = int((analysis_frame["event_type"] == "herding").sum())
+    input_paths = [
+        PROJECT_ROOT / str(path)
+        for path in data_load_summary.get("source_path", pd.Series(dtype=str)).dropna().unique()
+        if (PROJECT_ROOT / str(path)).is_file()
+    ]
+    input_manifest = save_input_manifest(input_paths, output_dirs["base"] / "input_manifest.json")
+    save_provenance_manifest(
+        config,
+        output_dirs["base"] / "provenance.json",
+        schema_version=2,
+        pipeline_version="baseline-csad-v2",
+        train_start=config["data"]["start"],
+        train_end=config["data"]["end"],
+        statistical_method="classical CSAD OLS with Newey-West HAC covariance; block event-study inference",
+        input_manifest_path=input_manifest,
+        random_seed=20260715,
+    )
+
+    low_dispersion_count = int((analysis_frame["event_type"] == "low_dispersion").sum())
     shock_count = int((analysis_frame["event_type"] == "shock").sum())
     LOGGER.info(
-        "파이프라인이 완료됐습니다. 관측치=%d, herding 이벤트=%d, shock 이벤트=%d.",
+        "파이프라인이 완료됐습니다. 관측치=%d, low-dispersion 이벤트=%d, shock 이벤트=%d.",
         len(analysis_frame),
-        herding_count,
+        low_dispersion_count,
         shock_count,
     )
 

@@ -1,5 +1,5 @@
 input:
-  base_dir: outputs/tick/xrp_365d/candidate_paper_sim
+  base_dir: outputs/v2/tick/xrp_365d/candidate_paper_sim
 
 analysis:
   prev_candidate: prev_neg
@@ -17,7 +17,7 @@ analysis:
     - 10
 
 output:
-  base_dir: outputs/tick/xrp_365d/candidate_refinement
+  base_dir: outputs/v2/tick/xrp_365d/candidate_refinement
 
 logging:
   level: INFO

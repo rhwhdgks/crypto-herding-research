@@ -1,0 +1,5 @@
+identity,assumptions,result,implication
+gaussian_mean_residual_independence,iid Gaussian assets; equal weights; N>=3,M is independent of the residual vector and CSAD,E[CSAD|M] is a positive constant
+no_intercept_projection,"positive constant projected on M, |M|, M^2 without intercept",delta2*=(c/s^2)(1-4/pi)/(3-8/pi)<0,negative quadratic curvature is mechanical
+scsad_projection,"sign(M)*constant projected on 1, M, M^2, M^3",gamma3*=-c*sqrt(2/pi)/(6*s^3)<0,negative cubic curvature approximates a sign step
+intercept_restoration,E[CSAD|M] is constant and the design includes an intercept,standard and restored nonlinear pseudo-true targets equal zero,the intercept absorbs the positive CSAD level

@@ -34,7 +34,7 @@ analysis:
     - 22
     - 23
   lookback_days_for_threshold: 5
-  herding_score_percentile: 0.15
+  run_clustering_score_percentile: 0.15
   min_trades_per_bucket: 200
 
 research:
@@ -42,7 +42,7 @@ research:
   focus_horizon_minutes: 30
 
 output:
-  base_dir: outputs/tick/multi_asset_365d/generalization_extended
+  base_dir: outputs/v2/tick/multi_asset_365d/generalization_extended
 
 logging:
   level: INFO

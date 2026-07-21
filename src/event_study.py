@@ -36,6 +36,7 @@ def run_event_study(
         for horizon in holding_periods:
             column = f"forward_return_{horizon}m"
             sample = subset[column].dropna()
+            inference = _event_block_inference(subset[column], horizon_minutes=horizon, seed=20260715)
             results.append(
                 {
                     event_label_column: event_type,
@@ -47,6 +48,7 @@ def run_event_study(
                     "std_return": sample.std(ddof=1) if sample.shape[0] >= 2 else np.nan,
                     "t_stat": _compute_t_stat(sample),
                     "win_rate": (sample > 0).mean() if not sample.empty else np.nan,
+                    **inference,
                 }
             )
 
@@ -144,3 +146,48 @@ def _compute_t_stat(sample: pd.Series) -> float:
         return np.nan
 
     return float(sample.mean() / (std / sqrt(sample.shape[0])))
+
+
+def _event_block_inference(
+    event_returns: pd.Series,
+    horizon_minutes: int,
+    seed: int,
+    n_draws: int = 1000,
+) -> dict:
+    sample = event_returns.dropna().sort_index()
+    timestamps = pd.to_datetime(sample.index, utc=True)
+    last_kept = None
+    nonoverlap = 0
+    for timestamp in timestamps:
+        if last_kept is None or timestamp >= last_kept + pd.Timedelta(minutes=int(horizon_minutes)):
+            nonoverlap += 1
+            last_kept = timestamp
+    working = pd.DataFrame({"return": sample.to_numpy(), "utc_day": timestamps.floor("D")})
+    unique_days = int(working["utc_day"].nunique())
+    bootstrap = np.asarray([], dtype=float)
+    if unique_days >= 2 and nonoverlap >= 2:
+        daily = working.groupby("utc_day")["return"].agg(["sum", "count"]).to_numpy(dtype=float)
+        rng = np.random.default_rng(seed)
+        indices = rng.integers(0, len(daily), size=(int(n_draws), len(daily)))
+        draws = daily[indices].sum(axis=1)
+        bootstrap = draws[:, 0] / draws[:, 1]
+    if bootstrap.size:
+        observed = float(sample.mean())
+        centered = bootstrap - bootstrap.mean()
+        p_value = float((np.sum(np.abs(centered) >= abs(observed)) + 1) / (len(bootstrap) + 1))
+        lower, upper = np.quantile(bootstrap, [0.025, 0.975])
+        standard_error = float(bootstrap.std(ddof=1))
+    else:
+        p_value = lower = upper = standard_error = np.nan
+    return {
+        "n_raw_events": int(len(sample)),
+        "n_nonoverlapping_events": int(nonoverlap),
+        "n_unique_days": unique_days,
+        "bootstrap_se": standard_error,
+        "confidence_interval_lower": float(lower),
+        "confidence_interval_upper": float(upper),
+        "p_value_block": p_value,
+        "block_method": "utc_day_cluster_bootstrap",
+        "block_length": "1 UTC day",
+        "seed": int(seed),
+    }

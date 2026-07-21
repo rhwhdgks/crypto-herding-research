@@ -7,7 +7,6 @@ import numpy as np
 import pandas as pd
 
 from tick_candidate_paper_sim import build_monthly_summary
-from tick_overlap_core_regime import assign_quantile_bucket
 
 
 VARIANT_LABELS = {
@@ -34,13 +33,18 @@ def load_overlap_core_regime_sample(base_dir: str | Path) -> pd.DataFrame:
     return frame.sort_values("entry_timestamp").reset_index(drop=True)
 
 
-def enrich_variant_buckets(frame: pd.DataFrame) -> tuple[pd.DataFrame, dict[str, float]]:
+def enrich_variant_buckets(frame: pd.DataFrame, fit_end: pd.Timestamp) -> tuple[pd.DataFrame, dict[str, float]]:
     enriched = frame.copy()
-    enriched["strength_bucket"] = assign_quantile_bucket(enriched["strength_ratio"], 4, "strength")
-    enriched["prior_drop_bucket"] = assign_quantile_bucket(enriched["prior_drop_magnitude"], 4, "prior_drop")
-
-    strength_cut = float(enriched["strength_ratio"].quantile(0.50))
-    prior_cut = float(enriched["prior_drop_magnitude"].quantile(0.75))
+    fit_end = pd.Timestamp(fit_end)
+    train = enriched.loc[enriched["entry_timestamp"] <= fit_end]
+    oos = enriched.loc[enriched["entry_timestamp"] > fit_end]
+    if train.empty or oos.empty:
+        raise ValueError("Variant threshold fit requires non-empty, non-overlapping train and OOS samples")
+    strength_cut = float(train["strength_ratio"].quantile(0.50))
+    prior_cut = float(train["prior_drop_magnitude"].quantile(0.75))
+    enriched["strength_bucket"] = np.where(enriched["strength_ratio"] <= strength_cut, "strength_Q1_Q2", "strength_Q3_Q4")
+    enriched["prior_drop_bucket"] = np.where(enriched["prior_drop_magnitude"] >= prior_cut, "prior_drop_Q4", "prior_drop_Q1_Q3")
+    enriched["threshold_fit_end"] = fit_end
     thresholds = {
         "strength_q2_upper": strength_cut,
         "prior_drop_q4_lower": prior_cut,
@@ -51,7 +55,7 @@ def enrich_variant_buckets(frame: pd.DataFrame) -> tuple[pd.DataFrame, dict[str,
 def build_variant_masks(frame: pd.DataFrame) -> dict[str, pd.Series]:
     time_17_18 = frame["hour_utc"].isin([17, 18])
     prior_drop_q4 = frame["prior_drop_bucket"] == "prior_drop_Q4"
-    strength_q1_q2 = frame["strength_bucket"].isin(["strength_Q1", "strength_Q2"])
+    strength_q1_q2 = frame["strength_bucket"].eq("strength_Q1_Q2")
     return {
         "base_overlap_core": pd.Series(True, index=frame.index),
         "time_17_18": time_17_18,

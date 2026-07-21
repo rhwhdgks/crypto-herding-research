@@ -35,10 +35,14 @@ Thumbs.db
 # =========================================
 # AI assistants / development notes (internal)
 # =========================================
+.agents/
 .claude/
+.codex/
 agents.md
 claude.md
 CLAUDE.md
+CODEX_HANDOFF_*.md
+review_package_docs/
 
 # =========================================
 # Logs
@@ -60,14 +64,10 @@ credentials.json
 # =========================================
 # Raw market data (regenerate via scripts)
 # =========================================
-data/*.parquet
-data/*.csv
-data/tick_archive/
-data/tick_pilot/
-data/news/
-data/reddit/
-data/x_archive/
-data/coinmarketcap/
+# All raw and normalized datasets stay local. Keep only the directory guide.
+data/**
+!data/README.md
+!data/.gitkeep
 
 # =========================================
 # Reference papers (copyright)
@@ -78,16 +78,31 @@ references/
 # Database dumps
 # =========================================
 *.sql.gz
+*.sql
 *.db
 *.sqlite
 *.sqlite3
+*.dump
 
 # =========================================
 # Heavy research outputs / experiments
 # =========================================
-# Default: only explicitly added files under outputs/ and experiments/ are tracked.
-# See PUBLISH.md for the curated `git add` list.
-# Regenerable heavy intermediates (rebuild via the step scripts):
-experiments/informed_trading/outputs/doge_vpin_15m.csv
-experiments/informed_trading/outputs/doge_futures_state_15m.csv
-data/futures_archive/
+# Generated outputs are opt-in: use `git add -f` only for reviewed reports,
+# decisions, manifests, and plots. Already tracked historical files are unaffected.
+outputs/**
+experiments/**/outputs/**
+
+# Large or regenerable research artifacts are never public by default.
+*.parquet
+*.feather
+*.h5
+*.hdf5
+*.zip
+*.tar
+*.tar.gz
+*.jsonl
+**/intermediate/
+**/.staging-*/
+**/staging/
+*.tmp
+*.part

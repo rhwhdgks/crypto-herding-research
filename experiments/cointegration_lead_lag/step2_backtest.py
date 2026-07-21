@@ -3,7 +3,7 @@
 Sprint1 step9_backtesting.py의 z-score 진입/청산 로직을 그대로 유지.
 Binance USDT 1분봉 + lead_lag_matrix의 micro_frame을 결합해서:
   - Baseline mode:   |z| > Z_ENTRY 진입, mean-reversion 청산
-  - Filtered mode:   진입 조건에 "직전 LAG_MIN 분 이내 DOGE micro_herding_down event 발생" 추가
+  - Filtered mode:   진입 조건에 "직전 LAG_MIN 분 이내 DOGE schema-v2 run-side-down and price-down event 발생" 추가
 
 PnL은 두 다리 로그리턴 기반, 비용은 turnover * (fee+slip) per side.
 """
@@ -15,11 +15,10 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-DATA_DIR = Path("/home/jonghan/findalpha/herding/data")
-OUT_DIR = Path("/home/jonghan/findalpha/herding/experiments/cointegration_lead_lag/outputs")
-MICRO_FRAME_PATH = Path(
-    "/home/jonghan/findalpha/herding/outputs/tick/multi_asset_365d/lead_lag_matrix/intermediate/tick_micro_frame_15m.csv"
-)
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+DATA_DIR = PROJECT_ROOT / "data"
+OUT_DIR = PROJECT_ROOT / "experiments/cointegration_lead_lag/outputs"
+MICRO_FRAME_PATH = PROJECT_ROOT / "outputs/v2/tick/multi_asset_365d/lead_lag_matrix/intermediate/tick_micro_frame_15m.csv"
 
 Z_ENTRY = 3.0  # Sprint1 step10 robust 버전 (churn 감소)
 Z_EXIT = 0.5
@@ -46,12 +45,18 @@ def max_drawdown(equity: pd.Series) -> float:
 def load_event_mask(coin: str, lag_minutes: int, all_minutes_index: pd.DatetimeIndex) -> pd.Series:
     """Return a boolean Series indexed by minute timestamps.
 
-    True if there was a `micro_herding_down` event for `coin` within the past `lag_minutes`.
+    True after an explicit run-side-down and price-down v2 event.
     """
     mf = pd.read_csv(MICRO_FRAME_PATH)
     mf["bucket_start"] = pd.to_datetime(mf["bucket_start"], utc=True)
     sym = coin if coin.endswith("USDT") else f"{coin}USDT"
-    events = mf.loc[(mf["symbol"] == sym) & (mf["event_label"] == "micro_herding_down"), "bucket_start"]
+    events = mf.loc[
+        (mf["symbol"] == sym)
+        & mf["is_micro_run_clustering_event"].fillna(False).astype(bool)
+        & mf["run_clustering_side"].eq("down")
+        & mf["price_direction"].eq("down"),
+        "bucket_start",
+    ]
     events = pd.to_datetime(events.values, utc=True)
     if len(events) == 0:
         return pd.Series(False, index=all_minutes_index)
@@ -186,7 +191,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--coin-a", default="AVAXUSDT")
     parser.add_argument("--coin-b", default="DOGEUSDT")
-    parser.add_argument("--filter-coin", default="DOGEUSDT", help="micro_herding_down 이벤트 기준 자산")
+    parser.add_argument("--filter-coin", default="DOGEUSDT", help="schema-v2 run-side-down and price-down 이벤트 기준 자산")
     parser.add_argument("--lag-minutes", type=int, default=LAG_MIN_DEFAULT)
     parser.add_argument(
         "--cointegration-csv",

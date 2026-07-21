@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "pipeline_version": "tick-raw-confirmatory-v1",
+  "git_commit": "0b47f9d20ab9bbbb2e30528cdfa1ac5b386c538a",
+  "git_worktree_dirty": true,
+  "config_sha256": "0db0eb9579d6313e39eba4b8402eacc575549e6fa498d8fa66d9f170c40b5b3b",
+  "input_manifest_sha256": "80f9d75a11f64d6d017ba3957d9fa8ede5bb808d7940dbf7cccb7defbe622060",
+  "generated_at_utc": "2026-07-18T10:46:03.255163+00:00",
+  "train_start": "2024-04-08T00:00:00Z",
+  "train_end": "2026-04-07T23:45:00Z",
+  "oos_start": null,
+  "oos_end": null,
+  "statistical_method": "separate 8-price, 8-aggressor, 3-predictive BH-FDR families",
+  "random_seed": null,
+  "status": "corrected"
+}

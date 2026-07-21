@@ -1,0 +1,3 @@
+variant,period,required_cells,passed_cells,all_required_cells_pass,maximum_required_q_value
+no_lookahead_sensitivity,holdout_full,4,4,True,3.440512935565749e-09
+replication_primary,holdout_full,4,4,True,5.121266308132502e-09

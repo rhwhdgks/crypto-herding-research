@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "pipeline_version": "cmc-fixed-62-replication-v1",
+  "git_commit": "0b47f9d20ab9bbbb2e30528cdfa1ac5b386c538a",
+  "git_worktree_dirty": true,
+  "config_sha256": "4d259d568259b75ca702fe1dee830a318e175e90ca77bb72e11f80baa040fe51",
+  "input_manifest_sha256": "9bce53955f07284fa03129e5fcfe07c061f779880d8ac52fe2bfb07d3c0b8b4c",
+  "generated_at_utc": "2026-07-19T04:40:29.411179+00:00",
+  "train_start": "2018-01-01",
+  "train_end": "2024-04-09",
+  "oos_start": null,
+  "oos_end": null,
+  "statistical_method": "Fixed-62 daily and weekly HAC CSAD with variant-period six-test BH-FDR",
+  "random_seed": null,
+  "status": "corrected"
+}

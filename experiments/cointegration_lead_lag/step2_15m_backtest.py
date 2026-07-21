@@ -10,11 +10,10 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-DATA_DIR = Path("/home/jonghan/findalpha/herding/data")
-OUT_DIR = Path("/home/jonghan/findalpha/herding/experiments/cointegration_lead_lag/outputs")
-MICRO_FRAME_PATH = Path(
-    "/home/jonghan/findalpha/herding/outputs/tick/multi_asset_365d/lead_lag_matrix/intermediate/tick_micro_frame_15m.csv"
-)
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+DATA_DIR = PROJECT_ROOT / "data"
+OUT_DIR = PROJECT_ROOT / "experiments/cointegration_lead_lag/outputs"
+MICRO_FRAME_PATH = PROJECT_ROOT / "outputs/v2/tick/multi_asset_365d/lead_lag_matrix/intermediate/tick_micro_frame_15m.csv"
 
 COIN_A = "AVAXUSDT"
 COIN_B = "DOGEUSDT"
@@ -51,7 +50,13 @@ def load_event_mask_15m(coin: str, lag_bars: int, all_bars_index: pd.DatetimeInd
     mf["bucket_start"] = pd.to_datetime(mf["bucket_start"], utc=True)
     sym = coin if coin.endswith("USDT") else f"{coin}USDT"
     events = pd.to_datetime(
-        mf.loc[(mf["symbol"] == sym) & (mf["event_label"] == "micro_herding_down"), "bucket_start"].values,
+        mf.loc[
+            (mf["symbol"] == sym)
+            & mf["is_micro_run_clustering_event"].fillna(False).astype(bool)
+            & mf["run_clustering_side"].eq("down")
+            & mf["price_direction"].eq("down"),
+            "bucket_start",
+        ].values,
         utc=True,
     )
     base = pd.Series(False, index=all_bars_index)

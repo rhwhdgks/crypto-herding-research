@@ -1,0 +1,1359 @@
+{
+  "files": [
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BTC-USDT/2021-04-09_2021-07-17.json.gz",
+      "size": 4224,
+      "sha256": "182d93989808344602ab60aabbbe0e1419d7cbe07ca6d04f35ff4d88ca54381f"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BTC-USDT/2021-07-18_2021-10-25.json.gz",
+      "size": 4267,
+      "sha256": "8ebdc0773c8f0d4148cba77599022d1e793932d7cc3ac871a114a96682c43bb1"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BTC-USDT/2021-10-26_2022-02-02.json.gz",
+      "size": 4183,
+      "sha256": "c3eaef70eabcf179caabfc29877c45229cded11bdc5da98f2ea2c4949553d31c"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BTC-USDT/2022-02-03_2022-05-13.json.gz",
+      "size": 4154,
+      "sha256": "8260667c2eeb9cef4b993d6e64563aa3e7ab41d52137131f689e72eaf843a116"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BTC-USDT/2022-05-14_2022-08-21.json.gz",
+      "size": 4182,
+      "sha256": "b3dfecc36a0313b0b969764d40c91e6f33632859f53ffbbf3b8ccb7753968349"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BTC-USDT/2022-08-22_2022-11-29.json.gz",
+      "size": 4123,
+      "sha256": "343a9b8665db3468d35e248a8e06eb8a3ba427210947d661c499ca02c0e64ceb"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BTC-USDT/2022-11-30_2023-03-09.json.gz",
+      "size": 4073,
+      "sha256": "bc27973f54bddaefac27fb5123acb2ea1fbf09ad33eed9bc737a0fb8c354f640"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BTC-USDT/2023-03-10_2023-06-17.json.gz",
+      "size": 4214,
+      "sha256": "31f71a2aed3a7321d1973357f09eb8f3a2bbee5ff218a3acf0443738f493df54"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BTC-USDT/2023-06-18_2023-09-25.json.gz",
+      "size": 4130,
+      "sha256": "f75ea0d106144f164f7439bc781c60a9a049b297a2be0c713cac3a5418931139"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BTC-USDT/2023-09-26_2024-01-03.json.gz",
+      "size": 4246,
+      "sha256": "8a670efda24b339e92804670e14afeea8f3b3adcb762fd76ce8ffb5c31b381e8"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BTC-USDT/2024-01-04_2024-04-12.json.gz",
+      "size": 4301,
+      "sha256": "e0278a7da70963904f0506691df377920979f21a1754b738b0f5441fc6e054ef"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BTC-USDT/2024-04-13_2024-07-21.json.gz",
+      "size": 4287,
+      "sha256": "990de355f0b75c6c62c6e9016a54c850c461eb86a21970f7ee5b9d356688ba0a"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BTC-USDT/2024-07-22_2024-10-29.json.gz",
+      "size": 4268,
+      "sha256": "eeac47692ce7456808fc1720a4e9e6ff80b44a4c3ca05fcfdb0a9dbe02eee2a0"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BTC-USDT/2024-10-30_2025-02-06.json.gz",
+      "size": 4276,
+      "sha256": "cad6dc4c8b23483c5b798f216759e4a34abd33b2871c45dbbaff2fefe789bd3d"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BTC-USDT/2025-02-07_2025-05-17.json.gz",
+      "size": 4275,
+      "sha256": "238fd6f46264535957f81ad150af7a5fc73908382ff64ecfefe9720ad237a685"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BTC-USDT/2025-05-18_2025-08-25.json.gz",
+      "size": 4272,
+      "sha256": "5fa0a0db6f83905a75095816c0260556f86b658f85e6b8418077234568d11a99"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BTC-USDT/2025-08-26_2025-12-03.json.gz",
+      "size": 4305,
+      "sha256": "9bc3312fdb27cf0f80fa989a3241f8f2c884c132164e76d90645ee1550699c14"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BTC-USDT/2025-12-04_2026-03-13.json.gz",
+      "size": 4231,
+      "sha256": "2f8275c8da14bdee3708076ba513e4af921a5942d64a70cc884430e5de4fbea7"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BTC-USDT/2026-03-14_2026-04-09.json.gz",
+      "size": 4224,
+      "sha256": "cd114f614abf1de68931f26b22764c2f85ad7b06109f6d54d5a71af547c9558f"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ETH-USDT/2021-04-09_2021-07-17.json.gz",
+      "size": 4091,
+      "sha256": "932edc2911186bcdda54e36ddb55bb47ed42232d65815bb80570b15820559a4d"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ETH-USDT/2021-07-18_2021-10-25.json.gz",
+      "size": 4075,
+      "sha256": "0b12018c6b5e2eed0bfe44692ed619a2971edd220774be6d7e01f28693752ebf"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ETH-USDT/2021-10-26_2022-02-02.json.gz",
+      "size": 4068,
+      "sha256": "1ed8c01d4204592027747ac3248240cdbe583c3079055a361f81e2ca96547934"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ETH-USDT/2022-02-03_2022-05-13.json.gz",
+      "size": 4039,
+      "sha256": "4d0fc629579d7de0c5db4f01600f2f995f198068e91deb44006f0865b75d60ca"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ETH-USDT/2022-05-14_2022-08-21.json.gz",
+      "size": 4042,
+      "sha256": "17415c98f7571e51dfa22f8120e296e7e9a98ecec9e6d72a2d82aae3dbd8dbd7"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ETH-USDT/2022-08-22_2022-11-29.json.gz",
+      "size": 3980,
+      "sha256": "db0b28b5ce47ebc58154ca320f2d4a063921a36fced92e7064f9cbd907269d94"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ETH-USDT/2022-11-30_2023-03-09.json.gz",
+      "size": 3975,
+      "sha256": "6558393eb2dad9cf88547a612ace9f44064d5a1fa42753e4cdbfe6f29e0bb65a"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ETH-USDT/2023-03-10_2023-06-17.json.gz",
+      "size": 4095,
+      "sha256": "f08cf6c19b8b7bcfc7711def3b26995a48b156819be8e5b3e16d2dc9284af8e9"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ETH-USDT/2023-06-18_2023-09-25.json.gz",
+      "size": 3959,
+      "sha256": "eb66c812a925028a87a1d3bcdd80cd6d4f1d25eba363a30fa6dde2e9afe19256"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ETH-USDT/2023-09-26_2024-01-03.json.gz",
+      "size": 4119,
+      "sha256": "831b68134666309c02e94d02e3189a6cacfb05d9dbe0cf194dcb9571d8369d79"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ETH-USDT/2024-01-04_2024-04-12.json.gz",
+      "size": 4148,
+      "sha256": "3af05462ab5cd7b6e7166d76811276a624e01a6a0392fe83f6a45e61db938cb1"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ETH-USDT/2024-04-13_2024-07-21.json.gz",
+      "size": 4129,
+      "sha256": "07521d0d9fb83d30ae037e619cf80dd2c6baa629ff02a1e1b2c4ff3a1874ad08"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ETH-USDT/2024-07-22_2024-10-29.json.gz",
+      "size": 4132,
+      "sha256": "8d3f6c52ff6bc1de594d1030eeb71074b25e7752e58d4930d2df0446a0f5b5b9"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ETH-USDT/2024-10-30_2025-02-06.json.gz",
+      "size": 4214,
+      "sha256": "a3f87bbfa63ababc658d172095916ab8093dae6e3ab86ad44c294f1d31c04b9a"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ETH-USDT/2025-02-07_2025-05-17.json.gz",
+      "size": 4196,
+      "sha256": "4329678dcb0f3d85ab601073a6fdc6ff8b5d3abbe00bfd2151a76fd187646eec"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ETH-USDT/2025-05-18_2025-08-25.json.gz",
+      "size": 4205,
+      "sha256": "f04c99e11b47cd76426922155cdc9f552c3a5cb9e844b90ede8b2268d0e9e3a7"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ETH-USDT/2025-08-26_2025-12-03.json.gz",
+      "size": 4230,
+      "sha256": "de01dab38c0a568961af5c9b9e21605a4d7b706a38fbb9e66bb6939086b60048"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ETH-USDT/2025-12-04_2026-03-13.json.gz",
+      "size": 4132,
+      "sha256": "b5d29e4f4f17c9f458db0a1fb0b96d11a543aa2e039ea7038ed65bf1236494a3"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ETH-USDT/2026-03-14_2026-04-09.json.gz",
+      "size": 4140,
+      "sha256": "56c218737881434792775af8f81c8e28596ff7c7063b92b5bc2da23e47e75e46"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=XRP-USDT/2021-04-09_2021-07-17.json.gz",
+      "size": 4105,
+      "sha256": "91c28df1edfaef1f23844f480339781c7ccd4f71e891587de1ace217c6941f55"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=XRP-USDT/2021-07-18_2021-10-25.json.gz",
+      "size": 4054,
+      "sha256": "78686e615844cec79445820d17c1d53054af053da14fd226ff51c457617387da"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=XRP-USDT/2021-10-26_2022-02-02.json.gz",
+      "size": 4054,
+      "sha256": "cd3df57bd65863675345553bd5e727f990e83fde0b5e28ed3325b2437f5fc237"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=XRP-USDT/2022-02-03_2022-05-13.json.gz",
+      "size": 4006,
+      "sha256": "a8c697c7928e84f8a71c4089654cd164e2cdcf0dcb85d32fca782fb5e4f46e39"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=XRP-USDT/2022-05-14_2022-08-21.json.gz",
+      "size": 3931,
+      "sha256": "5472d09a370c7cff8fc4098307347ae11ac0a38d78caa4879fdd17a8c6a9f89c"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=XRP-USDT/2022-08-22_2022-11-29.json.gz",
+      "size": 3984,
+      "sha256": "655c55dce5af1f0656151eba8591ac154bc344011e308e694e5a2c46c800b7bc"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=XRP-USDT/2022-11-30_2023-03-09.json.gz",
+      "size": 3949,
+      "sha256": "8d7e4920a5774fbca5ae0972bfe4d75690c96bc005657a899744d81ee5f1bc83"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=XRP-USDT/2023-03-10_2023-06-17.json.gz",
+      "size": 4255,
+      "sha256": "1ddcbb35dcab8c1a1c35e216b93ce33f09bcca8f3dbd3fea5dac82cd34456259"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=XRP-USDT/2023-06-18_2023-09-25.json.gz",
+      "size": 4272,
+      "sha256": "65b2d5326c33db8c16bf021be9f376c08c38b3d79b4d80f481299606ef6cfed5"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=XRP-USDT/2023-09-26_2024-01-03.json.gz",
+      "size": 4099,
+      "sha256": "a9a7848670575735f06a31c33428afbf142ecf9687fffdafe49c832c3b1d04b9"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=XRP-USDT/2024-01-04_2024-04-12.json.gz",
+      "size": 3984,
+      "sha256": "8ccf9aee4d6c47f291d38c70cd6d221e4200f3f5896f48babe0e0f866029f2e8"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=XRP-USDT/2024-04-13_2024-07-21.json.gz",
+      "size": 3968,
+      "sha256": "0dc7da4c337a170c6733c0c798c54640bb62432650cad670063883ef982786d4"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=XRP-USDT/2024-07-22_2024-10-29.json.gz",
+      "size": 3966,
+      "sha256": "0a44619b0d2fd167762b6bc4c62ebf9fd24ac74e51d6cd301aed552464c1ca25"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=XRP-USDT/2024-10-30_2025-02-06.json.gz",
+      "size": 4203,
+      "sha256": "76e8bd538c54536cd4b3cf89a428aa5b5b91b47622e5887063a25494a5ead2d8"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=XRP-USDT/2025-02-07_2025-05-17.json.gz",
+      "size": 4138,
+      "sha256": "fec8bdf6375863aa68a1060f6c656e853b66c87686a425e55392a3972baa9c47"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=XRP-USDT/2025-05-18_2025-08-25.json.gz",
+      "size": 4144,
+      "sha256": "9e6299e6abc1c19f8c748acb6c2e2cb0a2f252c75d7c73c6dd8781fbafdee906"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=XRP-USDT/2025-08-26_2025-12-03.json.gz",
+      "size": 4131,
+      "sha256": "0c567c5a459e58ad57a6addedb8f06c4a33c7a84240841403ab6233b113ca505"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=XRP-USDT/2025-12-04_2026-03-13.json.gz",
+      "size": 4077,
+      "sha256": "0fd3c049980dd1422e77b1f14932e015e7dfaff619d6bbdb90d45789f457b8ab"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=XRP-USDT/2026-03-14_2026-04-09.json.gz",
+      "size": 4073,
+      "sha256": "221a7e63f9170c50236053bba1cbc0bf2612bdc924f5c98e15ad7dfd267d742e"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ADA-USDT/2021-04-09_2021-07-17.json.gz",
+      "size": 4292,
+      "sha256": "bac4c0ca01a635c5f8d6f4871b5cf9ffdd57d023f756ac9b8568bb96a5cf8ffe"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ADA-USDT/2021-07-18_2021-10-25.json.gz",
+      "size": 4289,
+      "sha256": "cb9d4eff40d170bd94ae8e9106b37f89b8a2f519beda77823e27512bcd0fd9fa"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ADA-USDT/2021-10-26_2022-02-02.json.gz",
+      "size": 4331,
+      "sha256": "3852c23670a75b41c33cbde563d8c817fc33a93d2c2cebc0b7295e5b4538046b"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ADA-USDT/2022-02-03_2022-05-13.json.gz",
+      "size": 4228,
+      "sha256": "48c088ed14fa7f19f7e89e552661d1268c3e28b3f77bdcc3a84b57304e5d6663"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ADA-USDT/2022-05-14_2022-08-21.json.gz",
+      "size": 3992,
+      "sha256": "8bdde76329155c2e36094af925fa9ed6af040c01c04d7845f788b9fc15bdea2b"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ADA-USDT/2022-08-22_2022-11-29.json.gz",
+      "size": 3935,
+      "sha256": "b2dacd4fd8ac06265a6aa3de76f386f847229c41bcdc90af9dbea04994ca8baa"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ADA-USDT/2022-11-30_2023-03-09.json.gz",
+      "size": 3940,
+      "sha256": "e888479e9501e07a30484d77a9a54a47deee5e925744a395d86cb6b6ccd81963"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ADA-USDT/2023-03-10_2023-06-17.json.gz",
+      "size": 3965,
+      "sha256": "85483e6f274c75e71f9de6c9a29763ed92c033e9af831119451a5fd53a80014e"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ADA-USDT/2023-06-18_2023-09-25.json.gz",
+      "size": 3887,
+      "sha256": "4a23888d9faef13b211d67597fc619d5331e8d12cfbb554fa483dd880451b93e"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ADA-USDT/2023-09-26_2024-01-03.json.gz",
+      "size": 3827,
+      "sha256": "d39cfaec6bfe6d3fce127a16139d59d7d8bcc7634d1346660269fbdcdc420868"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ADA-USDT/2024-01-04_2024-04-12.json.gz",
+      "size": 3769,
+      "sha256": "a64ac18c3b51bd2578b728126fa7d4baf0efd45b0abe572f3ab2b130d772adba"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ADA-USDT/2024-04-13_2024-07-21.json.gz",
+      "size": 3667,
+      "sha256": "88873cb16995d4e98a763908ab4538f94b90db5d7d59367d622933936a176fe9"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ADA-USDT/2024-07-22_2024-10-29.json.gz",
+      "size": 3614,
+      "sha256": "50571d9fc9d8dd39cf1bbeb7423067b1d48e7fbfdc4c1dee1747b3d1709f21b1"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ADA-USDT/2024-10-30_2025-02-06.json.gz",
+      "size": 3870,
+      "sha256": "8b251a5e1408e74e0a1ef8380526ec2ed4441c87d6b83f2237b2c09cbd1ea994"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ADA-USDT/2025-02-07_2025-05-17.json.gz",
+      "size": 3814,
+      "sha256": "e1be7622944a692e5173484d7ced1cf3fd181ffd58068bab8bd2719f10cec9bc"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ADA-USDT/2025-05-18_2025-08-25.json.gz",
+      "size": 3805,
+      "sha256": "58bb51b4ed47c0129ffbfbd4e3ee75342340ab654732a6f21fe6c34c9ff6d884"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ADA-USDT/2025-08-26_2025-12-03.json.gz",
+      "size": 3813,
+      "sha256": "29cd2b1c2e1aec215d747d7a29f09c5f0202dcea5556e2d2fbdb69abdd4b23f4"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ADA-USDT/2025-12-04_2026-03-13.json.gz",
+      "size": 3729,
+      "sha256": "43a0b29e4b9ea9b1623f5f2cdc516a2a02458081c442311577d4abdc96f2542c"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ADA-USDT/2026-03-14_2026-04-09.json.gz",
+      "size": 3696,
+      "sha256": "d600cfd9a615c12b912f751b08903bf054d5a8351d97b36a40149d2fd1e10b7f"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=SOL-USDT/2021-04-09_2021-07-17.json.gz",
+      "size": 3749,
+      "sha256": "92a848ed1ef412855202eaa8be1a8999cb0432dcf3678f44e0fc74cdd0ca3500"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=SOL-USDT/2021-07-18_2021-10-25.json.gz",
+      "size": 3892,
+      "sha256": "94789558e640671527937ec45567d4917d4a168a1aa5688351a2c71f7f4476f0"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=SOL-USDT/2021-10-26_2022-02-02.json.gz",
+      "size": 3897,
+      "sha256": "eba161c61c509e13f68cbb6a45b59f486b0931e566ce1b457b8753e4b2719894"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=SOL-USDT/2022-02-03_2022-05-13.json.gz",
+      "size": 3794,
+      "sha256": "69017f4122044120a977b6afa06729c5accd6dbc03c73c0b970af2b6223eb13e"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=SOL-USDT/2022-05-14_2022-08-21.json.gz",
+      "size": 3594,
+      "sha256": "98e83ae9d40cd7544009890ec9fdfe1d3de86d14f0f67a0c17a4e46a5068d715"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=SOL-USDT/2022-08-22_2022-11-29.json.gz",
+      "size": 3515,
+      "sha256": "04fe23cd78ee5c0cab4b9ae53eac4c018d45fdaa45bebd1c8e375c842615c1b7"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=SOL-USDT/2022-11-30_2023-03-09.json.gz",
+      "size": 3741,
+      "sha256": "a1ff13806eb9af23109807200d75714d566c668f54649b367cdfa8c8bfed7043"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=SOL-USDT/2023-03-10_2023-06-17.json.gz",
+      "size": 3956,
+      "sha256": "c3171a99b691fd41b542db7fba91d45621398838d5dbb913d1b9def921e45d2d"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=SOL-USDT/2023-06-18_2023-09-25.json.gz",
+      "size": 3935,
+      "sha256": "b89b57b6cfe7c3fa6208b002fbd888c21021018ed300b8ccb6567e7b51ae0a51"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=SOL-USDT/2023-09-26_2024-01-03.json.gz",
+      "size": 4025,
+      "sha256": "306d30423f54b59e98a8c30ea694f7237ddb8b8b2f3b008e21bb63c039b5f33a"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=SOL-USDT/2024-01-04_2024-04-12.json.gz",
+      "size": 3972,
+      "sha256": "4027b55f988fde7d467e970976440c26c6e90da0823390d0ee4a3340825ff1ea"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=SOL-USDT/2024-04-13_2024-07-21.json.gz",
+      "size": 3955,
+      "sha256": "a933af616788eeff92e359ece31d8fb9fd7c6da254951df30873bdce60948481"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=SOL-USDT/2024-07-22_2024-10-29.json.gz",
+      "size": 3904,
+      "sha256": "8ba74f6f5d0f1c2c3802051091c7794365469bf5bc1698e2144f4bc9ce545660"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=SOL-USDT/2024-10-30_2025-02-06.json.gz",
+      "size": 4010,
+      "sha256": "799cdd1192cd4b028558aa1085d97daf698b106f7cfe4c34464c267486b8c750"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=SOL-USDT/2025-02-07_2025-05-17.json.gz",
+      "size": 3949,
+      "sha256": "fd86d65230ea6b34982445b1807c56c31b130053e42880b473470fd222eecba1"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=SOL-USDT/2025-05-18_2025-08-25.json.gz",
+      "size": 3964,
+      "sha256": "c3c42feffb0ab4d0d503ce07d69bf3c4d32be161f1d61282a46a17f5f53a1f16"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=SOL-USDT/2025-08-26_2025-12-03.json.gz",
+      "size": 3995,
+      "sha256": "ecfcce6bf28f8a4e25ad496c8e8435e9478978a7f173b251b0833c4b856941a0"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=SOL-USDT/2025-12-04_2026-03-13.json.gz",
+      "size": 3899,
+      "sha256": "62fb6bc30f6d266661b292ec6ba821c11a918525ccbf1335e8a2cf9813290678"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=SOL-USDT/2026-03-14_2026-04-09.json.gz",
+      "size": 3883,
+      "sha256": "cc388ecd5ad679ffbec676417d15541502035517600d88b41d92b307851756c0"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOGE-USDT/2021-04-09_2021-07-17.json.gz",
+      "size": 4123,
+      "sha256": "f4526a474ce6ba602038d63fad300d1f34f11130902be861136468765cc2b67b"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOGE-USDT/2021-07-18_2021-10-25.json.gz",
+      "size": 4039,
+      "sha256": "fc31c2e881d5b34dcbecefb075f5f4963aae21d38b135d3bcc32cebb136b98fc"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOGE-USDT/2021-10-26_2022-02-02.json.gz",
+      "size": 3990,
+      "sha256": "78006884c8e846cc5faea7807e4b4ea2e1e9493487f30830fe4cc3063a4b6fdb"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOGE-USDT/2022-02-03_2022-05-13.json.gz",
+      "size": 3934,
+      "sha256": "d122b81dd350ee38618e0357d60e661d3ab5a2932b37a23a7f31bb435b8bf7f9"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOGE-USDT/2022-05-14_2022-08-21.json.gz",
+      "size": 3813,
+      "sha256": "dc7a08e5b5311b790fb9a7ccc418013f5a23bfbd82244786400eac0a2adafeb7"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOGE-USDT/2022-08-22_2022-11-29.json.gz",
+      "size": 3831,
+      "sha256": "3e593ce6dc5e5760aca63114776d01e03c58ea7f84037c117a3969b673b5b35d"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOGE-USDT/2022-11-30_2023-03-09.json.gz",
+      "size": 3880,
+      "sha256": "ee8888734d8795a2a288a14cc52ead15fca1fa25bfd7ded96f02bcafa9c85b50"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOGE-USDT/2023-03-10_2023-06-17.json.gz",
+      "size": 4105,
+      "sha256": "161c398231b0b231a634094ccb4b4a6abc58c2e6c2e8f7203b9b38502bfa6148"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOGE-USDT/2023-06-18_2023-09-25.json.gz",
+      "size": 4052,
+      "sha256": "92fd93fe528216592de25cab2bec29787368de1bf477f3af85c0cfd017b2cbb5"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOGE-USDT/2023-09-26_2024-01-03.json.gz",
+      "size": 4116,
+      "sha256": "d59f04307a166593486d0eb6abdcc380e770be5c5dced8cbc3f43ab482cac416"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOGE-USDT/2024-01-04_2024-04-12.json.gz",
+      "size": 4202,
+      "sha256": "ca4ec28026605a9a0e0a3acb803f7057ad71b4e20c083659c00f52552cda70f4"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOGE-USDT/2024-04-13_2024-07-21.json.gz",
+      "size": 4212,
+      "sha256": "0cdd9119d10b274409390276c5fdab4d3df851e5404e97851e03eb0fb9a0e1dc"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOGE-USDT/2024-07-22_2024-10-29.json.gz",
+      "size": 4180,
+      "sha256": "895bfbf0b4c86413ed6af9f34bb5d6cc2ab1ac99eb54624f976fee3c4a46c77a"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOGE-USDT/2024-10-30_2025-02-06.json.gz",
+      "size": 4319,
+      "sha256": "2cbee96911a7529a632d454409ab8adca44965dc55516af29a6fac16597605c3"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOGE-USDT/2025-02-07_2025-05-17.json.gz",
+      "size": 4265,
+      "sha256": "8ec43d174a106ad33063c5331e1442c1a8f1530e3c791b8707d443a575db3d87"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOGE-USDT/2025-05-18_2025-08-25.json.gz",
+      "size": 4275,
+      "sha256": "6cff5344426857ea6114ffebd53ddf1b8cd371991fa11eb574a0a28b451e572b"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOGE-USDT/2025-08-26_2025-12-03.json.gz",
+      "size": 4289,
+      "sha256": "a173308328cb3e0da908cc95f7e534a0ef995fc7148be9aea13b00d41c695829"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOGE-USDT/2025-12-04_2026-03-13.json.gz",
+      "size": 4203,
+      "sha256": "3ef4286575ec40d918a6d224306541669db4f4ee39e95b00ecaa49a8dd95beff"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOGE-USDT/2026-03-14_2026-04-09.json.gz",
+      "size": 4176,
+      "sha256": "64b3643d1872cd776729cb01ad2b3c7cb0919f5551e45219b85dceaac76fbdab"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LINK-USDT/2021-04-09_2021-07-17.json.gz",
+      "size": 3937,
+      "sha256": "be508e9b24135157fdb0abdc8a0b8061493db841e8d46836bd3013e70f6c9ce2"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LINK-USDT/2021-07-18_2021-10-25.json.gz",
+      "size": 3899,
+      "sha256": "93d5e21622a2d386f3cd8c627bcacda781cca398b0d4207a97d0ece802e28845"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LINK-USDT/2021-10-26_2022-02-02.json.gz",
+      "size": 3939,
+      "sha256": "29011dba74cb8d992a10d2c78d2d43ace295e9ad2a904deb3fbba1c7089ee2dd"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LINK-USDT/2022-02-03_2022-05-13.json.gz",
+      "size": 3788,
+      "sha256": "e992f59f883997b186e36ce0df6b58acedadce77bba2498be12055e96ecc9a63"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LINK-USDT/2022-05-14_2022-08-21.json.gz",
+      "size": 3624,
+      "sha256": "b7a45dd76e70c907a2e5635fc2c698dcdcf7f4d34b2e77ccbbf03626da3663e2"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LINK-USDT/2022-08-22_2022-11-29.json.gz",
+      "size": 3577,
+      "sha256": "ada980eeab8f2cdb32da383b2058a2422a6929ef9a32417e46f18e93db2d1d55"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LINK-USDT/2022-11-30_2023-03-09.json.gz",
+      "size": 3589,
+      "sha256": "a7411ec0ff123a3d0bded98f5a9afd42b18e2be986e3541698087890a693d54a"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LINK-USDT/2023-03-10_2023-06-17.json.gz",
+      "size": 3728,
+      "sha256": "b46a843c5d1bcbae171aa3ca2f6f71059eba4bd2708de483fc53690cf98462a2"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LINK-USDT/2023-06-18_2023-09-25.json.gz",
+      "size": 3754,
+      "sha256": "6ba44626004f95e2e240f65de0ca94f5da1a7154e4c66308980b69055d847bea"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LINK-USDT/2023-09-26_2024-01-03.json.gz",
+      "size": 3886,
+      "sha256": "47c688dc69880c19448196e7eba5b1cf1591536e89b97435e179322cb6e256ed"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LINK-USDT/2024-01-04_2024-04-12.json.gz",
+      "size": 3920,
+      "sha256": "986699e8b57b5c1049b948a1e04a29e2044d54dda6e77de5a2b40b91f70d11a9"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LINK-USDT/2024-04-13_2024-07-21.json.gz",
+      "size": 3873,
+      "sha256": "46d8bc2cc621cc54199d64b35667e0422b3365c7c3caf6fa7ba197e1c7cd4cbb"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LINK-USDT/2024-07-22_2024-10-29.json.gz",
+      "size": 3804,
+      "sha256": "5ee5169dd063b624ec539a99b9322a2596815c1efcc5b1f0ab3bbb6ec10ef56c"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LINK-USDT/2024-10-30_2025-02-06.json.gz",
+      "size": 4018,
+      "sha256": "3bfa225ff30b42a50d1e437b15a4a6c4077c9d56c5ab6b1a003ec98368ea579e"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LINK-USDT/2025-02-07_2025-05-17.json.gz",
+      "size": 3898,
+      "sha256": "89b2e70cce7de7e128fc155f3d3366060236170cd6b46b2d58e26111950df8fb"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LINK-USDT/2025-05-18_2025-08-25.json.gz",
+      "size": 3948,
+      "sha256": "642522a60b1ae8c9c8e952519f8781a4a59f2fd785af0f907f173e2234e79107"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LINK-USDT/2025-08-26_2025-12-03.json.gz",
+      "size": 3947,
+      "sha256": "58aa6787de95adb8f9c009f8fab4efae576416b5619e13ebb3258e27851c363a"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LINK-USDT/2025-12-04_2026-03-13.json.gz",
+      "size": 3854,
+      "sha256": "b501f9cbbf2c8ab65c2388dd0e9edb5ae3d6c973346038937397369916157255"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LINK-USDT/2026-03-14_2026-04-09.json.gz",
+      "size": 3801,
+      "sha256": "f78d9d7bb4c077256b5eea3be297776163f48081547ba1385bf11f43968552c1"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=AVAX-USDT/2021-04-09_2021-07-17.json.gz",
+      "size": 3612,
+      "sha256": "3fe0e204ac3c1a83d208ec4a6369976da1665b7b2af65eb2d0dec2dbb25bc6e8"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=AVAX-USDT/2021-07-18_2021-10-25.json.gz",
+      "size": 3756,
+      "sha256": "e7df529ad3d24338fa1615ef3f3b9ce25ef4d0e1105aa63310b2008fd0748f5a"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=AVAX-USDT/2021-10-26_2022-02-02.json.gz",
+      "size": 3821,
+      "sha256": "7a2e68ef209ab2a3b9196450f39569defb7addf2d509d273e1878ae430441e27"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=AVAX-USDT/2022-02-03_2022-05-13.json.gz",
+      "size": 3770,
+      "sha256": "fe26de107f237a1e550a7ceeb3cacc8efafa967d5897946766e9e04934cc07c1"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=AVAX-USDT/2022-05-14_2022-08-21.json.gz",
+      "size": 3566,
+      "sha256": "98541dcb1c3f0993b09f77b0081ecd8da523ff0eb3c2c17207b955e5c23b7c92"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=AVAX-USDT/2022-08-22_2022-11-29.json.gz",
+      "size": 3434,
+      "sha256": "eb2bb1df43b677135b5a8392a602f354dcbdbde677e19a18cf2a97a143512791"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=AVAX-USDT/2022-11-30_2023-03-09.json.gz",
+      "size": 3413,
+      "sha256": "0dd4863d32902acdcf428794bade676f7fff27e2deca6e308ca8d0f840d52237"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=AVAX-USDT/2023-03-10_2023-06-17.json.gz",
+      "size": 3520,
+      "sha256": "a98bc1e0f6bb698a49a4db56b69c68f1bd6e06859af64b5cec04ac31cb52d7bb"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=AVAX-USDT/2023-06-18_2023-09-25.json.gz",
+      "size": 3569,
+      "sha256": "b954a4c5b524055a3156f8d3f28c154391550ed65e50f6b6ff8c342f08a0c98e"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=AVAX-USDT/2023-09-26_2024-01-03.json.gz",
+      "size": 4014,
+      "sha256": "0dbb063b6a3306733405fd9f328200af028f0115dfb60e7b64055972a029bc6f"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=AVAX-USDT/2024-01-04_2024-04-12.json.gz",
+      "size": 4057,
+      "sha256": "06dd8927771e20043614e0f503214b4546fe9c8bd1715a41bac6092ac7e56292"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=AVAX-USDT/2024-04-13_2024-07-21.json.gz",
+      "size": 3992,
+      "sha256": "dd255780daada6aae417f5cb897a338321ceba0f9db369d5b201508b9e7c5d15"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=AVAX-USDT/2024-07-22_2024-10-29.json.gz",
+      "size": 3910,
+      "sha256": "8f5ba6cdf8e0fd9571a2703b2471f81337aa053beb30d48e5618506209022f34"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=AVAX-USDT/2024-10-30_2025-02-06.json.gz",
+      "size": 4072,
+      "sha256": "07e2b6702e74b8aeb217ab8a509cf6ec57680b2baea740b9e382c60d08a08567"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=AVAX-USDT/2025-02-07_2025-05-17.json.gz",
+      "size": 3928,
+      "sha256": "b4e59ad2a7778a7a08ab865cd5373ebdf6a99ea0a9a3fc226c6f6883280a4009"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=AVAX-USDT/2025-05-18_2025-08-25.json.gz",
+      "size": 3928,
+      "sha256": "d5c2d862726f2171001f082165c488b8f39c0e943a493c8e449128d0a42cf8e3"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=AVAX-USDT/2025-08-26_2025-12-03.json.gz",
+      "size": 3998,
+      "sha256": "dfa09fb77794da5291ca3bdc408cb0c665c066dcf53e574646a732ea3c911a02"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=AVAX-USDT/2025-12-04_2026-03-13.json.gz",
+      "size": 3845,
+      "sha256": "50be76cb1929e14567745b51c0dbb0d2024d39ca2cd48dd461e53cdde6304acb"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=AVAX-USDT/2026-03-14_2026-04-09.json.gz",
+      "size": 3824,
+      "sha256": "81ff464974cb13cfb4cd747699417967db7427656421c53f6e0d9300dda0815c"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOT-USDT/2021-04-09_2021-07-17.json.gz",
+      "size": 3976,
+      "sha256": "a1ce238e58efe9c0e178dd3bac81edc88bafddfc97d840cbe9a635052e542801"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOT-USDT/2021-07-18_2021-10-25.json.gz",
+      "size": 4012,
+      "sha256": "9bef320229418ef446b9ce9d8c0679272c3f6951beb88527b500c2f2b214f1af"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOT-USDT/2021-10-26_2022-02-02.json.gz",
+      "size": 3982,
+      "sha256": "c7810343ccb8a4f2264378a7e24caf9fec868ddf8c4734de8afef66133a16e2f"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOT-USDT/2022-02-03_2022-05-13.json.gz",
+      "size": 3849,
+      "sha256": "0b5413073a65690285108e5bad009f4f5d6aea430b83072968f49c911fcd975c"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOT-USDT/2022-05-14_2022-08-21.json.gz",
+      "size": 3660,
+      "sha256": "9a0ec7d9c565bf84dbfac9b468d182359b9e2e37be17371da63356206464db06"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOT-USDT/2022-08-22_2022-11-29.json.gz",
+      "size": 3581,
+      "sha256": "fba82447dc6332a39ad25a86afb13e95ac5380ecc3a683f56d120625f9e4125b"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOT-USDT/2022-11-30_2023-03-09.json.gz",
+      "size": 3596,
+      "sha256": "309a50e526f4e3e9d7825c292c6d45d1530d1f55bbd0893af05741c1b99f2257"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOT-USDT/2023-03-10_2023-06-17.json.gz",
+      "size": 3740,
+      "sha256": "b8a3281ada54964d0fb47e4e9dcd62a436c6f1feb1b48097cbeb652dd622b02d"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOT-USDT/2023-06-18_2023-09-25.json.gz",
+      "size": 3662,
+      "sha256": "bdf363a82b9788fe6605cfb21b2ad7aaef34513b4138363deca3b1fa1aedb7ec"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOT-USDT/2023-09-26_2024-01-03.json.gz",
+      "size": 3792,
+      "sha256": "b8a14cade5434b02fee0d60f4dc0ec36f397b1561d20943a67cd6aa888aa0190"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOT-USDT/2024-01-04_2024-04-12.json.gz",
+      "size": 3821,
+      "sha256": "a5f5a8ec3e31dbd8e271790ab0f539d0b414d025e152532f0f62d3ab78e361e4"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOT-USDT/2024-04-13_2024-07-21.json.gz",
+      "size": 3771,
+      "sha256": "b479a1be8d35294d9569d7eb3cf282e495573473824bb1aa683f04c7c53240ca"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOT-USDT/2024-07-22_2024-10-29.json.gz",
+      "size": 3703,
+      "sha256": "a0afadf8ac56b26cd146dded217c8d07b47544c4bffbea295a178a13bd6576ff"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOT-USDT/2024-10-30_2025-02-06.json.gz",
+      "size": 3916,
+      "sha256": "fd3cbdf2b91fb58ff9926aac61ca3afbb055b5c08c5e05543f6a917da1e57608"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOT-USDT/2025-02-07_2025-05-17.json.gz",
+      "size": 3805,
+      "sha256": "8d89509174c00600ac39a94b33fc5abc046a3878ddd55967bd6112dba37472df"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOT-USDT/2025-05-18_2025-08-25.json.gz",
+      "size": 3756,
+      "sha256": "18c807e98b0f4c6698f149f8eb7d312206415fd5351a8679e15cafafc5681cad"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOT-USDT/2025-08-26_2025-12-03.json.gz",
+      "size": 3789,
+      "sha256": "249ef3b3521a5539d69078ea03676d1904ac06e07e27d98928c715be19d446ad"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOT-USDT/2025-12-04_2026-03-13.json.gz",
+      "size": 3682,
+      "sha256": "8aabf5289c51110ce50e6d88ca3aa5a63ab73dd9f8ec6005006d6e244ed9c00f"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=DOT-USDT/2026-03-14_2026-04-09.json.gz",
+      "size": 3658,
+      "sha256": "e72b5788440cb752cf8f43041c85ca6f9a58320f1520e244cfbe0c19481d8c36"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LTC-USDT/2021-04-09_2021-07-17.json.gz",
+      "size": 3892,
+      "sha256": "7a77334d789e786ebacf957a6c170eb3478ed70726d460d2f11b9ae3e0ca6280"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LTC-USDT/2021-07-18_2021-10-25.json.gz",
+      "size": 3826,
+      "sha256": "d658efb32b1512e95ad233e93d405d7d7849bf9494e776154ce8302ffbddff92"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LTC-USDT/2021-10-26_2022-02-02.json.gz",
+      "size": 3799,
+      "sha256": "faf8116b51b0ce1817774a66164a3bfe57b20695df9dde2740b740cd0fc18222"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LTC-USDT/2022-02-03_2022-05-13.json.gz",
+      "size": 3701,
+      "sha256": "04f74e901e36d2b3e99db45a83d88f41b3044ce54c58847d4d88fdb076ae1790"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LTC-USDT/2022-05-14_2022-08-21.json.gz",
+      "size": 3600,
+      "sha256": "d6e4e25d188b14c18733404729a810a3d409dda7b3e20876852158dd57d9698f"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LTC-USDT/2022-08-22_2022-11-29.json.gz",
+      "size": 3577,
+      "sha256": "0b2258a94f426d87a417076227c6de5059f3cbbd7a17da5f2f218d78f5f02c8c"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LTC-USDT/2022-11-30_2023-03-09.json.gz",
+      "size": 3639,
+      "sha256": "0fa9276ee11d082c3eafe29483366efd47874581cb42097041fb9b60ca3f5b88"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LTC-USDT/2023-03-10_2023-06-17.json.gz",
+      "size": 3820,
+      "sha256": "a96b765b5100759866489267355613a730e8c3418eed018471c0a7e09fd5099a"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LTC-USDT/2023-06-18_2023-09-25.json.gz",
+      "size": 3775,
+      "sha256": "db2f21f0827e6e1641ac4894628795c4c58eab470df03625c03f3eaae9d36f16"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LTC-USDT/2023-09-26_2024-01-03.json.gz",
+      "size": 3677,
+      "sha256": "ac7961e65ff29d37c9b175474facbb56b0761ddf300d610c95d972e1993c5400"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LTC-USDT/2024-01-04_2024-04-12.json.gz",
+      "size": 3766,
+      "sha256": "52f5293747b7228acf09ef6969699750f419bcff78d9c29cc8c9266533e66145"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LTC-USDT/2024-04-13_2024-07-21.json.gz",
+      "size": 3706,
+      "sha256": "9542fe5d408bd6d31dfc193843ab96017258ce20b66f7f6560eac50cc5a80588"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LTC-USDT/2024-07-22_2024-10-29.json.gz",
+      "size": 3667,
+      "sha256": "a5198d0dc3f5220e4a35daf14e660bdb8a3a7480ebc4a1bdf949a8bd687f055c"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LTC-USDT/2024-10-30_2025-02-06.json.gz",
+      "size": 3901,
+      "sha256": "80a675835b79cb63adafdffc18b47eb9c58c749c55d99a29b25b5eaf992fb245"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LTC-USDT/2025-02-07_2025-05-17.json.gz",
+      "size": 3842,
+      "sha256": "d31c18bcd7a4d5e691df9b6a382d1208af1ddf211cf78a284f8cb5c6f0517f23"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LTC-USDT/2025-05-18_2025-08-25.json.gz",
+      "size": 3772,
+      "sha256": "221138ab6b5b9de7e1146af4c4a671c58efb50ff4c7cc905f3cc1795778f30bb"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LTC-USDT/2025-08-26_2025-12-03.json.gz",
+      "size": 3825,
+      "sha256": "04cfef85e6d3f6bfb0627eda26db680eb1b7b7cef616bb7606f35a6384bafe2b"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LTC-USDT/2025-12-04_2026-03-13.json.gz",
+      "size": 3670,
+      "sha256": "0c53dffcea18ae2fc8dd7f034e604c7dfc8d0585f0d58a8c56b90aa4dc94927c"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=LTC-USDT/2026-03-14_2026-04-09.json.gz",
+      "size": 3630,
+      "sha256": "ff5979af380cc15f8001ca6a0c7c8c654a05ce2bb5bde420cf94ab3eaa5f703e"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=TRX-USDT/2021-04-09_2021-07-17.json.gz",
+      "size": 3876,
+      "sha256": "6bfce6edfd3087147b93a1208bded0e8f1c0dd3b3b960c2b01b6a388c8591570"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=TRX-USDT/2021-07-18_2021-10-25.json.gz",
+      "size": 3807,
+      "sha256": "b310c5bc1a2726e9dd6a35d4343ab4bd9c29cf91b30a1609633b5a7893046860"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=TRX-USDT/2021-10-26_2022-02-02.json.gz",
+      "size": 3931,
+      "sha256": "2d76d9343674c28abaf03f2792b456118a9016987b70b1342b27bd8315751fd3"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=TRX-USDT/2022-02-03_2022-05-13.json.gz",
+      "size": 3839,
+      "sha256": "091d64a781ed8e95e1c8ff667a222dc18205fc8f3be6fbd6a81f5e79d0143db7"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=TRX-USDT/2022-05-14_2022-08-21.json.gz",
+      "size": 3800,
+      "sha256": "971c1b3ab4b260ad171a19238f1ded00f2d2239f371566b9ca09377060330f56"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=TRX-USDT/2022-08-22_2022-11-29.json.gz",
+      "size": 3658,
+      "sha256": "4e1651c520be46aab7e9edfc659736c28871e7ad524fd1d96fd1e31ce5fa797c"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=TRX-USDT/2022-11-30_2023-03-09.json.gz",
+      "size": 3713,
+      "sha256": "8a6342eefe8c153a2516ea3b2bcbee6bee9dcf1085ee27a8f429d57e81a68396"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=TRX-USDT/2023-03-10_2023-06-17.json.gz",
+      "size": 3986,
+      "sha256": "e58fd15b7d019066840ce816cc143d65bfd82d7b21fa567734ccfefa2b6ca745"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=TRX-USDT/2023-06-18_2023-09-25.json.gz",
+      "size": 3940,
+      "sha256": "a147d68b2b4e1649254d1117200ac7527405a2ecfe5d51eb54eaf3274c7f494e"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=TRX-USDT/2023-09-26_2024-01-03.json.gz",
+      "size": 3997,
+      "sha256": "1e9122a768e2679a07152f1bafdcb0589cd8090c8603cd6b24c1d25bea2130c0"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=TRX-USDT/2024-01-04_2024-04-12.json.gz",
+      "size": 4062,
+      "sha256": "5f92a92eabd2b47238ca6120c5d9d3f5a43f9da3e17c05f32117e6cf4557262f"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=TRX-USDT/2024-04-13_2024-07-21.json.gz",
+      "size": 4003,
+      "sha256": "74e167e828f991271ff397f9cf0a8de7d42a36c4e9b1630d28220fb1fbe0b239"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=TRX-USDT/2024-07-22_2024-10-29.json.gz",
+      "size": 4035,
+      "sha256": "787aa5ef079ceebf85d588085f526cc57ba806d92d40855374c26bfed1d7a10d"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=TRX-USDT/2024-10-30_2025-02-06.json.gz",
+      "size": 4218,
+      "sha256": "11233c708f143b0636f3a6de4c4ebe66bc384c01e6c6dfc0bb6e2f0375a4ea27"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=TRX-USDT/2025-02-07_2025-05-17.json.gz",
+      "size": 4130,
+      "sha256": "ac1c97c09a997aaa09c8e4c9dcca9b7532416ecf41b326d904328300a5bc8e0b"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=TRX-USDT/2025-05-18_2025-08-25.json.gz",
+      "size": 4158,
+      "sha256": "e00961b24f12b6a75d3f82b4a217427bde456293edc2f84d3b3c60b6e6ee6f9c"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=TRX-USDT/2025-08-26_2025-12-03.json.gz",
+      "size": 4137,
+      "sha256": "48ac8c451cf0d3fbecd708e8cfe3cd59e47cff91205c55040e6ad30433233e13"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=TRX-USDT/2025-12-04_2026-03-13.json.gz",
+      "size": 4027,
+      "sha256": "e4369703d3a256cb7926bfbd8b329913ffdbaeeef3ccd5d0102977a06e9e6b12"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=TRX-USDT/2026-03-14_2026-04-09.json.gz",
+      "size": 4062,
+      "sha256": "6b5c17b9cc1216301ce627d8bd3aed7ec0c0188b26bf6fc5e26937ca87aa53a4"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ATOM-USDT/2021-04-09_2021-07-17.json.gz",
+      "size": 3864,
+      "sha256": "0f6b8caa5b6367fd445e2168a971c778c5a144194277320a9c2dc5a4a3b490a5"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ATOM-USDT/2021-07-18_2021-10-25.json.gz",
+      "size": 3945,
+      "sha256": "2deb5b05617c462eac3fe32707c26c0bd9d03f9a159fbcd57fa257ce914ab732"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ATOM-USDT/2021-10-26_2022-02-02.json.gz",
+      "size": 3987,
+      "sha256": "e37f1ea86928ccb086bb832f45bfb9680a3ca25ac994e00c9454c12ef2285213"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ATOM-USDT/2022-02-03_2022-05-13.json.gz",
+      "size": 3916,
+      "sha256": "13b51da82967f54824375d83c6368294e4bf63aed4b3bcaeeb88f07970ac0269"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ATOM-USDT/2022-05-14_2022-08-21.json.gz",
+      "size": 3716,
+      "sha256": "3ae7825ef519322d9b73fa43764b5742b1fe14173ede3821d41de9652b61358a"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ATOM-USDT/2022-08-22_2022-11-29.json.gz",
+      "size": 3716,
+      "sha256": "8a9e6968347f540f4b3e405a55a10d384ca36f364853b566bf0173c1c9e22457"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ATOM-USDT/2022-11-30_2023-03-09.json.gz",
+      "size": 3666,
+      "sha256": "fb393da6b515fa3259340849c518312424dccc0d946a1f3050c11e610ec31daf"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ATOM-USDT/2023-03-10_2023-06-17.json.gz",
+      "size": 3808,
+      "sha256": "d1adbc92d190975bb9ce8bec6957c7597aad908ef3bfda0b97ba91dea6080b3d"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ATOM-USDT/2023-06-18_2023-09-25.json.gz",
+      "size": 3657,
+      "sha256": "7a30d4d864f2428c487cff8c4f0bf325f6dc6d058d9e594fc6008b152c70d11c"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ATOM-USDT/2023-09-26_2024-01-03.json.gz",
+      "size": 3819,
+      "sha256": "7c7583780b1b8133a9d38a24ef5b0f33b93162ec4ad9c156784eb0a399098f67"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ATOM-USDT/2024-01-04_2024-04-12.json.gz",
+      "size": 3811,
+      "sha256": "55de44f3bd2d6ce0d6ce9120b27d792399cb9f3fa74eaaf53e1781c4f7f78dd9"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ATOM-USDT/2024-04-13_2024-07-21.json.gz",
+      "size": 3778,
+      "sha256": "4e22296bf4ae2381e35098358fe1576c2b6418c5bbd3f3b180e84fec1730aa02"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ATOM-USDT/2024-07-22_2024-10-29.json.gz",
+      "size": 3739,
+      "sha256": "3a4abc8af16037587b6b8299f2fa64c0534f9049aa4a5c709848c9003147da9d"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ATOM-USDT/2024-10-30_2025-02-06.json.gz",
+      "size": 3828,
+      "sha256": "5b1da42ded16993b9552b1aac8b7c615b0cd2e955c76884883495f4aab16f866"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ATOM-USDT/2025-02-07_2025-05-17.json.gz",
+      "size": 3737,
+      "sha256": "9f761c2fb51d3fd9d12c4e9596f63f7c13378d97389a157f3afb9ae67857a376"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ATOM-USDT/2025-05-18_2025-08-25.json.gz",
+      "size": 3691,
+      "sha256": "80c4a4d3c9a3727d2c6e7594a357e3fb9a0cf04574b182656f3d750785d0e585"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ATOM-USDT/2025-08-26_2025-12-03.json.gz",
+      "size": 3704,
+      "sha256": "fce1450866026741e7112399670ada0cc98d5d174a5c02237edea825403c9458"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ATOM-USDT/2025-12-04_2026-03-13.json.gz",
+      "size": 3623,
+      "sha256": "0551e18b6f1d201c5ebc3c29212af0300e1dcdff3439adfe8df7a7a0220416bb"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=ATOM-USDT/2026-03-14_2026-04-09.json.gz",
+      "size": 3617,
+      "sha256": "d33b301d054c78450ddd5a745281220e8a2fb9cf64d8031f0b0c908c0484bdb6"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=NEAR-USDT/2021-04-09_2021-07-17.json.gz",
+      "size": 3906,
+      "sha256": "be59617c7abd009d033c078820f61f6e5d7a45d119c09a9dfaa47d34684e0c9a"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=NEAR-USDT/2021-07-18_2021-10-25.json.gz",
+      "size": 4013,
+      "sha256": "ba9d2d8c6195a8e393f1b3a96f8d92642b0bf8490b6a0d971b40358915063fec"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=NEAR-USDT/2021-10-26_2022-02-02.json.gz",
+      "size": 4097,
+      "sha256": "c56ba28608896a55ad67ac8e4ec509ad95cab9a8749373768f125bfd000200fe"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=NEAR-USDT/2022-02-03_2022-05-13.json.gz",
+      "size": 4123,
+      "sha256": "ea3eb1bc20bcce6e9a2b05631504583995974adddf11efd300da8310b8701b9d"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=NEAR-USDT/2022-05-14_2022-08-21.json.gz",
+      "size": 3907,
+      "sha256": "918edde414801ae00a2579a359ab719788f1da12500561b3bbc73604633f1a89"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=NEAR-USDT/2022-08-22_2022-11-29.json.gz",
+      "size": 3837,
+      "sha256": "d67f06606be0ed615e3fdc42c5393fc50a3f1ea57590a38b5589350f1b9c0a94"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=NEAR-USDT/2022-11-30_2023-03-09.json.gz",
+      "size": 3786,
+      "sha256": "6b8c2d4a5c62cbdf117dc06fe68906d02626792b7a7e135a9626ddc21de610d5"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=NEAR-USDT/2023-03-10_2023-06-17.json.gz",
+      "size": 3897,
+      "sha256": "1ee8a25e9d02336eb808e8bbbf946caf04822454c84e724e53e06c0f68dd8b82"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=NEAR-USDT/2023-06-18_2023-09-25.json.gz",
+      "size": 4057,
+      "sha256": "f57c28a5a4e08e825949d521ed5a45b04223f34f0635f1542c98ae90a4ba8636"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=NEAR-USDT/2023-09-26_2024-01-03.json.gz",
+      "size": 4133,
+      "sha256": "d85745c423ad3f1e6032be226572d9c88a281fff78ac123fc334a7bbb21afb9a"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=NEAR-USDT/2024-01-04_2024-04-12.json.gz",
+      "size": 4127,
+      "sha256": "eb8bba9142a08bc15d0fb2f63dbae45d1f8e75433a36f985175c580ed9459930"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=NEAR-USDT/2024-04-13_2024-07-21.json.gz",
+      "size": 4116,
+      "sha256": "3471c68da35cc4c2f424d00448db425da1f673aedb39133970a71510000c5a1b"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=NEAR-USDT/2024-07-22_2024-10-29.json.gz",
+      "size": 4067,
+      "sha256": "8d392574e4d042f1f47c88eebf1d932d058c612f3fd76ed6462d3beb1eab5e8f"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=NEAR-USDT/2024-10-30_2025-02-06.json.gz",
+      "size": 4085,
+      "sha256": "1345271d1f082bd41e1e06e85a167deccce1a1011baadd9c2b1c7effdb25b68d"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=NEAR-USDT/2025-02-07_2025-05-17.json.gz",
+      "size": 4013,
+      "sha256": "fd5943301de07a93a0333b4cc11d44ffc3a9bcce1ed38e3bb5136a716d37b0f5"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=NEAR-USDT/2025-05-18_2025-08-25.json.gz",
+      "size": 3951,
+      "sha256": "25fe7cd8db09a9a60c6559a07714f7d69c2d695aeb80834d50abb82e33aedb97"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=NEAR-USDT/2025-08-26_2025-12-03.json.gz",
+      "size": 4004,
+      "sha256": "3fa33ad7f9f7009f26946ca1b0300e0b96bc9063fc8215c93572492c6b81daa7"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=NEAR-USDT/2025-12-04_2026-03-13.json.gz",
+      "size": 3919,
+      "sha256": "b21abec53ac903daa514745b97d2719bca495973437d18737dce340d5cc1d45f"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=NEAR-USDT/2026-03-14_2026-04-09.json.gz",
+      "size": 3889,
+      "sha256": "6d5b67b048f6ddd82d850f0f2a0bc95d134431a162ad2881f19686e2fb7d30a4"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BNB-USDT/2021-04-09_2021-07-17.json.gz",
+      "size": 89,
+      "sha256": "2aef9a256792181f30c0081a08dafb22ec836f23f6e821c27e684d7a4acd4b43"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BNB-USDT/2021-07-18_2021-10-25.json.gz",
+      "size": 89,
+      "sha256": "979958c786827c40d763b43d106b792cf4cd7f94f72ec1156fa2ed87a8232455"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BNB-USDT/2021-10-26_2022-02-02.json.gz",
+      "size": 89,
+      "sha256": "4bd81249810eae5fad46c9b6092d57fbb03b66478964828ac51c55b9cca0b405"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BNB-USDT/2022-02-03_2022-05-13.json.gz",
+      "size": 89,
+      "sha256": "fc63e3ea1d465e5fd790b19becf33b325c352dd2bf5b82295c455197a3016592"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BNB-USDT/2022-05-14_2022-08-21.json.gz",
+      "size": 89,
+      "sha256": "de59efae1c4d835c7b6913e6d9b6f177c7d89a3c1152169716fc91a12db0fd6e"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BNB-USDT/2022-08-22_2022-11-29.json.gz",
+      "size": 89,
+      "sha256": "39f3168c1b1cf4f7675672bd93737fe7a7a1851a3c670554419d919a16b8c7c1"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BNB-USDT/2022-11-30_2023-03-09.json.gz",
+      "size": 2916,
+      "sha256": "431c9271e65abafde2d88fee61c04eb778939ddaf3907bfbb9afa2f14b587efc"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BNB-USDT/2023-03-10_2023-06-17.json.gz",
+      "size": 3764,
+      "sha256": "9f1e282b38af3c3e6b72078d7fb32278fb1e8e1b7a48641f9b2fb3c8467965be"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BNB-USDT/2023-06-18_2023-09-25.json.gz",
+      "size": 3670,
+      "sha256": "0e5a0506f09e1aa14d0268aea72edd0a0c5b70b6e4ebb935410d5e720a46ca34"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BNB-USDT/2023-09-26_2024-01-03.json.gz",
+      "size": 3564,
+      "sha256": "4b51bb7c915ed877e58166934ac0245e1dba74b726faa65557d1a526da58b9b4"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BNB-USDT/2024-01-04_2024-04-12.json.gz",
+      "size": 3555,
+      "sha256": "4b934e442792f40cca239f7069c847fdd875807a6edd86f69ea04962fd6d4ddc"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BNB-USDT/2024-04-13_2024-07-21.json.gz",
+      "size": 3528,
+      "sha256": "7c581a07959b121e7c78b810a2733cccedf2cd195ae54167c0366fa2ca159bd5"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BNB-USDT/2024-07-22_2024-10-29.json.gz",
+      "size": 3456,
+      "sha256": "f665ffe560bca92e5893976d4cc655bbde892e095674bd29f487bea49c158be7"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BNB-USDT/2024-10-30_2025-02-06.json.gz",
+      "size": 3582,
+      "sha256": "59628570cd7d7c1434b4cd112cd5bb4147104ac1b84a2e79820e54b56bb1d9f7"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BNB-USDT/2025-02-07_2025-05-17.json.gz",
+      "size": 3543,
+      "sha256": "fed2295348d439136a5d40ffdeb45259549117485eb70da085847c9d6e3c9127"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BNB-USDT/2025-05-18_2025-08-25.json.gz",
+      "size": 3529,
+      "sha256": "66994000d73e844d6be5a9726d66be9c80f6b9222d08c05d92623f327e5b0edb"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BNB-USDT/2025-08-26_2025-12-03.json.gz",
+      "size": 3697,
+      "sha256": "60df95376a069afbf45ec236cbe449e508a6f9997df35bae0d0060db82d7a376"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BNB-USDT/2025-12-04_2026-03-13.json.gz",
+      "size": 3573,
+      "sha256": "8dab0148f2bdc5be1fe735776b87f88bc09d208751d47e3679620ba6e3c81a64"
+    },
+    {
+      "path": "data/okx/listing_aware_14/raw/instrument=BNB-USDT/2026-03-14_2026-04-09.json.gz",
+      "size": 3566,
+      "sha256": "fd9a7e3d537fdc6036955a90dae27cc51188aee0935ca8504d57f9b76867a05e"
+    },
+    {
+      "path": "data/okx/listing_aware_14/instruments.json.gz",
+      "size": 37456,
+      "sha256": "bb48620910ad0996d0628a557015804c993e96a3b3c576d15066e1d926262dd2"
+    },
+    {
+      "path": "research_protocols/okx_14_listing_aware_external_validation_v1.md",
+      "size": 4561,
+      "sha256": "4e188e05e0a6edc9222a0400f53be51527e3be250bc1fb2133ea3871a901ab99"
+    },
+    {
+      "path": "outputs/v2/cmc_fixed_62/replication_v1/regression_targets.csv",
+      "size": 12485,
+      "sha256": "db298544876b01500c52cd7c0b52aac3f2439d46809e87240e0111781aa86d09"
+    },
+    {
+      "path": "outputs/v2/cmc_fixed_62/temporal_validation_v1/regression_targets.csv",
+      "size": 9486,
+      "sha256": "896bb4765eb6f235fb6411c0d19ebf7b6a8a458b8cba0ca47f342e6a461f14c8"
+    },
+    {
+      "path": "outputs/v2/binance_14/external_validation_v1/regression_targets.csv",
+      "size": 9798,
+      "sha256": "a5273ba8d330948cc73d47111a1b98515693c13747585d887ef4a989263b7d21"
+    }
+  ]
+}

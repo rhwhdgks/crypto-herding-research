@@ -153,6 +153,7 @@ def fetch_google_news_query(
         headline = _strip_title_source(title or "", source)
         if not headline or pd.isna(pub_date):
             continue
+        collected_at = pd.Timestamp.now(tz="UTC")
         rows.append(
             {
                 "timestamp": pub_date,
@@ -164,7 +165,8 @@ def fetch_google_news_query(
                 "query_text": query,
                 "guid": guid,
                 "link": link,
-                "collected_at_utc": pd.Timestamp.now(tz="UTC"),
+                "collected_at_utc": collected_at,
+                "first_seen_at_utc": collected_at,
             }
         )
 
@@ -252,6 +254,7 @@ def fetch_gdelt_query(
             domain = str(article.get("domain", "") or "").strip()
             if not headline or not link or pd.isna(timestamp):
                 continue
+            collected_at = pd.Timestamp.now(tz="UTC")
             rows.append(
                 {
                     "timestamp": timestamp,
@@ -263,7 +266,8 @@ def fetch_gdelt_query(
                     "query_text": query,
                     "guid": link,
                     "link": link,
-                    "collected_at_utc": pd.Timestamp.now(tz="UTC"),
+                    "collected_at_utc": collected_at,
+                    "first_seen_at_utc": collected_at,
                     "collection_source": "gdelt",
                     "language": article.get("language"),
                     "source_country": article.get("sourcecountry"),
@@ -295,6 +299,7 @@ def load_existing_news(path: str | Path) -> pd.DataFrame:
                 "guid",
                 "link",
                 "collected_at_utc",
+                "first_seen_at_utc",
                 "collection_source",
                 "language",
                 "source_country",
@@ -306,6 +311,8 @@ def load_existing_news(path: str | Path) -> pd.DataFrame:
         frame["timestamp"] = pd.to_datetime(frame["timestamp"], utc=True, errors="coerce")
     if "collected_at_utc" in frame.columns:
         frame["collected_at_utc"] = pd.to_datetime(frame["collected_at_utc"], utc=True, errors="coerce")
+    if "first_seen_at_utc" in frame.columns:
+        frame["first_seen_at_utc"] = pd.to_datetime(frame["first_seen_at_utc"], utc=True, errors="coerce")
     if "asset" in frame.columns:
         frame["asset"] = frame["asset"].apply(_normalize_asset)
     return frame
@@ -424,7 +431,11 @@ def merge_and_save_news(existing: pd.DataFrame, fresh: pd.DataFrame, output_path
         combined["timestamp"] = pd.to_datetime(combined["timestamp"], utc=True, errors="coerce")
         if "collected_at_utc" in combined.columns:
             combined["collected_at_utc"] = pd.to_datetime(combined["collected_at_utc"], utc=True, errors="coerce")
+        if "first_seen_at_utc" not in combined.columns:
+            combined["first_seen_at_utc"] = combined.get("collected_at_utc")
+        combined["first_seen_at_utc"] = pd.to_datetime(combined["first_seen_at_utc"], utc=True, errors="coerce")
         dedupe_cols = ["timestamp", "source", "headline", "link"]
+        combined["first_seen_at_utc"] = combined.groupby(dedupe_cols, dropna=False)["first_seen_at_utc"].transform("min")
         combined = combined.drop_duplicates(subset=dedupe_cols, keep="last").sort_values("timestamp")
 
     resolved = Path(output_path)

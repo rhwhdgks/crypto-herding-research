@@ -16,7 +16,14 @@ from tick_data import (
     load_tick_month,
     resolve_tick_date_window,
 )
-from tick_herding import classify_tick_runs
+from tick_event_schema import (
+    TICK_EVENT_SCHEMA_VERSION,
+    TICK_PIPELINE_VERSION,
+    build_event_mask,
+    require_tick_schema_v2,
+    validate_tick_analysis_config,
+)
+from tick_herding import classify_tick_runs, compute_conditional_run_z
 
 
 def build_tick_short_horizon_dataset(config: dict) -> tuple[dict[int, pd.DataFrame], pd.DataFrame]:
@@ -41,31 +48,33 @@ def build_tick_short_horizon_dataset(config: dict) -> tuple[dict[int, pd.DataFra
             daily_dates_by_month = _build_daily_tail_dates(dates)
             for month_start in month_starts:
                 month_key = month_start.strftime("%Y-%m")
-                month_end = (month_start + pd.offsets.MonthEnd(1)).normalize()
-                use_monthly = month_end < end_ts.normalize()
-                if use_monthly:
-                    try:
-                        archive_path, _, load_summary = load_tick_month(symbol=symbol, month_start=month_start, data_cfg=data_cfg)
-                    except FileNotFoundError:
-                        use_monthly = False
-                    else:
-                        rows_loaded = 0
-                        month_frames, previous_price_by_interval = process_month_archive_to_bucket_frames(
-                            archive_path=archive_path,
-                            trade_kind=str(data_cfg.get("trade_kind", "aggTrades")),
-                            symbol=symbol,
-                            intervals=intervals,
-                            previous_price_by_interval=previous_price_by_interval,
-                            monthly_chunk_rows=monthly_chunk_rows,
-                            start_ts=start_ts,
-                            end_ts=end_ts,
-                        )
-                        rows_loaded = int(sum(len(frame) for frame in month_frames.values()))
-                        load_summary["rows_loaded"] = rows_loaded
-                        load_records.append(load_summary)
-                        for interval, frames in month_frames.items():
-                            if frames:
-                                bucket_frames_by_interval[interval].extend(frames)
+                try:
+                    archive_path, _, load_summary = load_tick_month(
+                        symbol=symbol,
+                        month_start=month_start,
+                        data_cfg=data_cfg,
+                    )
+                except FileNotFoundError:
+                    use_monthly = False
+                else:
+                    use_monthly = True
+                    month_frames, previous_price_by_interval = process_month_archive_to_bucket_frames(
+                        archive_path=archive_path,
+                        trade_kind=str(data_cfg.get("trade_kind", "aggTrades")),
+                        symbol=symbol,
+                        intervals=intervals,
+                        previous_price_by_interval=previous_price_by_interval,
+                        monthly_chunk_rows=monthly_chunk_rows,
+                        start_ts=start_ts,
+                        end_ts=end_ts,
+                    )
+                    load_summary["rows_loaded"] = int(
+                        sum(len(frame) for frame in month_frames.values())
+                    )
+                    load_records.append(load_summary)
+                    for interval, frames in month_frames.items():
+                        if frames:
+                            bucket_frames_by_interval[interval].extend(frames)
                 if not use_monthly:
                     for date in daily_dates_by_month.get(month_key, []):
                         try:
@@ -221,21 +230,39 @@ def compute_bucket_tick_statistics(
     run_counts = run_frame["tick_type"].value_counts().to_dict()
     tick_counts = classified_ticks["tick_type"].value_counts().to_dict()
 
-    h_p = _compute_herding_intensity(int(run_counts.get("up", 0)), n_transactions)
-    h_n = _compute_herding_intensity(int(run_counts.get("down", 0)), n_transactions)
-    h_z = _compute_herding_intensity(int(run_counts.get("zero", 0)), n_transactions)
-
-    score_components = {"up": h_p, "down": h_n}
-    dominant_side = min(score_components, key=lambda key: score_components[key] if pd.notna(score_components[key]) else np.inf)
-    herding_score = score_components[dominant_side]
+    run_scores = {
+        side: compute_conditional_run_z(
+            runs=int(run_counts.get(side, 0)),
+            category_count=int(tick_counts.get(side, 0)),
+            n_transactions=n_transactions,
+        )
+        for side in ("up", "down", "zero")
+    }
+    valid_scores = {side: score for side, score in run_scores.items() if pd.notna(score)}
+    run_clustering_side = min(valid_scores, key=valid_scores.get) if valid_scores else "none"
+    run_clustering_score = valid_scores.get(run_clustering_side, np.nan)
 
     first_price = float(classified_ticks["price"].iloc[0])
     last_price = float(classified_ticks["price"].iloc[-1])
+    bucket_end = bucket_start + pd.Timedelta(minutes=int(interval_minutes))
+    maker_side = classified_ticks.get("is_buyer_maker", pd.Series(index=classified_ticks.index, dtype="boolean"))
+    quote_volume = pd.to_numeric(classified_ticks.get("quote_quantity"), errors="coerce")
+    available = maker_side.notna() & quote_volume.notna()
+    buy_quote_volume = float(quote_volume.loc[available & maker_side.eq(False)].sum())
+    sell_quote_volume = float(quote_volume.loc[available & maker_side.eq(True)].sum())
+    aggressor_total = buy_quote_volume + sell_quote_volume
+    aggressor_imbalance = (
+        (buy_quote_volume - sell_quote_volume) / aggressor_total if aggressor_total > 0 else np.nan
+    )
 
     return {
         "symbol": symbol,
         "bucket_start": bucket_start,
+        "bucket_end": bucket_end,
+        "signal_timestamp": bucket_end,
         "interval_minutes": int(interval_minutes),
+        "schema_version": TICK_EVENT_SCHEMA_VERSION,
+        "pipeline_version": TICK_PIPELINE_VERSION,
         "first_timestamp": classified_ticks["timestamp"].min(),
         "last_timestamp": classified_ticks["timestamp"].max(),
         "transaction_count": n_transactions,
@@ -250,11 +277,12 @@ def compute_bucket_tick_statistics(
         "up_runs": int(run_counts.get("up", 0)),
         "down_runs": int(run_counts.get("down", 0)),
         "zero_runs": int(run_counts.get("zero", 0)),
-        "h_p": h_p,
-        "h_n": h_n,
-        "h_z": h_z,
-        "herding_score": herding_score,
-        "dominant_side": dominant_side,
+        "run_z_up": run_scores["up"],
+        "run_z_down": run_scores["down"],
+        "run_z_zero": run_scores["zero"],
+        "run_clustering_score": run_clustering_score,
+        "run_clustering_side": run_clustering_side,
+        "aggressor_imbalance": aggressor_imbalance,
     }
 
 
@@ -263,47 +291,173 @@ def prepare_micro_herding_frame(bucket_frame: pd.DataFrame, config: dict) -> pd.
         return pd.DataFrame()
 
     analysis_cfg = config["analysis"]
+    validate_tick_analysis_config(analysis_cfg)
     session_hours = set(int(value) for value in analysis_cfg["session_hours_utc"])
-    percentile = float(analysis_cfg["herding_score_percentile"])
+    percentile = float(analysis_cfg["run_clustering_score_percentile"])
     lookback_days = int(analysis_cfg["lookback_days_for_threshold"])
     min_trades = int(analysis_cfg["min_trades_per_bucket"])
+    flat_return_epsilon = float(analysis_cfg.get("flat_return_epsilon", 0.0))
 
-    frame = bucket_frame.copy().sort_values(["symbol", "bucket_start"]).reset_index(drop=True)
+    frame = _reindex_complete_utc_grid(bucket_frame)
     frame["bucket_start"] = pd.to_datetime(frame["bucket_start"], utc=True)
+    interval_minutes = int(frame["interval_minutes"].dropna().iloc[0])
+    frame["bucket_end"] = frame["bucket_start"] + pd.to_timedelta(interval_minutes, unit="m")
+    frame["signal_timestamp"] = frame["bucket_end"]
+    frame["schema_version"] = TICK_EVENT_SCHEMA_VERSION
+    frame["pipeline_version"] = TICK_PIPELINE_VERSION
     frame["hour_utc"] = frame["bucket_start"].dt.hour
     frame["session_utc"] = frame["hour_utc"].map(_map_session_label)
     frame["is_target_session"] = frame["hour_utc"].isin(session_hours)
-    frame["meets_trade_count"] = frame["transaction_count"] >= min_trades
+    frame["meets_trade_count"] = frame["transaction_count"].fillna(0) >= min_trades
+    frame["price_direction"] = np.select(
+        [frame["bucket_return"] > flat_return_epsilon, frame["bucket_return"] < -flat_return_epsilon],
+        ["up", "down"],
+        default="flat",
+    )
+    frame.loc[frame["bucket_return"].isna(), "price_direction"] = "flat"
+    balance_epsilon = float(analysis_cfg.get("aggressor_balance_epsilon", 0.0))
+    frame["aggressor_direction"] = np.select(
+        [frame["aggressor_imbalance"] > balance_epsilon, frame["aggressor_imbalance"] < -balance_epsilon],
+        ["buy", "sell"],
+        default="balanced",
+    )
+    frame.loc[frame["aggressor_imbalance"].isna(), "aggressor_direction"] = "unavailable"
 
     for horizon in [int(value) for value in analysis_cfg["forward_horizons_minutes"]]:
-        if horizon % int(frame["interval_minutes"].iloc[0]) != 0:
+        if horizon % interval_minutes != 0:
             continue
-        step = int(horizon // int(frame["interval_minutes"].iloc[0]))
-        frame[f"forward_return_{horizon}m"] = frame.groupby("symbol")["last_price"].shift(-step) / frame["last_price"] - 1.0
+        frame = _attach_exact_forward_return(frame, horizon)
 
-    window_buckets = int((lookback_days * 24 * 60) / int(frame["interval_minutes"].iloc[0]))
-    frame["herding_threshold"] = (
-        frame.groupby("symbol")["herding_score"]
+    window_buckets = int((lookback_days * 24 * 60) / interval_minutes)
+    frame["run_clustering_threshold"] = (
+        frame.groupby("symbol")["run_clustering_score"]
         .transform(lambda series: series.rolling(window=window_buckets, min_periods=window_buckets).quantile(percentile).shift(1))
     )
-    frame["is_micro_herding_event"] = (
+    frame["is_micro_run_clustering_event"] = (
         frame["is_target_session"]
         & frame["meets_trade_count"]
-        & frame["herding_threshold"].notna()
-        & (frame["herding_score"] <= frame["herding_threshold"])
+        & frame["run_clustering_threshold"].notna()
+        & (frame["run_clustering_score"] <= frame["run_clustering_threshold"])
     )
     frame["is_control_bucket"] = (
         frame["is_target_session"]
         & frame["meets_trade_count"]
-        & frame["herding_threshold"].notna()
-        & (~frame["is_micro_herding_event"])
+        & frame["run_clustering_threshold"].notna()
+        & (~frame["is_micro_run_clustering_event"])
     )
     frame["event_label"] = np.where(
-        frame["is_micro_herding_event"],
-        "micro_herding_" + frame["dominant_side"].astype(str),
+        frame["is_micro_run_clustering_event"],
+        "micro_run_clustering__run_side_"
+        + frame["run_clustering_side"].astype(str)
+        + "__price_"
+        + frame["price_direction"].astype(str),
         "none",
     )
     return frame
+
+
+def rebuild_bucket_schema_v2_from_run_counts(bucket_frame: pd.DataFrame) -> pd.DataFrame:
+    """Explicitly rebuild v2 statistics from archived raw run/tick counts.
+
+    Legacy fixed-p score columns are ignored. Aggressor fields are unavailable because
+    historical bucket aggregates did not retain buyer-maker volume splits.
+    """
+    required = {
+        "symbol",
+        "bucket_start",
+        "interval_minutes",
+        "transaction_count",
+        "bucket_return",
+        "last_price",
+        "up_ticks",
+        "down_ticks",
+        "zero_ticks",
+        "up_runs",
+        "down_runs",
+        "zero_runs",
+    }
+    missing = sorted(required.difference(bucket_frame.columns))
+    if missing:
+        raise ValueError(f"Cannot rebuild v2 bucket schema; missing: {', '.join(missing)}")
+    frame = bucket_frame.copy()
+    frame["bucket_start"] = pd.to_datetime(frame["bucket_start"], utc=True)
+    for side in ("up", "down", "zero"):
+        n = pd.to_numeric(frame["transaction_count"], errors="coerce").to_numpy(dtype=float)
+        k = pd.to_numeric(frame[f"{side}_ticks"], errors="coerce").to_numpy(dtype=float)
+        r = pd.to_numeric(frame[f"{side}_runs"], errors="coerce").to_numpy(dtype=float)
+        m = n - k
+        with np.errstate(divide="ignore", invalid="ignore"):
+            mean = k * (m + 1.0) / n
+            variance = k * m * (k - 1.0) * (m + 1.0) / ((n**2) * (n - 1.0))
+            values = (r - mean) / np.sqrt(variance)
+        degenerate = (n <= 1) | (k <= 0) | (k >= n) | (r < 0) | (variance <= 0) | ~np.isfinite(values)
+        values[degenerate] = np.nan
+        frame[f"run_z_{side}"] = values
+    score_columns = ["run_z_up", "run_z_down", "run_z_zero"]
+    scores = frame[score_columns]
+    frame["run_clustering_score"] = scores.min(axis=1, skipna=True)
+    all_missing = scores.isna().all(axis=1)
+    safe_scores = scores.fillna(np.inf)
+    frame["run_clustering_side"] = safe_scores.idxmin(axis=1).str.removeprefix("run_z_")
+    frame.loc[all_missing, "run_clustering_side"] = "none"
+    frame.loc[all_missing, "run_clustering_score"] = np.nan
+    interval = pd.to_timedelta(frame["interval_minutes"], unit="m")
+    frame["bucket_end"] = frame["bucket_start"] + interval
+    frame["signal_timestamp"] = frame["bucket_end"]
+    frame["aggressor_imbalance"] = np.nan
+    frame["schema_version"] = TICK_EVENT_SCHEMA_VERSION
+    frame["pipeline_version"] = TICK_PIPELINE_VERSION
+    legacy_columns = [
+        column
+        for column in ["h_p", "h_n", "h_z", "herding_score", "dominant_side"]
+        if column in frame.columns
+    ]
+    return frame.drop(columns=legacy_columns)
+
+
+def _reindex_complete_utc_grid(bucket_frame: pd.DataFrame) -> pd.DataFrame:
+    source = bucket_frame.copy()
+    source["bucket_start"] = pd.to_datetime(source["bucket_start"], utc=True)
+    interval_values = pd.to_numeric(source["interval_minutes"], errors="coerce").dropna().unique()
+    if len(interval_values) != 1:
+        raise ValueError("A micro frame must contain exactly one interval_minutes value")
+    interval_minutes = int(interval_values[0])
+    frames: list[pd.DataFrame] = []
+    for symbol, group in source.groupby("symbol", sort=False):
+        ordered = group.sort_values("bucket_start").drop_duplicates("bucket_start", keep="last")
+        grid = pd.date_range(
+            ordered["bucket_start"].min(),
+            ordered["bucket_start"].max(),
+            freq=f"{interval_minutes}min",
+            tz="UTC",
+        )
+        complete = ordered.set_index("bucket_start").reindex(grid)
+        complete.index.name = "bucket_start"
+        complete["symbol"] = symbol
+        complete["interval_minutes"] = interval_minutes
+        complete["is_observed_bucket"] = complete["transaction_count"].notna()
+        frames.append(complete.reset_index())
+    return pd.concat(frames, ignore_index=True).sort_values(["symbol", "bucket_start"]).reset_index(drop=True)
+
+
+def _attach_exact_forward_return(frame: pd.DataFrame, horizon_minutes: int) -> pd.DataFrame:
+    result = frame.copy()
+    horizon = int(horizon_minutes)
+    lookup = result[["symbol", "bucket_start", "last_price"]].rename(
+        columns={"bucket_start": "target_bucket_start", "last_price": "target_last_price"}
+    )
+    result["target_bucket_start"] = result["bucket_start"] + pd.to_timedelta(horizon, unit="m")
+    result = result.merge(lookup, on=["symbol", "target_bucket_start"], how="left", validate="many_to_one")
+    exact = result["last_price"].notna() & result["target_last_price"].notna()
+    result[f"forward_return_{horizon}m"] = np.where(
+        exact,
+        result["target_last_price"] / result["last_price"] - 1.0,
+        np.nan,
+    )
+    result[f"requested_horizon_minutes_{horizon}m"] = horizon
+    result[f"realized_horizon_minutes_{horizon}m"] = np.where(exact, horizon, np.nan)
+    result[f"horizon_is_exact_{horizon}m"] = exact
+    return result.drop(columns=["target_bucket_start", "target_last_price"])
 
 
 def summarize_micro_herding(
@@ -317,11 +471,12 @@ def summarize_micro_herding(
     pooled_rows: list[dict] = []
     symbol_rows: list[dict] = []
 
-    event_specs = [
-        ("all", micro_frame["is_micro_herding_event"]),
-        ("up", micro_frame["event_label"] == "micro_herding_up"),
-        ("down", micro_frame["event_label"] == "micro_herding_down"),
-    ]
+    require_tick_schema_v2(micro_frame)
+    event_specs = [("all", build_event_mask(micro_frame))]
+    event_specs.extend(
+        (f"run_side_{side}", build_event_mask(micro_frame, {"run_clustering_side": [side]}))
+        for side in ("up", "down", "zero")
+    )
 
     for horizon in horizons:
         return_column = f"forward_return_{horizon}m"
@@ -371,7 +526,7 @@ def build_tick_short_horizon_report(
             f"- 구간: {config['data'].get('start', 'resolved')} ~ {config['data'].get('end', 'resolved')}",
             f"- 버킷: {', '.join(str(v) + 'm' for v in config['analysis']['interval_minutes'])}",
             f"- 목표 세션 UTC: {min(config['analysis']['session_hours_utc'])}~{max(config['analysis']['session_hours_utc'])}시",
-            f"- trailing herding score percentile: {float(config['analysis']['herding_score_percentile']):.2f}",
+            f"- trailing run-clustering score percentile: {float(config['analysis']['run_clustering_score_percentile']):.2f}",
             "",
         ]
     )
@@ -484,17 +639,6 @@ def _map_session_label(hour: int) -> str:
     if 8 <= hour <= 15:
         return "08-15"
     return "16-23"
-
-
-def _compute_herding_intensity(runs: int, n_transactions: int) -> float:
-    if n_transactions <= 0:
-        return np.nan
-    p_value = 1.0 / 3.0
-    variance = p_value * (1.0 - p_value) - 3.0 * (p_value**2) * ((1.0 - p_value) ** 2)
-    if variance <= 0:
-        return np.nan
-    chi = ((runs + 0.5) - (n_transactions * p_value * (1.0 - p_value))) / np.sqrt(n_transactions)
-    return float(chi / np.sqrt(variance))
 
 
 def _compute_t_stat(sample: pd.Series) -> float:

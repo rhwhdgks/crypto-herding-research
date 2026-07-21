@@ -1,5 +1,5 @@
 input:
-  base_dir: outputs/tick/xrp_5y/cost_sanity
+  base_dir: outputs/v2/tick/xrp_5y/cost_sanity
 
 analysis:
   holdout_days_list:
@@ -9,7 +9,7 @@ analysis:
   block_days: 30
 
 output:
-  base_dir: outputs/tick/xrp_5y/subset_candidates
+  base_dir: outputs/v2/tick/xrp_5y/subset_candidates
 
 logging:
   level: INFO

@@ -3,13 +3,9 @@ from __future__ import annotations
 import argparse
 import logging
 import os
-import sys
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SRC_DIR = PROJECT_ROOT / "src"
-if str(SRC_DIR) not in sys.path:
-    sys.path.insert(0, str(SRC_DIR))
 
 from utils import load_config, prepare_output_dirs, save_config_snapshot, save_dataframe, save_text, setup_logging
 from x_api import collect_recent_search_posts

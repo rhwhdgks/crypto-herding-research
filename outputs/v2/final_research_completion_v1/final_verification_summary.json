@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "verification_scope": "read_only_artifact_and_statistical_invariants",
+  "required_artifacts_present": true,
+  "preregistration_seal_verified": true,
+  "exact_null_identity_verified": true,
+  "group_bh_family_sizes": [
+    23,
+    23
+  ],
+  "mechanism_bh_family_size": 5,
+  "mechanical_null_decision_recomputed": true,
+  "hypothesis_rows": 19,
+  "research_axes": 11,
+  "directional_alpha_active": false,
+  "tracker_active": false,
+  "verification_command": "PYTHONPATH=src .venv/bin/python scripts/verify_final_research_completion.py"
+}

@@ -1,0 +1,16 @@
+{
+  "amendment_version": "1.1",
+  "created_at_utc": "2026-07-21T04:55:36.698966+00:00",
+  "reason": "The original input manifest recorded the pre-supplement master report hash under a path that the runner subsequently updated.",
+  "original_manifest_preserved": "input_manifest.csv",
+  "corrected_manifest": "input_manifest_v1_1.csv",
+  "original_path": "outputs/research_master_report_2026-07-21.md",
+  "corrected_path": "outputs/research_master_report_2026-07-21_pre_supplement.md",
+  "recorded_size_bytes": 16644,
+  "recorded_sha256": "45b1d9e8b0f0e1a64507ad2a46e93bac30aaee2ed73be627fa66ee5c9b7a1787",
+  "preserved_input_exact_match": true,
+  "current_master_sha256": "95e57c629b103ea4417023392f07aba5b20f5babe132076fd37d034e63090258",
+  "result_tables_changed": false,
+  "simulation_changed": false,
+  "decision_changed": false
+}

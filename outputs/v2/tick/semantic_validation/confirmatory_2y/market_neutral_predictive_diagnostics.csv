@@ -1,0 +1,2 @@
+observations,utc_day_clusters,symbols,rsquared,adj_rsquared,outcome,covariance
+156990,725,7,0.0050874539838074995,0.0049163129513126735,target 30m return minus leave-one-out market 30m return,UTC-day clustered

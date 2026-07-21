@@ -1,0 +1,59 @@
+{
+  "files": [
+    {
+      "path": "data/binance_archive/point_in_time_v1/candidate_symbol_inventory.csv",
+      "size": 233857,
+      "sha256": "dedcbd7858b990f04dd729db5d090c90550c68ca703a718b1790bdfa926898cc"
+    },
+    {
+      "path": "data/binance_archive/point_in_time_v1/archive_file_index.csv",
+      "size": 7085050,
+      "sha256": "1839cf5361b28cd1fd7c0372f0fbfa2d4a2a43081976d70d14a17c578a7711fa"
+    },
+    {
+      "path": "data/binance_archive/point_in_time_v1/inventory_manifest.csv",
+      "size": 154391,
+      "sha256": "25a13eedd2c72358043951c6dbd98e46d40bd526d1f574c442142309a2d7fd58"
+    },
+    {
+      "path": "data/binance_archive/point_in_time_v1/file_manifest.csv",
+      "size": 13182367,
+      "sha256": "279b1ecc1d0414712b3dff96149adbe7d1b2b6526ae7f8ff1123cb28a47c97fe"
+    },
+    {
+      "path": "data/binance_archive/point_in_time_v1/source_quality_audit.csv",
+      "size": 1799868,
+      "sha256": "95e038ad715f34f299bc9e16c468151c68697e07008421447d33a11687434d37"
+    },
+    {
+      "path": "data/binance_archive/point_in_time_v1/daily_history.parquet",
+      "size": 21698585,
+      "sha256": "a80e4f320ebcbc61b4f4f801e63db734c4977afa19f46929dfd026842ed6d3a9"
+    },
+    {
+      "path": "research_protocols/binance_archive_point_in_time_universe_v1.md",
+      "size": 8385,
+      "sha256": "7b1b880e97025768f4a0b4601373dc91e1387c00c837e040023e6a5902e3592d"
+    },
+    {
+      "path": "outputs/v2/cmc_fixed_62/replication_v1/regression_targets.csv",
+      "size": 12485,
+      "sha256": "db298544876b01500c52cd7c0b52aac3f2439d46809e87240e0111781aa86d09"
+    },
+    {
+      "path": "outputs/v2/cmc_fixed_62/temporal_validation_v1/regression_targets.csv",
+      "size": 9486,
+      "sha256": "896bb4765eb6f235fb6411c0d19ebf7b6a8a458b8cba0ca47f342e6a461f14c8"
+    },
+    {
+      "path": "outputs/v2/binance_14/external_validation_v1/regression_targets.csv",
+      "size": 9798,
+      "sha256": "a5273ba8d330948cc73d47111a1b98515693c13747585d887ef4a989263b7d21"
+    },
+    {
+      "path": "outputs/v2/okx_14/listing_aware_external_validation_v1/regression_targets.csv",
+      "size": 9552,
+      "sha256": "75ea8a46b4d68dae88667e19ccc68182af9507e163df8aaae0260195a40cdb84"
+    }
+  ]
+}

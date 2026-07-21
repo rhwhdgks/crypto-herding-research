@@ -15,7 +15,7 @@ data:
   end: "2026-04-09"
 
 output:
-  base_dir: outputs/tick/multi_asset_365d/backfill_extended
+  base_dir: outputs/v2/tick/multi_asset_365d/backfill_extended
 
 logging:
   level: INFO

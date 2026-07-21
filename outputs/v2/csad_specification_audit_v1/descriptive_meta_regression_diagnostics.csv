@@ -1,0 +1,4 @@
+model,nobs,design_columns,design_rank,rank_deficient,rsquared,condition_number,interpretation
+no_intercept_csad,20,14,10,True,0.9243571895565513,1.149047445203506e+17,descriptive_only_overlapping_and_confounding_samples
+scsad,20,14,10,True,0.923496503732923,1.149047445203506e+17,descriptive_only_overlapping_and_confounding_samples
+standard_csad,20,14,10,True,0.8980999255636022,1.149047445203506e+17,descriptive_only_overlapping_and_confounding_samples

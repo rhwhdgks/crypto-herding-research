@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "pipeline_version": "binance-archive-point-in-time-universe-v1",
+  "git_commit": "0b47f9d20ab9bbbb2e30528cdfa1ac5b386c538a",
+  "git_worktree_dirty": true,
+  "config_sha256": "72640c2a2b049d27bd5ef33a68e4e08c162b935046c929fc601c2b3f9f1fc4e7",
+  "input_manifest_sha256": "ff859830ea5513cbd5e8e3b4ed3c4d94b9b7bfe9e5316e1b1ebf1461c95752ca",
+  "generated_at_utc": "2026-07-20T08:13:53.157125+00:00",
+  "train_start": "2021-04-10",
+  "train_end": "2026-04-09",
+  "oos_start": null,
+  "oos_end": null,
+  "statistical_method": "Daily-weekly HAC CSAD with variant-period BH-FDR and descriptive DL meta-analysis",
+  "random_seed": null,
+  "status": "corrected"
+}

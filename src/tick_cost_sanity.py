@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from tick_event_schema import build_run_side_event_mask
+
 
 def build_tick_trade_frame(
     frame: pd.DataFrame,
@@ -18,17 +20,14 @@ def build_tick_trade_frame(
     if return_column not in frame.columns:
         raise ValueError(f"Column not found: {return_column}")
 
-    if event_label == "all":
-        event_mask = frame["is_micro_herding_event"]
-    else:
-        event_mask = frame["event_label"] == f"micro_herding_{event_label}"
+    event_mask = build_run_side_event_mask(frame, event_label)
 
     trades = frame.loc[event_mask].copy()
     trades = trades.dropna(subset=[return_column]).sort_values(["symbol", "bucket_start"]).reset_index(drop=True)
     if trades.empty:
         return pd.DataFrame()
 
-    trades["entry_timestamp"] = pd.to_datetime(trades["bucket_start"], utc=True)
+    trades["entry_timestamp"] = pd.to_datetime(trades["signal_timestamp"], utc=True)
     trades["exit_timestamp"] = trades["entry_timestamp"] + pd.Timedelta(minutes=int(horizon_minutes))
     trades["gross_return"] = trades[return_column].astype(float)
     trades["signal_side"] = "long"

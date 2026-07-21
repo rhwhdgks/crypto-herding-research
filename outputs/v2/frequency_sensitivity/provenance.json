@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "pipeline_version": "csad-frequency-sensitivity-v1",
+  "git_commit": "0b47f9d20ab9bbbb2e30528cdfa1ac5b386c538a",
+  "git_worktree_dirty": true,
+  "config_sha256": "cd4f053d9b9ba075669fdad2c15b164f9128e4c4817d19581b5a2dd091d398e2",
+  "input_manifest_sha256": "4c398f27f6d6a212447d90206f4949116deb4832e2680f1e864dd13dc1ff5c53",
+  "generated_at_utc": "2026-07-16T04:44:12.123521+00:00",
+  "train_start": "2024-04-08T00:00:00Z",
+  "train_end": "2026-04-08T00:00:00Z",
+  "oos_start": null,
+  "oos_end": null,
+  "statistical_method": "12-cell HAC CSAD regressions with family-wide BH-FDR",
+  "random_seed": null,
+  "status": "corrected"
+}

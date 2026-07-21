@@ -1,13 +1,9 @@
 from __future__ import annotations
 
 import argparse
-import sys
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SRC_DIR = PROJECT_ROOT / "src"
-if str(SRC_DIR) not in sys.path:
-    sys.path.insert(0, str(SRC_DIR))
 
 from tick_short_horizon import (
     build_tick_short_horizon_dataset,
@@ -16,7 +12,15 @@ from tick_short_horizon import (
     prepare_micro_herding_frame,
     summarize_micro_herding,
 )
-from utils import load_config, prepare_output_dirs, save_config_snapshot, save_dataframe, save_text, setup_logging
+from utils import (
+    load_config,
+    prepare_output_dirs,
+    save_config_snapshot,
+    save_dataframe,
+    save_provenance_manifest,
+    save_text,
+    setup_logging,
+)
 
 
 def parse_args() -> argparse.Namespace:
@@ -38,6 +42,14 @@ def main() -> None:
 
     bucket_frames_by_interval, load_summary = build_tick_short_horizon_dataset(config)
     save_dataframe(load_summary, output_dirs["base"] / "tick_data_load_summary.csv", index=False)
+    save_provenance_manifest(
+        config,
+        output_dirs["base"] / "provenance.json",
+        schema_version=2,
+        pipeline_version="tick-semantics-v2",
+        statistical_method="conditional-run-z; exact-clock-forward-return",
+        input_manifest_path=output_dirs["base"] / "tick_data_load_summary.csv",
+    )
 
     pooled_summary_by_interval: dict[int, object] = {}
     symbol_summary_by_interval: dict[int, object] = {}

@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from tick_event_schema import build_event_mask, require_tick_schema_v2
+
 from tick_candidate_paper_sim import build_monthly_summary
 from tick_overlap_core_variants import _build_period_row, _compute_t_stat, _summarize_cost_grid_calendar
 
@@ -25,11 +27,12 @@ def load_trade_and_micro_frames(
 
 
 def build_sol_context(micro_frame: pd.DataFrame) -> pd.DataFrame:
-    sol = micro_frame.loc[micro_frame["symbol"] == "SOLUSDT", ["bucket_start", "event_label"]].copy()
+    require_tick_schema_v2(micro_frame)
+    sol = micro_frame.loc[micro_frame["symbol"] == "SOLUSDT"].copy()
     sol = sol.sort_values("bucket_start").reset_index(drop=True)
-    sol["sol_up_t0"] = sol["event_label"].eq("micro_herding_up")
+    sol["sol_up_t0"] = build_event_mask(sol, {"run_clustering_side": ["up"]})
     sol["sol_up_t1"] = sol["sol_up_t0"].shift(1).fillna(False).astype(bool)
-    sol["sol_down_t1"] = sol["event_label"].eq("micro_herding_down").shift(1).fillna(False).astype(bool)
+    sol["sol_down_t1"] = build_event_mask(sol, {"run_clustering_side": ["down"]}).shift(1).fillna(False).astype(bool)
     return sol[["bucket_start", "sol_up_t0", "sol_up_t1", "sol_down_t1"]]
 
 

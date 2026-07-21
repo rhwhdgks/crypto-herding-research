@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "fit_start": "2024-04-08T00:00:00+00:00",
+  "fit_end": "2025-04-07T23:45:00+00:00",
+  "created_at_utc": "2026-07-20T12:57:33.543229+00:00",
+  "lower_quantile": 0.005,
+  "upper_quantile": 0.995,
+  "columns": {
+    "abs_aggressor_imbalance": {
+      "winsor_lower": 0.001216062587049617,
+      "winsor_upper": 0.5865772685427234,
+      "mean": 0.1584056738115228,
+      "std": 0.12269851251884795
+    },
+    "abs_bucket_return": {
+      "winsor_lower": 0.0,
+      "winsor_upper": 0.022931425801298744,
+      "mean": 0.003112592187313494,
+      "std": 0.003410137275379491
+    },
+    "current_market_abs_return_loo": {
+      "winsor_lower": 0.00041582549954090434,
+      "winsor_upper": 0.018905092109020624,
+      "mean": 0.0031220655810031534,
+      "std": 0.002722867623972711
+    },
+    "log_amihud_illiquidity": {
+      "winsor_lower": 0.0,
+      "winsor_upper": 0.027864812603272816,
+      "mean": 0.002473698872539529,
+      "std": 0.0043668447845182385
+    },
+    "log_mean_intertrade_ms": {
+      "winsor_lower": 2.562538477115637,
+      "winsor_upper": 8.339512014178785,
+      "mean": 5.729730812844134,
+      "std": 1.3383428859345325
+    },
+    "log_quote_volume": {
+      "winsor_lower": 11.395962179496756,
+      "winsor_upper": 18.483034383270457,
+      "mean": 14.824756196406245,
+      "std": 1.5751692655120815
+    },
+    "log_transaction_count": {
+      "winsor_lower": 5.375278407684165,
+      "winsor_upper": 11.14762597475107,
+      "mean": 7.981180488932973,
+      "std": 1.3375199636684152
+    },
+    "trailing_volatility": {
+      "winsor_lower": 0.000896536778868757,
+      "winsor_upper": 0.01609057809768199,
+      "mean": 0.0042689494141829815,
+      "std": 0.0024620862554343855
+    },
+    "zero_run_intensity": {
+      "winsor_lower": -0.7698770832582854,
+      "winsor_upper": 137.98677686991007,
+      "mean": 22.865282262621573,
+      "std": 26.227721040522574
+    },
+    "zero_tick_share": {
+      "winsor_lower": 0.15381474957484695,
+      "winsor_upper": 0.8422022773390209,
+      "mean": 0.5367593541636064,
+      "std": 0.14138833337037632
+    }
+  }
+}

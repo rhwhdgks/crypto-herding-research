@@ -1,5 +1,5 @@
 input:
-  base_dir: outputs/tick/xrp_365d/short_horizon
+  base_dir: outputs/v2/tick/xrp_365d/short_horizon
 
 rule:
   interval_minutes: 15
@@ -13,7 +13,7 @@ analysis:
   step_days: 30
 
 output:
-  base_dir: outputs/tick/xrp_365d/fixed_rule/walkforward
+  base_dir: outputs/v2/tick/xrp_365d/fixed_rule/walkforward
 
 logging:
   level: INFO

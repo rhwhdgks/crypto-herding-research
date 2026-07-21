@@ -1,0 +1,9 @@
+requirement,implemented,evidence
+preregistration_seal,True,protocol/config hashes fixed before null results
+exact_conditional_null,True,999 draws preserving transaction_count and zero_ticks
+stratified_fpr_audit,True,23 frozen groups and two BH families
+mechanism_null_audit,True,5 outcomes and one BH family
+korean_paper_like_synthesis,True,English title/abstract plus detailed Korean body
+hypothesis_closure_table,True,19 questions with evidence and reopening rules
+read_only_verifier,True,script performs no output writes
+directional_alpha_or_tracker,False,explicitly excluded from final research completion

@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "pipeline_version": "cmc-multifactor-convergence-v1",
+  "git_commit": "0b47f9d20ab9bbbb2e30528cdfa1ac5b386c538a",
+  "git_worktree_dirty": true,
+  "config_sha256": "e3565c7a13d9930b08097959c585342e20e4bcdb2c520784a6c0a6f1d8452213",
+  "input_manifest_sha256": "b60232afcb51de01acd62db74c721264b25e6205f1c81546ec8de19327c43400",
+  "generated_at_utc": "2026-07-19T03:58:13.668444+00:00",
+  "train_start": "2018-01-01",
+  "train_end": "2024-04-09",
+  "oos_start": null,
+  "oos_end": null,
+  "statistical_method": "Point-in-time rolling MKT/SIZE/LIQ/MOM model; normal and empirical residual counterfactual CSAD; Newey-West HAC and six-period BH-FDR",
+  "random_seed": null,
+  "status": "corrected"
+}

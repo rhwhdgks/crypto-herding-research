@@ -1,5 +1,5 @@
 input:
-  base_dir: outputs/tick/xrp_365d/candidate_refinement
+  base_dir: outputs/v2/tick/xrp_365d/candidate_refinement
 
 analysis:
   round_trip_cost_bps: 4
@@ -16,7 +16,7 @@ analysis:
   block_step_days: 10
 
 output:
-  base_dir: outputs/tick/xrp_365d/overlap_core
+  base_dir: outputs/v2/tick/xrp_365d/overlap_core
 
 logging:
   level: INFO

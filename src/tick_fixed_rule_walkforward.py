@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from tick_event_schema import build_run_side_event_mask
+
 
 def compute_walkforward_summary(
     frame: pd.DataFrame,
@@ -23,7 +25,7 @@ def compute_walkforward_summary(
     if not unique_dates:
         return pd.DataFrame()
 
-    event_mask = frame["is_micro_herding_event"] if event_label == "all" else frame["event_label"] == f"micro_herding_{event_label}"
+    event_mask = build_run_side_event_mask(frame, event_label)
     control_mask = frame["is_control_bucket"]
 
     rows: list[dict] = []

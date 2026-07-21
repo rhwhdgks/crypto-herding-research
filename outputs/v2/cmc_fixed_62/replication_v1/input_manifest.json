@@ -1,0 +1,19 @@
+{
+  "files": [
+    {
+      "path": "data/coinmarketcap/fixed_62/checkpoint_manifest.csv",
+      "size": 101201,
+      "sha256": "0a418f2ae2903b249ceb3889a10bae752e75f015b6b676721ede6b704a3c7c5b"
+    },
+    {
+      "path": "data/coinmarketcap/fixed_62/fixed_62_daily.parquet",
+      "size": 8923165,
+      "sha256": "9370ee4d760ad4559d3f2de576375166ee54d2f604d73c6c1ec968824ac38526"
+    },
+    {
+      "path": "research_protocols/cmc_fixed_62_replication_v1.md",
+      "size": 6237,
+      "sha256": "c372afb15896e2077aa88567540703136cf89c313aca6576e16b4352db51b4f4"
+    }
+  ]
+}

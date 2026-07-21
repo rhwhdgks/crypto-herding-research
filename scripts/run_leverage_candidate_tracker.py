@@ -1,13 +1,9 @@
-"""Leverage-state 후보 forward tracker.
+"""감사 목적으로 보존된 leverage-state forward tracker.
 
-후보 규칙 (experiments/informed_trading/ step5~9, 2026-07-06):
-  DOGE down micro-herding event (15m, rolling 5d 15%ile threshold — ex-ante)
-  + funding_pre > 0.0001 (crowded long, 이벤트 전 공표값)
-  + d_oi_event > flush_cut (이벤트 버킷 OI 미붕괴, 버킷 종료 시점 관측)
-  → 알트 4종(+DOGE) 동일가중 long basket, +30min 보유
-
-이 스크립트는 신규 OOS 구간의 이벤트를 로그에 누적하고 레짐 상태를 보고한다.
-판정 기준: outputs/tracker_decision_criteria_2026-04-11.md
+구형 DOGE ``micro_herding_down`` 후보는 가격 하락 이벤트가 아니었으므로 무효화됐다.
+현재 config는 corrected v2 후보가 선정될 때까지 실행을 명시적으로 차단한다. 향후
+활성화하려면 별도 ``price_direction``/``run_clustering_side`` 조건, train-fitted
+threshold artifact, corrected OOS 검증을 모두 갖춰야 한다.
 
 실행:
   .venv/bin/python scripts/run_leverage_candidate_tracker.py \
@@ -17,7 +13,6 @@ from __future__ import annotations
 
 import argparse
 import io
-import sys
 import zipfile
 from pathlib import Path
 from urllib.error import HTTPError
@@ -27,14 +22,15 @@ import numpy as np
 import pandas as pd
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from tick_short_horizon import build_tick_short_horizon_dataset, prepare_micro_herding_frame  # noqa: E402
+from tick_event_schema import build_event_mask  # noqa: E402
+from research_validation import load_threshold_artifact, validate_oos_against_artifact  # noqa: E402
 from utils import load_config, setup_logging  # noqa: E402
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Leverage-state candidate forward tracker")
+    parser = argparse.ArgumentParser(description="Disabled legacy leverage-state candidate tracker")
     parser.add_argument("--config", required=True)
     return parser.parse_args()
 
@@ -118,15 +114,25 @@ def build_futures_state(symbol: str, start: str, end: str, fs_cfg: dict) -> pd.D
 def main() -> None:
     args = parse_args()
     config = load_config(args.config)
-    setup_logging(config)
+    if config.get("analysis", {}).get("disabled", False):
+        raise SystemExit(config["analysis"].get("disabled_reason", "Tracker is disabled."))
+    setup_logging(config.get("logging", {}).get("level", "INFO"))
     cand = config["candidate"]
-    out_dir = Path(config["output"]["base_dir"])
+    out_dir = PROJECT_ROOT / config["output"]["base_dir"]
     out_dir.mkdir(parents=True, exist_ok=True)
 
     interval = int(config["analysis"]["interval_minutes"][0])
     horizon = int(config["analysis"]["forward_horizons_minutes"][0])
     leader = str(cand["leader"])
     oos_start = pd.Timestamp(cand["oos_start"], tz="UTC")
+    artifact_path = PROJECT_ROOT / cand["threshold_artifact_path"]
+    if not artifact_path.exists():
+        raise SystemExit(f"Required train-fitted threshold artifact is missing: {artifact_path}")
+    threshold_artifact = load_threshold_artifact(artifact_path)
+    threshold_column = str(cand["threshold_column"])
+    if threshold_column not in threshold_artifact.thresholds:
+        raise SystemExit(f"Threshold artifact has no {threshold_column!r} value")
+    flush_cut = float(threshold_artifact.thresholds[threshold_column])
 
     print("1) tick bucket frames 빌드 (다운로드 포함)...")
     bucket_frames, load_summary = build_tick_short_horizon_dataset(config)
@@ -144,17 +150,23 @@ def main() -> None:
     print(f"   state: {n_state:,} OI buckets")
 
     # 3) leader 이벤트 + 진입 조건
+    event_mask = build_event_mask(micro, config["analysis"].get("event_filter"))
+    validate_oos_against_artifact(
+        micro.loc[micro["bucket_start"] >= oos_start, ["bucket_start"]].drop_duplicates(),
+        threshold_artifact,
+        "bucket_start",
+    )
     lead = micro.loc[
         (micro["symbol"] == leader)
-        & (micro["event_label"] == f"micro_herding_{cand['direction']}")
+        & event_mask
         & (micro["bucket_start"] >= oos_start),
-        ["bucket_start", "herding_score", "bucket_return"],
+        ["bucket_start", "run_clustering_score", "bucket_return"],
     ].copy()
     lead["bucket_start"] = lead["bucket_start"].dt.as_unit("ns")
     lead = lead.merge(state[["bucket_start", "funding_pre", "d_oi_event"]], on="bucket_start", how="left")
 
     crowded = lead["funding_pre"] > float(cand["funding_threshold"])
-    no_flush = lead["d_oi_event"] > float(cand["flush_cut"])
+    no_flush = lead["d_oi_event"] > flush_cut
     lead["signal"] = crowded & no_flush & lead["funding_pre"].notna() & lead["d_oi_event"].notna()
 
     # 4) basket forward return
@@ -164,7 +176,12 @@ def main() -> None:
     fwd = micro.loc[micro["symbol"].isin(basket_syms), ["symbol", "bucket_start", fwd_col]].copy()
     fwd["bucket_start"] = fwd["bucket_start"].dt.as_unit("ns")
     fwd_wide = fwd.pivot_table(index="bucket_start", columns="symbol", values=fwd_col)
-    fwd_wide["basket_fwd"] = fwd_wide[basket_syms].mean(axis=1)
+    complete_basket = fwd_wide[basket_syms].notna().all(axis=1)
+    fwd_wide["basket_fwd"] = np.where(
+        complete_basket,
+        fwd_wide[basket_syms].mean(axis=1),
+        np.nan,
+    )
     lead = lead.merge(fwd_wide.reset_index()[["bucket_start", "basket_fwd"]], on="bucket_start", how="left")
 
     signals = lead.loc[lead["signal"]].copy()
@@ -176,7 +193,7 @@ def main() -> None:
 
     # 6) 로그 append (bucket_start 기준 dedupe)
     log_path = out_dir / "leverage_tracker_log.csv"
-    new_rows = signals[["bucket_start", "funding_pre", "d_oi_event", "herding_score",
+    new_rows = signals[["bucket_start", "funding_pre", "d_oi_event", "run_clustering_score",
                         "bucket_return", "basket_fwd"]].copy()
     new_rows["logged_at"] = pd.Timestamp.now(tz="UTC").isoformat()
     if log_path.exists():
@@ -200,9 +217,9 @@ def main() -> None:
         f"OOS 구간: {oos_start.date()} ~ {micro['bucket_start'].max().date()}",
         "",
         "## 규칙",
-        f"- {leader} down micro-herding event (15m, rolling 5d 15%ile)",
+        f"- {leader} explicit event_filter={config['analysis'].get('event_filter')} (15m, rolling 5d 15%ile)",
         f"- funding_pre > {cand['funding_threshold']} (crowded long)",
-        f"- d_oi_event > {cand['flush_cut']} (OI no-flush, in-sample tercile 고정컷)",
+        f"- d_oi_event > {flush_cut} (train-fitted artifact, fit_end={threshold_artifact.fit_end})",
         f"- basket: {', '.join(s.replace('USDT','') for s in basket_syms)} 동일가중 +{horizon}min",
         "",
         "## 레짐 상태",
