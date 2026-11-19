@@ -33,15 +33,8 @@ ENV/
 Thumbs.db
 
 # =========================================
-# AI assistants / development notes (internal)
+# Development notes (internal)
 # =========================================
-.agents/
-.claude/
-.codex/
-agents.md
-claude.md
-CLAUDE.md
-CODEX_HANDOFF_*.md
 review_package_docs/
 
 # =========================================

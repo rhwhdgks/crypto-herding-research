@@ -15,9 +15,6 @@ TOP_LEVEL_FILES = (
     "README.md",
     "requirements.txt",
     "pyproject.toml",
-    "agents.md",
-    "claude.md",
-    "CODEX_HANDOFF_2026-07-15.md",
     "LICENSE",
 )
 BASELINE_SYMBOLS = (
